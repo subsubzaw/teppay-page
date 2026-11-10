@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Teppayナビ">
-  <title>Teppayナビ - Teppay対応店舗 & Googleマップ検索</title>
+  <meta name="apple-mobile-web-app-title" content="teppayナビ">
+  <link rel="manifest" href="manifest.json">
+  <title>teppayナビ - teppay対応店舗 & Googleマップ検索</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%2300beb7%22/><text x=%2250%22 y=%2266%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22white%22 font-weight=%22900%22 font-family=%22sans-serif%22>t</text></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%2300beb7%22/><text x=%2250%22 y=%2266%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22white%22 font-weight=%22900%22 font-family=%22sans-serif%22>t</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%2300beb7%22/><rect x=%2212%22 y=%2226%22 width=%2276%22 height=%2248%22 rx=%2224%22 fill=%22%23ffffff%22/><rect x=%2216%22 y=%2230%22 width=%2268%22 height=%2240%22 rx=%2220%22 fill=%22none%22 stroke=%22%23283548%22 stroke-width=%223%22 stroke-dasharray=%224,5%22/><text x=%2250%22 y=%2256%22 font-family=%22sans-serif%22 font-size=%2220%22 font-weight=%22900%22 fill=%22%23283548%22 text-anchor=%22middle%22>teppay</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%2300beb7%22/><rect x=%2212%22 y=%2226%22 width=%2276%22 height=%2248%22 rx=%2224%22 fill=%22%23ffffff%22/><rect x=%2216%22 y=%2230%22 width=%2268%22 height=%2240%22 rx=%2220%22 fill=%22none%22 stroke=%22%23283548%22 stroke-width=%223%22 stroke-dasharray=%224,5%22/><text x=%2250%22 y=%2256%22 font-family=%22sans-serif%22 font-size=%2220%22 font-weight=%22900%22 fill=%22%23283548%22 text-anchor=%22middle%22>teppay</text></svg>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -938,6 +939,45 @@
     }
 
     /* Toast */
+    /* Flat SVG Icons */
+    .icon-svg {
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+    .nav-icon-svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: all 0.2s;
+    }
+    .nav-item.active .nav-icon-svg {
+      stroke: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    .preset-icon-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .preset-icon-badge svg {
+      width: 18px;
+      height: 18px;
+    }
+    .chips-label-note {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-left: 4px;
+      font-weight: 500;
+    }
     .toast {
       position: fixed;
       bottom: 75px;
@@ -992,7 +1032,7 @@
       color: var(--text);
     }
 
-    /* Footer styled after official Teppay page */
+    /* Footer styled after official teppay page */
     .teppay-footer {
       background: var(--slate-footer);
       color: #e2e8f0;
@@ -1030,7 +1070,7 @@
 </head>
 <body>
 
-  <!-- Top Header with Official Railway Track Teppay Logo -->
+  <!-- Top Header with Official Railway Track teppay Logo -->
   <header>
     <div class="header-inner">
       <div class="logo-area">
@@ -1039,23 +1079,23 @@
           <rect x="5.5" y="5.5" width="99" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
           <text x="55" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="16" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppay</text>
         </svg>
-        <span class="nav-title-badge">ナビ</span>
+        <span class="nav-title-badge">teppayナビ</span>
       </div>
       <button class="header-btn" id="open-install-guide-btn">
-        <span>📲</span> ホーム追加
+        <svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/><path d="M12 7v6M9.5 10.5 12 13l2.5-2.5"/></svg>
+        <span>ホーム画面に追加</span>
       </button>
     </div>
   </header>
 
-  <!-- Hero Brand Banner matching image.png -->
+  <!-- Hero Brand Banner -->
   <div class="hero-brand-banner">
     <div class="hero-brand-inner">
       <div class="hero-brand-top">
-        <span class="hero-yellow-badge">全330チェーン対応！</span>
-        <span class="hero-pink-badge">Googleマップ即時連携</span>
+        <span class="hero-yellow-badge">全330チェーン対応</span>
+        <span class="hero-pink-badge">Googleマップ連携</span>
       </div>
-      <h2 class="hero-brand-title">じゃ、こっちの<span>pay</span>で<br>よくない？</h2>
-      <p class="hero-brand-desc">今いる場所からTeppay対応店舗を瞬時にスキャン &amp; ワンタップでルート案内</p>
+      <h2 class="hero-brand-title">今いる場所から<span>teppay</span>対応店舗を<br>瞬時にチェック</h2>
     </div>
   </div>
 
@@ -1063,32 +1103,29 @@
   <div class="area-bar">
     <div class="area-status-row">
       <div class="area-label">
-        <span>📍 検索エリア:</span>
+        <svg class="icon-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#00beb7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/></svg>
+        <span>検索エリア:</span>
         <span class="current-area-badge" id="current-area-display">現在地付近</span>
       </div>
       <div class="area-actions">
         <button class="btn-sm primary" id="gps-btn">
-          <span>🎯</span> 現在地
+          <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+          <span>現在地</span>
         </button>
         <button class="btn-sm" id="toggle-area-input-btn">
-          <span>✏️</span> 変更
+          <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span>変更</span>
         </button>
       </div>
     </div>
     <div class="area-input-panel" id="area-input-panel">
       <div class="area-input-group">
-        <input type="text" id="custom-area-input" placeholder="駅名・地名（例: 志津駅, 武蔵小杉, 勝田台）">
+        <input type="text" id="custom-area-input" placeholder="駅名・地名（例: 新宿, 志津駅, 横浜, 船橋）">
         <button class="btn-sm primary" id="apply-area-btn">適用</button>
       </div>
     </div>
-    <div class="chips-scroll">
-      <button class="chip active" data-area="">現在地</button>
-      <button class="chip" data-area="志津駅">志津・勝田台</button>
-      <button class="chip" data-area="八千代市">八千代・村上</button>
-      <button class="chip" data-area="武蔵小杉">武蔵小杉</button>
-      <button class="chip" data-area="佐倉市">佐倉市</button>
-      <button class="chip" data-area="津田沼駅">津田沼・船橋</button>
-    </div>
+    <!-- Area suggestions: hidden by default, shown based on searched content -->
+    <div class="chips-scroll" id="chips-scroll" style="display: none;"></div>
   </div>
 
   <div class="container">
@@ -1121,20 +1158,13 @@
         <div id="radar-map-box"></div>
 
         <div class="radar-status">
-          <span id="radar-status-text">周辺のTeppay対象店舗をスキャン中...</span>
+          <span id="radar-status-text">周辺のteppay対象店舗をスキャン中...</span>
           <button type="button" class="btn-sm" id="rescan-radar-btn">🔄 再スキャン</button>
         </div>
 
         <div class="radar-results-list" id="radar-results-list"></div>
 
-        <div style="border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 6px;">
-          <button type="button" class="action-btn map" style="width: 100%; justify-content: center; padding: 11px 16px; font-size: 13px; font-weight: 800; background: linear-gradient(135deg, #00beb7 0%, #009e97 100%); color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(0, 190, 183, 0.35);" id="open-gmaps-all-major-btn">
-            <span>🚀</span> Googleマップアプリで主要チェーンを一括検索
-          </button>
-          <div style="font-size: 10px; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">
-            ※Googleマップの検索窓は文字数・単語数上限（約32語）があるため330チェーンすべてのOR検索はできません。上のアプリ内マップで全330チェーンを一括ピン表示し、Googleマップ側には主要16チェーンを一括送信します。
-          </div>
-        </div>
+
       </div>
 
       <div class="preset-grid">
@@ -1142,7 +1172,7 @@
         <div class="preset-card" data-preset="homecenter">
           <div>
             <div class="preset-header">
-              <span class="preset-icon">🔨</span> ホームセンター
+              <div class="preset-icon-badge" style="background:#fef3c7;color:#d97706;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div> ホームセンター
             </div>
             <div class="preset-desc">コーナン、ビバホーム、島忠ホームズ、ロイヤルHC、コメリ等</div>
           </div>
@@ -1155,7 +1185,7 @@
         <div class="preset-card" data-preset="convenience">
           <div>
             <div class="preset-header">
-              <span class="preset-icon">🏪</span> コンビニ
+              <div class="preset-icon-badge" style="background:#e0f2fe;color:#0284c7;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div> コンビニ
             </div>
             <div class="preset-desc">セブン、ローソン、ファミマ、ミニストップ、デイリー等</div>
           </div>
@@ -1168,7 +1198,7 @@
         <div class="preset-card" data-preset="drugstore">
           <div>
             <div class="preset-header">
-              <span class="preset-icon">💊</span> ドラッグストア
+              <div class="preset-icon-badge" style="background:#fce7f3;color:#db2777;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg></div> ドラッグストア
             </div>
             <div class="preset-desc">ウエルシア、スギ薬局、トモズ、コクミン、サツドラ等</div>
           </div>
@@ -1181,7 +1211,7 @@
         <div class="preset-card" data-preset="supermarket">
           <div>
             <div class="preset-header">
-              <span class="preset-icon">🛒</span> スーパー
+              <div class="preset-icon-badge" style="background:#e6faf7;color:#00968f;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></div> スーパー
             </div>
             <div class="preset-desc">オーケー、イトーヨーカドー、成城石井、ヨークマート等</div>
           </div>
@@ -1194,7 +1224,7 @@
         <div class="preset-card" data-preset="gourmet">
           <div>
             <div class="preset-header">
-              <span class="preset-icon">🍽️</span> グルメ・外食
+              <div class="preset-icon-badge" style="background:#ffedd5;color:#ea580c;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 11v11"/><path d="M6 2v20"/><path d="M6 7h4a2 2 0 0 0 2-2V2"/></svg></div> グルメ・外食
             </div>
             <div class="preset-desc">すき家、松屋、ガスト、スシロー、くら寿司、日高屋等</div>
           </div>
@@ -1207,7 +1237,7 @@
         <div class="preset-card" data-preset="cafe">
           <div>
             <div class="preset-header">
-              <span class="preset-icon">☕</span> カフェ・喫茶
+              <div class="preset-icon-badge" style="background:#fef3c7;color:#b45309;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div> カフェ・喫茶
             </div>
             <div class="preset-desc">コメダ珈琲店、銀座ルノアール、ベックスコーヒー等</div>
           </div>
@@ -1220,7 +1250,7 @@
         <div class="preset-card" data-preset="kaden">
           <div>
             <div class="preset-header">
-              <span class="preset-icon">⚡</span> 家電量販店
+              <div class="preset-icon-badge" style="background:#fef9c3;color:#ca8a04;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div> 家電量販店
             </div>
             <div class="preset-desc">ビックカメラ、ヤマダ、ケーズ、エディオン、ノジマ等</div>
           </div>
@@ -1246,7 +1276,7 @@
         <div class="preset-card" data-preset="leisure">
           <div>
             <div class="preset-header">
-              <span class="preset-icon">🎤</span> カラオケ・娯楽
+              <div class="preset-icon-badge" style="background:#ede9fe;color:#7c3aed;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div> カラオケ・娯楽
             </div>
             <div class="preset-desc">カラオケまねきねこ、ジャンカラ等</div>
           </div>
@@ -1289,14 +1319,14 @@
       </div>
     </div>
 
-    <!-- TAB 3: 「これ使える？」Teppayチェッカー -->
+    <!-- TAB 3: 「これ使える？」teppayチェッカー -->
     <div class="tab-pane" id="tab-checker">
       <div class="checker-box">
         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">
           🔍 店名を入力して即時判定
         </div>
         <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-          「このお店でTeppay使える？」を公式シート準拠で判定します。非対応の場合は代替チェーンをご案内します。
+          「このお店でteppay使える？」を公式シート準拠で判定します。非対応の場合は代替チェーンをご案内します。
         </div>
 
         <div class="checker-input-wrap">
@@ -1359,27 +1389,27 @@
           <div class="step-num">4</div>
           <div class="step-text">
             <strong>ネイティブアプリのように起動！</strong><br>
-            ホーム画面にアイコンが追加され、いつでもワンタップで近くのTeppay対応店を探せます。
+            ホーム画面にアイコンが追加され、いつでもワンタップで近くのteppay対応店を探せます。
           </div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-title">
-          <span>💡 Teppay決済の基本知識</span>
+          <span>💡 teppay決済の基本知識</span>
         </div>
         <div style="font-size: 13px; line-height: 1.6; color: #334155;">
           <p style="margin-bottom: 8px;">
             <strong>Q. Suicaタッチ払いと何が違う？</strong><br>
-            Suicaは「交通系ICカードのタッチ決済」ですが、Teppayは「モバイルSuicaアプリ内のバーコード/QRコード決済」です。それぞれ使えるお店が異なります。
+            Suicaは「交通系ICカードのタッチ決済」ですが、teppayは「モバイルSuicaアプリ内のバーコード/QRコード決済」です。それぞれ使えるお店が異なります。
           </p>
           <p style="margin-bottom: 8px;">
             <strong>Q. どのお店で使える？</strong><br>
-            レジに <strong>「Teppay」</strong> または <strong>「Smart Code（スマートコード）」</strong> のマークがある加盟店（全国170万カ所以上）で利用できます。
+            レジに <strong>「teppay」</strong> または <strong>「Smart Code（スマートコード）」</strong> のマークがある加盟店（全国170万カ所以上）で利用できます。
           </p>
           <p style="margin-bottom: 8px;">
             <strong>Q. レジでの伝え方は？</strong><br>
-            「スマートコードで」または「Teppayで」「コード決済で」と伝えて画面のコードを提示（または店舗のQRコードをスキャン）します。
+            「スマートコードで」または「teppayで」「コード決済で」と伝えて画面のコードを提示（または店舗のQRコードをスキャン）します。
           </p>
           <p>
             <strong>Q. データの収録元は？</strong><br>
@@ -1391,7 +1421,7 @@
 
   </div>
 
-  <!-- Official Teppay Style Footer -->
+  <!-- Official teppay Style Footer -->
   <footer class="teppay-footer">
     <div class="footer-track-ribbon"></div>
     <div class="footer-content">
@@ -1401,62 +1431,65 @@
           <rect x="5.5" y="5.5" width="99" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
           <text x="55" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="16" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppay</text>
         </svg>
-        <span style="font-weight:800; font-size:12px; color:#ffffff;">Teppay ナビゲーション</span>
+        <span style="font-weight:800; font-size:12px; color:#ffffff;">teppayナビ</span>
       </div>
       <div class="footer-desc">
-        ※本サイトはTeppay利用者のための周辺店舗検索・ルート案内ツールです。加盟店データは全330チェーンの対象店舗リストに基づき構成されています。
+        ※本サイトはteppay利用者のための周辺店舗検索・ルート案内ツールです。加盟店データは全330チェーンの対象店舗リストに基づき構成されています。
       </div>
       <div class="footer-copy">
-        &copy; 2026 Teppay Navi - 全330チェーン対象店舗マップ
+        &copy; 2026 teppayナビ - 全330チェーン対象店舗マップ
       </div>
     </div>
   </footer>
 
-  <!-- Bottom Navigation -->
+  <!-- Bottom Navigation with Flat SVG Icons -->
   <nav class="nav-bar">
     <button class="nav-item active" data-tab="tab-quick">
-      <span class="nav-icon">📍</span>
+      <svg class="nav-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/></svg>
       <span>周辺マップ</span>
     </button>
     <button class="nav-item" data-tab="tab-list">
-      <span class="nav-icon">🔍</span>
+      <svg class="nav-icon-svg" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/><circle cx="17" cy="17" r="3"/><path d="m21 21-1.5-1.5"/></svg>
       <span>チェーン一覧</span>
     </button>
     <button class="nav-item" data-tab="tab-checker">
-      <span class="nav-icon">❓</span>
+      <svg class="nav-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <span>使える？判定</span>
     </button>
     <button class="nav-item" data-tab="tab-guide">
-      <span class="nav-icon">📖</span>
+      <svg class="nav-icon-svg" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       <span>ガイド</span>
     </button>
   </nav>
 
-  <!-- Install Modal -->
+  <!-- Install Modal with Android & iOS Support -->
   <div class="modal-overlay" id="install-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 style="font-size: 16px;">📲 ホーム画面への追加手順</h3>
+        <div style="font-size: 16px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/><path d="M12 7v6M9.5 10.5 12 13l2.5-2.5"/></svg>
+          <span>ホーム画面に追加</span>
+        </div>
         <button class="modal-close-btn" id="close-modal-btn">✕</button>
       </div>
-      <div style="font-size: 13px; line-height: 1.6; color: #334155;">
-        <p style="margin-bottom: 12px;">
-          このHTMLファイルをホーム画面に追加すると、アドレスバーのないフルスクリーンアプリとして快適にご利用いただけます。
+      <div style="font-size: 13px; line-height: 1.6; color: var(--text);">
+        <p style="margin-bottom: 14px;">
+          ホーム画面に追加すると、アドレスバーのないフルスクリーンアプリとして快適にワンタップ起動できます。
         </p>
-        <div style="background: #f8fafc; border-radius: 8px; padding: 12px; margin-bottom: 12px; border: 1px solid #e2e8f0;">
-          <strong>【iPhone Safariの場合】</strong>
+        <div style="background: var(--primary-ultra-light); border-radius: 14px; padding: 14px; margin-bottom: 12px; border: 1.5px solid var(--border);">
+          <strong style="color: var(--primary-dark);">【Android (Chrome等) の場合】</strong>
           <ol style="margin-left: 20px; margin-top: 6px;">
-            <li>画面下中央の共有ボタン（四角から上向き矢印）をタップ</li>
-            <li>メニューをスクロールして「ホーム画面に追加」をタップ</li>
-            <li>右上の「追加」をタップ</li>
+            <li>画面右上のメニュー（<strong>⋮</strong>）をタップ</li>
+            <li><strong>「アプリをインストール」</strong>または<strong>「ホーム画面に追加」</strong>をタップ</li>
+            <li>確認ダイアログで「インストール」を選択</li>
           </ol>
         </div>
-        <div style="background: #f8fafc; border-radius: 8px; padding: 12px; border: 1px solid #e2e8f0;">
-          <strong>【iPhone Chromeの場合】</strong>
+        <div style="background: var(--primary-ultra-light); border-radius: 14px; padding: 14px; margin-bottom: 12px; border: 1.5px solid var(--border);">
+          <strong style="color: var(--primary-dark);">【iPhone (Safari) の場合】</strong>
           <ol style="margin-left: 20px; margin-top: 6px;">
-            <li>アドレスバー右側の共有アイコンまたは右下のメニュー（…）をタップ</li>
-            <li>「ホーム画面に追加」または「共有...」→「ホーム画面に追加」を選択</li>
-            <li>「追加」をタップ</li>
+            <li>画面下中央の<strong>共有アイコン</strong>（四角から上向き矢印）をタップ</li>
+            <li>メニューから<strong>「ホーム画面に追加」</strong>をタップ</li>
+            <li>右上の「追加」をタップ</li>
           </ol>
         </div>
       </div>
@@ -1469,7 +1502,7 @@
   <script>
     // Embedded Data
     const CHAINS_DATA = [{"category": "コンビニエンスストア", "name": "生活彩家", "tags": ["コンビニ"], "match_keywords": ["生活彩家"]}, {"category": "コンビニエンスストア", "name": "セブン‐イレブン", "tags": ["コンビニ"], "match_keywords": ["7-Eleven", "セブン-イレブン", "セブンイレブン"]}, {"category": "コンビニエンスストア", "name": "デイリーヤマザキ", "tags": ["コンビニ"], "match_keywords": ["デイリーヤマザキ"]}, {"category": "コンビニエンスストア", "name": "ナチュラルローソン", "tags": ["コンビニ"], "match_keywords": ["ナチュラルローソン"]}, {"category": "コンビニエンスストア", "name": "ファミリーマート", "tags": ["コンビニ"], "match_keywords": ["ファミリーマート"]}, {"category": "コンビニエンスストア", "name": "ポプラ", "tags": ["コンビニ"], "match_keywords": ["ポプラ"]}, {"category": "コンビニエンスストア", "name": "ミニストップ", "tags": ["コンビニ"], "match_keywords": ["ミニストップ"]}, {"category": "コンビニエンスストア", "name": "ローソン", "tags": ["コンビニ"], "match_keywords": ["ローソン"]}, {"category": "コンビニエンスストア", "name": "ローソンストア100", "tags": ["コンビニ"], "match_keywords": ["ローソンストア100"]}, {"category": "ドラッグストア・薬局", "name": "アインズ&トルペ", "tags": ["ドラッグストア"], "match_keywords": ["アインズ&トルペ"]}, {"category": "ドラッグストア・薬局", "name": "アルカドラッグ", "tags": ["ドラッグストア"], "match_keywords": ["アルカドラッグ"]}, {"category": "ドラッグストア・薬局", "name": "ウエルシア薬局", "tags": ["ドラッグストア"], "match_keywords": ["ウエルシア薬局", "welcia", "ウエルシア"]}, {"category": "ドラッグストア・薬局", "name": "金光薬品", "tags": ["ドラッグストア"], "match_keywords": ["金光薬品"]}, {"category": "ドラッグストア・薬局", "name": "キリン堂", "tags": ["ドラッグストア"], "match_keywords": ["キリン堂"]}, {"category": "ドラッグストア・薬局", "name": "コクミン", "tags": ["ドラッグストア"], "match_keywords": ["コクミン"]}, {"category": "ドラッグストア・薬局", "name": "コスメティクスアンドメディカル", "tags": ["ドラッグストア"], "match_keywords": ["コスメティクスアンドメディカル"]}, {"category": "ドラッグストア・薬局", "name": "サツドラ", "tags": ["ドラッグストア"], "match_keywords": ["サツドラ"]}, {"category": "ドラッグストア・薬局", "name": "スギドラッグ", "tags": ["ドラッグストア"], "match_keywords": ["スギドラッグ"]}, {"category": "ドラッグストア・薬局", "name": "スギ薬局", "tags": ["ドラッグストア"], "match_keywords": ["スギ薬局"]}, {"category": "ドラッグストア・薬局", "name": "スギヤマ薬品", "tags": ["ドラッグストア"], "match_keywords": ["スギヤマ薬品"]}, {"category": "ドラッグストア・薬局", "name": "スーパードラッグ ひまわり", "tags": ["ドラッグストア"], "match_keywords": ["スーパードラッグ ひまわり"]}, {"category": "ドラッグストア・薬局", "name": "ダックス", "tags": ["ドラッグストア"], "match_keywords": ["ダックス"]}, {"category": "ドラッグストア・薬局", "name": "トモズ", "tags": ["ドラッグストア"], "match_keywords": ["トモズ"]}, {"category": "ドラッグストア・薬局", "name": "とをしや薬局", "tags": ["ドラッグストア"], "match_keywords": ["とをしや薬局"]}, {"category": "ドラッグストア・薬局", "name": "HAC", "tags": ["ドラッグストア"], "match_keywords": ["HAC"]}, {"category": "ドラッグストア・薬局", "name": "ハッピードラッグ", "tags": ["ドラッグストア"], "match_keywords": ["ハッピードラッグ"]}, {"category": "ドラッグストア・薬局", "name": "Fit Care Express", "tags": ["ドラッグストア"], "match_keywords": ["Fit Care Express"]}, {"category": "ドラッグストア・薬局", "name": "Fit Care DEPOT", "tags": ["ドラッグストア"], "match_keywords": ["Fit Care DEPOT"]}, {"category": "ドラッグストア・薬局", "name": "Fit Care MART", "tags": ["ドラッグストア"], "match_keywords": ["Fit Care MART"]}, {"category": "ドラッグストア・薬局", "name": "V・ｄｒｕｇ", "tags": ["ドラッグストア"], "match_keywords": ["バロードラッグ", "V・drug", "V・ｄｒｕｇ", "Vドラッグ"]}, {"category": "ドラッグストア・薬局", "name": "ふく薬品", "tags": ["ドラッグストア"], "match_keywords": ["ふく薬品"]}, {"category": "ドラッグストア・薬局", "name": "マルエ", "tags": ["ドラッグストア"], "match_keywords": ["マルエ"]}, {"category": "ドラッグストア・薬局", "name": "musée de peau", "tags": ["ドラッグストア"], "match_keywords": ["musée de peau"]}, {"category": "ドラッグストア・薬局", "name": "よどや", "tags": ["ドラッグストア"], "match_keywords": ["よどや"]}, {"category": "スーパーマーケット・ホームセンター", "name": "アークオアシス", "tags": ["ホームセンター"], "match_keywords": ["アークオアシス"]}, {"category": "スーパーマーケット・ホームセンター", "name": "アークマスター", "tags": ["ホームセンター"], "match_keywords": ["アークマスター"]}, {"category": "スーパーマーケット・ホームセンター", "name": "伊藤チェーン", "tags": ["スーパーマーケット"], "match_keywords": ["伊藤チェーン"]}, {"category": "スーパーマーケット・ホームセンター", "name": "イトーヨーカ堂／イトーヨーカドー", "tags": ["スーパーマーケット"], "match_keywords": ["イトーヨーカドー", "イトーヨーカ堂"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ヴィシーズ", "tags": ["ホームセンター"], "match_keywords": ["ヴィシーズ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "オーケー", "tags": ["スーパーマーケット"], "match_keywords": ["オーケー"]}, {"category": "スーパーマーケット・ホームセンター", "name": "オータニ", "tags": ["スーパーマーケット"], "match_keywords": ["オータニ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "KINSHO／Harves", "tags": ["スーパーマーケット"], "match_keywords": ["KINSHO", "Harves"]}, {"category": "スーパーマーケット・ホームセンター", "name": "京浜さえき", "tags": ["スーパーマーケット"], "match_keywords": ["京浜さえき"]}, {"category": "スーパーマーケット・ホームセンター", "name": "コーナン", "tags": ["ホームセンター"], "match_keywords": ["コーナン"]}, {"category": "スーパーマーケット・ホームセンター", "name": "コメリ", "tags": ["ホームセンター"], "match_keywords": ["コメリ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "サンプラザ", "tags": ["スーパーマーケット"], "match_keywords": ["サンプラザ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "sanwa", "tags": ["スーパーマーケット"], "match_keywords": ["スーパー三和", "sanwa", "三和"]}, {"category": "スーパーマーケット・ホームセンター", "name": "島忠ホームズ", "tags": ["ホームセンター"], "match_keywords": ["Shimachu", "島忠ホームズ", "ホームズ", "島忠"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ジョイフルエーケー", "tags": ["ホームセンター"], "match_keywords": ["ジョイフルエーケー"]}, {"category": "スーパーマーケット・ホームセンター", "name": "食鮮館タイヨー", "tags": ["スーパーマーケット"], "match_keywords": ["食鮮館タイヨー"]}, {"category": "スーパーマーケット・ホームセンター", "name": "スーパーアルプス", "tags": ["スーパーマーケット"], "match_keywords": ["スーパーアルプス"]}, {"category": "スーパーマーケット・ホームセンター", "name": "スーパーセンタームサシ", "tags": ["ホームセンター"], "match_keywords": ["スーパーセンタームサシ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "スーパーマーケットバロー", "tags": ["スーパーマーケット"], "match_keywords": ["スーパーマーケットバロー"]}, {"category": "スーパーマーケット・ホームセンター", "name": "生活協同組合コープかごしま", "tags": ["スーパーマーケット"], "match_keywords": ["生活協同組合コープかごしま"]}, {"category": "スーパーマーケット・ホームセンター", "name": "成城石井", "tags": ["スーパーマーケット"], "match_keywords": ["成城石井"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ダイユーエイト", "tags": ["ホームセンター"], "match_keywords": ["ダイユーエイト"]}, {"category": "スーパーマーケット・ホームセンター", "name": "東京さえき", "tags": ["スーパーマーケット"], "match_keywords": ["東京さえき"]}, {"category": "スーパーマーケット・ホームセンター", "name": "東光ストア", "tags": ["スーパーマーケット"], "match_keywords": ["東光ストア"]}, {"category": "スーパーマーケット・ホームセンター", "name": "道東アークス", "tags": ["スーパーマーケット"], "match_keywords": ["道東アークス"]}, {"category": "スーパーマーケット・ホームセンター", "name": "道南ラルズ", "tags": ["スーパーマーケット"], "match_keywords": ["道南ラルズ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "道北アークス", "tags": ["スーパーマーケット"], "match_keywords": ["道北アークス"]}, {"category": "スーパーマーケット・ホームセンター", "name": "NICOPET", "tags": ["スーパーマーケット"], "match_keywords": ["NICOPET"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ビバホーム", "tags": ["ホームセンター"], "match_keywords": ["ビバホーム"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ビバホームプロ", "tags": ["ホームセンター"], "match_keywords": ["ビバホームプロ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "福原", "tags": ["スーパーマーケット"], "match_keywords": ["福原"]}, {"category": "スーパーマーケット・ホームセンター", "name": "フーズマーケットホック", "tags": ["スーパーマーケット"], "match_keywords": ["フーズマーケットホック"]}, {"category": "スーパーマーケット・ホームセンター", "name": "FOODONE", "tags": ["スーパーマーケット"], "match_keywords": ["FOODONE"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ベルジョイス", "tags": ["スーパーマーケット"], "match_keywords": ["ベルジョイス"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ホームセンターバロー", "tags": ["ホームセンター"], "match_keywords": ["ホームセンターバロー"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ホームセンタームサシ", "tags": ["ホームセンター"], "match_keywords": ["ホームセンタームサシ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "マルマンストア", "tags": ["スーパーマーケット"], "match_keywords": ["マルマンストア"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ムサシプロ", "tags": ["ホームセンター"], "match_keywords": ["ムサシプロ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "山梨さえき（おかじま）", "tags": ["スーパーマーケット"], "match_keywords": ["山梨さえき（おかじま）", "山梨さえき"]}, {"category": "スーパーマーケット・ホームセンター", "name": "山梨さえき（セルバ）", "tags": ["スーパーマーケット"], "match_keywords": ["山梨さえき（セルバ）", "山梨さえき"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ユニバース", "tags": ["スーパーマーケット"], "match_keywords": ["ユニバース"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ヨーク／コンフォートマーケット", "tags": ["スーパーマーケット"], "match_keywords": ["コンフォートマーケット", "ヨーク"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ヨークベニマル", "tags": ["スーパーマーケット"], "match_keywords": ["ヨークベニマル"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ヨーク／ヨークフーズ", "tags": ["スーパーマーケット"], "match_keywords": ["ヨークフーズ", "ヨーク"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ヨーク／ヨークプライス", "tags": ["スーパーマーケット"], "match_keywords": ["ヨークプライス", "ヨーク"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ヨーク／ヨークマート", "tags": ["スーパーマーケット"], "match_keywords": ["ヨークマート", "ヨーク"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ラッキー", "tags": ["スーパーマーケット"], "match_keywords": ["ラッキー"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ラルズ", "tags": ["スーパーマーケット"], "match_keywords": ["ラルズ"]}, {"category": "スーパーマーケット・ホームセンター", "name": "ロイヤルホームセンター", "tags": ["ホームセンター"], "match_keywords": ["ロイヤルホームセンター"]}, {"category": "家電", "name": "エディオン", "tags": ["家電量販店"], "match_keywords": ["エディオン"]}, {"category": "家電", "name": "ケーズデンキ", "tags": ["家電量販店"], "match_keywords": ["ケーズデンキ"]}, {"category": "家電", "name": "コジマ", "tags": ["家電量販店"], "match_keywords": ["コジマ"]}, {"category": "家電", "name": "ジョーシン", "tags": ["家電量販店"], "match_keywords": ["ジョーシン"]}, {"category": "家電", "name": "ソフマップ", "tags": ["家電量販店"], "match_keywords": ["ソフマップ"]}, {"category": "家電", "name": "ノジマ", "tags": ["家電量販店"], "match_keywords": ["ノジマ"]}, {"category": "家電", "name": "ビックカメラ", "tags": ["家電量販店"], "match_keywords": ["ビックカメラ"]}, {"category": "家電", "name": "ヤマダデンキ", "tags": ["家電量販店"], "match_keywords": ["ヤマダデンキ"]}, {"category": "本", "name": "ジュンク堂書店", "tags": [], "match_keywords": ["ジュンク堂書店", "ジュンク堂"]}, {"category": "本", "name": "TSUTAYA", "tags": [], "match_keywords": ["TSUTAYA"]}, {"category": "本", "name": "TSUTAYA BOOKSTORE", "tags": [], "match_keywords": ["TSUTAYA BOOKSTORE"]}, {"category": "本", "name": "蔦屋書店", "tags": [], "match_keywords": ["蔦屋書店"]}, {"category": "本", "name": "丸善", "tags": [], "match_keywords": ["丸善"]}, {"category": "服飾", "name": "KENFORD", "tags": ["服飾・ファッション"], "match_keywords": ["KENFORD"]}, {"category": "服飾", "name": "コナカ", "tags": ["服飾・ファッション"], "match_keywords": ["コナカ"]}, {"category": "服飾", "name": "SHETLAND FOX", "tags": ["服飾・ファッション"], "match_keywords": ["SHETLAND FOX"]}, {"category": "服飾", "name": "SUIT SQUARE", "tags": ["服飾・ファッション"], "match_keywords": ["SUIT SQUARE"]}, {"category": "服飾", "name": "SUIT SELECT", "tags": ["服飾・ファッション"], "match_keywords": ["SUIT SELECT"]}, {"category": "服飾", "name": "DIFFERENCE", "tags": ["服飾・ファッション"], "match_keywords": ["DIFFERENCE"]}, {"category": "服飾", "name": "はるやま", "tags": ["服飾・ファッション"], "match_keywords": ["はるやま"]}, {"category": "服飾", "name": "P.S.FA", "tags": ["服飾・ファッション"], "match_keywords": ["P.S.FA"]}, {"category": "服飾", "name": "フォーエル", "tags": ["服飾・ファッション"], "match_keywords": ["フォーエル"]}, {"category": "服飾", "name": "フタタ", "tags": ["服飾・ファッション"], "match_keywords": ["フタタ"]}, {"category": "服飾", "name": "眼鏡市場", "tags": ["服飾・ファッション"], "match_keywords": ["眼鏡市場"]}, {"category": "服飾", "name": "メガネフラワー", "tags": ["服飾・ファッション"], "match_keywords": ["メガネフラワー"]}, {"category": "服飾", "name": "UNIVERSAL LANGUAGE", "tags": ["服飾・ファッション"], "match_keywords": ["UNIVERSAL LANGUAGE"]}, {"category": "服飾", "name": "UNIVERSAL LANGUAGE MEASURE'S", "tags": ["服飾・ファッション"], "match_keywords": ["UNIVERSAL LANGUAGE MEASURE'S"]}, {"category": "服飾", "name": "洋服の青山", "tags": ["服飾・ファッション"], "match_keywords": ["洋服の青山", "青山"]}, {"category": "服飾", "name": "REGAL", "tags": ["服飾・ファッション"], "match_keywords": ["REGAL"]}, {"category": "服飾", "name": "REGAL SHOES", "tags": ["服飾・ファッション"], "match_keywords": ["REGAL SHOES"]}, {"category": "服飾", "name": "REGAL SHOE & co.", "tags": ["服飾・ファッション"], "match_keywords": ["REGAL SHOE & co."]}, {"category": "服飾", "name": "REGAL TOKYO", "tags": ["服飾・ファッション"], "match_keywords": ["REGAL TOKYO"]}, {"category": "服飾", "name": "リーガルファクトリーストア", "tags": ["服飾・ファッション"], "match_keywords": ["リーガルファクトリーストア"]}, {"category": "百貨店・モール", "name": "アスピア明石", "tags": ["百貨店・モール"], "match_keywords": ["アスピア明石"]}, {"category": "百貨店・モール", "name": "池袋ショッピングパーク", "tags": ["百貨店・モール"], "match_keywords": ["池袋ショッピングパーク"]}, {"category": "百貨店・モール", "name": "イトーヨーカ堂／アリオ", "tags": ["百貨店・モール"], "match_keywords": ["イトーヨーカ堂", "アリオ"]}, {"category": "百貨店・モール", "name": "KiKi京橋", "tags": ["百貨店・モール"], "match_keywords": ["KiKi京橋"]}, {"category": "百貨店・モール", "name": "岸和田カンカンベイサイドモール", "tags": ["百貨店・モール"], "match_keywords": ["岸和田カンカンベイサイドモール"]}, {"category": "百貨店・モール", "name": "キラリナ京王吉祥寺", "tags": ["百貨店・モール"], "match_keywords": ["キラリナ京王吉祥寺"]}, {"category": "百貨店・モール", "name": "近鉄百貨店", "tags": ["百貨店・モール"], "match_keywords": ["近鉄百貨店"]}, {"category": "百貨店・モール", "name": "くずはモール", "tags": ["百貨店・モール"], "match_keywords": ["くずはモール"]}, {"category": "百貨店・モール", "name": "グランベリーパーク", "tags": ["百貨店・モール"], "match_keywords": ["グランベリーパーク"]}, {"category": "百貨店・モール", "name": "京王聖蹟桜ヶ丘SC", "tags": ["百貨店・モール"], "match_keywords": ["京王聖蹟桜ヶ丘SC"]}, {"category": "百貨店・モール", "name": "京王多摩センターSC", "tags": ["百貨店・モール"], "match_keywords": ["京王多摩センターSC"]}, {"category": "百貨店・モール", "name": "京王百貨店", "tags": ["百貨店・モール"], "match_keywords": ["京王百貨店"]}, {"category": "百貨店・モール", "name": "東急フードショー", "tags": ["百貨店・モール"], "match_keywords": ["東急フードショー"]}, {"category": "百貨店・モール", "name": "京王モール & 京王モールアネックス", "tags": ["百貨店・モール"], "match_keywords": ["京王モール & 京王モールアネックス"]}, {"category": "百貨店・モール", "name": "京急百貨店", "tags": ["百貨店・モール"], "match_keywords": ["京急百貨店"]}, {"category": "百貨店・モール", "name": "京阪シティモール", "tags": ["百貨店・モール"], "match_keywords": ["京阪シティモール"]}, {"category": "百貨店・モール", "name": "京阪モール", "tags": ["百貨店・モール"], "match_keywords": ["京阪モール"]}, {"category": "百貨店・モール", "name": "SHIBUYA109渋谷店", "tags": ["百貨店・モール"], "match_keywords": ["SHIBUYA109渋谷店"]}, {"category": "百貨店・モール", "name": "渋谷スクランブルスクエア", "tags": ["百貨店・モール"], "match_keywords": ["渋谷スクランブルスクエア"]}, {"category": "百貨店・モール", "name": "渋谷ストリーム", "tags": ["百貨店・モール"], "match_keywords": ["渋谷ストリーム"]}, {"category": "百貨店・モール", "name": "渋谷ヒカリエ", "tags": ["百貨店・モール"], "match_keywords": ["渋谷ヒカリエ"]}, {"category": "百貨店・モール", "name": "ジョイナス", "tags": ["百貨店・モール"], "match_keywords": ["ジョイナス"]}, {"category": "百貨店・モール", "name": "ShinQsビューティパレット", "tags": ["百貨店・モール"], "match_keywords": ["ShinQsビューティパレット"]}, {"category": "百貨店・モール", "name": "ダイナシティ", "tags": ["百貨店・モール"], "match_keywords": ["ダイナシティ"]}, {"category": "百貨店・モール", "name": "東急百貨店", "tags": ["百貨店・モール"], "match_keywords": ["東急百貨店"]}, {"category": "百貨店・モール", "name": "東武百貨店", "tags": ["百貨店・モール"], "match_keywords": ["東武百貨店"]}, {"category": "百貨店・モール", "name": "なんばCITY", "tags": ["百貨店・モール"], "match_keywords": ["なんばCITY"]}, {"category": "百貨店・モール", "name": "なんばパークス", "tags": ["百貨店・モール"], "match_keywords": ["なんばパークス"]}, {"category": "百貨店・モール", "name": "ニッケコルトンプラザ", "tags": ["百貨店・モール"], "match_keywords": ["ニッケコルトンプラザ"]}, {"category": "百貨店・モール", "name": "二子玉川ライズショッピングセンター", "tags": ["百貨店・モール"], "match_keywords": ["二子玉川ライズショッピングセンター"]}, {"category": "百貨店・モール", "name": "PRALIVA（プラリバ）", "tags": ["百貨店・モール"], "match_keywords": ["PRALIVA（プラリバ）", "PRALIVA"]}, {"category": "百貨店・モール", "name": "フレンテ笹塚", "tags": ["百貨店・モール"], "match_keywords": ["フレンテ笹塚"]}, {"category": "百貨店・モール", "name": "ミント神戸", "tags": ["百貨店・モール"], "match_keywords": ["ミント神戸"]}, {"category": "百貨店・モール", "name": "モレラ岐阜", "tags": ["百貨店・モール"], "match_keywords": ["モレラ岐阜"]}, {"category": "百貨店・モール", "name": "ル・トロワ", "tags": ["百貨店・モール"], "match_keywords": ["ル・トロワ"]}, {"category": "百貨店・モール", "name": "ロフト", "tags": ["百貨店・モール"], "match_keywords": ["ロフト"]}, {"category": "グルメ", "name": "壱鵠堂", "tags": ["ラーメン・中華"], "match_keywords": ["壱鵠堂"]}, {"category": "グルメ", "name": "イトーヨーカ堂／ポッポ", "tags": ["ファストフード"], "match_keywords": ["イトーヨーカ堂", "ポッポ"]}, {"category": "グルメ", "name": "威風", "tags": ["ラーメン・中華"], "match_keywords": ["威風"]}, {"category": "グルメ", "name": "ヴィクトリアステーション", "tags": ["ファミレス・洋食"], "match_keywords": ["ヴィクトリアステーション"]}, {"category": "グルメ", "name": "ウェンディーズ・ファーストキッチン", "tags": ["ファストフード"], "match_keywords": ["ウェンディーズ・ファーストキッチン", "ファーストキッチン", "ウェンディーズ"]}, {"category": "グルメ", "name": "魚鮮水産", "tags": [], "match_keywords": ["魚鮮水産"]}, {"category": "グルメ", "name": "魚民", "tags": [], "match_keywords": ["魚民"]}, {"category": "グルメ", "name": "魚民のすし", "tags": ["寿司・回転寿司"], "match_keywords": ["魚民のすし"]}, {"category": "グルメ", "name": "エルトリート", "tags": ["ファミレス・洋食"], "match_keywords": ["エルトリート"]}, {"category": "グルメ", "name": "おかげ庵", "tags": ["カフェ・喫茶"], "match_keywords": ["おかげ庵"]}, {"category": "グルメ", "name": "オリーブの丘", "tags": ["ファミレス・洋食"], "match_keywords": ["オリーブの丘"]}, {"category": "グルメ", "name": "ガスト", "tags": ["ファミレス・洋食"], "match_keywords": ["ガスト"]}, {"category": "グルメ", "name": "かつ庵", "tags": ["牛丼・丼もの"], "match_keywords": ["かつ庵"]}, {"category": "グルメ", "name": "CAFE&BAKERY MIYABI", "tags": ["カフェ・喫茶"], "match_keywords": ["CAFE&BAKERY MIYABI"]}, {"category": "グルメ", "name": "牛たん炭火焼き 利久", "tags": [], "match_keywords": ["牛たん炭火焼き 利久"]}, {"category": "グルメ", "name": "牛たん徳茂", "tags": [], "match_keywords": ["牛たん徳茂"]}, {"category": "グルメ", "name": "久兵衛屋", "tags": ["牛丼・丼もの"], "match_keywords": ["久兵衛屋"]}, {"category": "グルメ", "name": "銀座ルノアール", "tags": ["カフェ・喫茶"], "match_keywords": ["銀座ルノアール"]}, {"category": "グルメ", "name": "串カツ田中", "tags": [], "match_keywords": ["串カツ田中"]}, {"category": "グルメ", "name": "くら寿司", "tags": ["寿司・回転寿司"], "match_keywords": ["くら寿司"]}, {"category": "グルメ", "name": "ケンタッキーフライドチキン", "tags": ["ファストフード"], "match_keywords": ["ケンタッキーフライドチキン", "ケンタッキー", "KFC"]}, {"category": "グルメ", "name": "CoCo壱番屋", "tags": [], "match_keywords": ["CoCo壱番屋"]}, {"category": "グルメ", "name": "ココス", "tags": ["ファミレス・洋食"], "match_keywords": ["ココス"]}, {"category": "グルメ", "name": "こだわりのれん街", "tags": [], "match_keywords": ["こだわりのれん街"]}, {"category": "グルメ", "name": "コメダ珈琲店", "tags": ["カフェ・喫茶"], "match_keywords": ["コメダ珈琲店"]}, {"category": "グルメ", "name": "さかなや道場", "tags": [], "match_keywords": ["さかなや道場"]}, {"category": "グルメ", "name": "三代目鳥メロ", "tags": [], "match_keywords": ["三代目鳥メロ"]}, {"category": "グルメ", "name": "シズラー", "tags": ["ファミレス・洋食"], "match_keywords": ["シズラー"]}, {"category": "グルメ", "name": "しゃぶ食べ", "tags": ["ファミレス・洋食"], "match_keywords": ["しゃぶ食べ"]}, {"category": "グルメ", "name": "しゃぶ葉", "tags": ["ファミレス・洋食"], "match_keywords": ["しゃぶ葉"]}, {"category": "グルメ", "name": "軍鶏農場", "tags": [], "match_keywords": ["軍鶏農場"]}, {"category": "グルメ", "name": "熟成焼肉いちばん", "tags": [], "match_keywords": ["熟成焼肉いちばん"]}, {"category": "グルメ", "name": "庄や", "tags": [], "match_keywords": ["庄や"]}, {"category": "グルメ", "name": "ジョナサン", "tags": ["ファミレス・洋食"], "match_keywords": ["ジョナサン"]}, {"category": "グルメ", "name": "ジョリーパスタ", "tags": ["ファミレス・洋食"], "match_keywords": ["ジョリーパスタ"]}, {"category": "グルメ", "name": "白木屋", "tags": [], "match_keywords": ["白木屋"]}, {"category": "グルメ", "name": "すき家", "tags": ["牛丼・丼もの"], "match_keywords": ["すき家"]}, {"category": "グルメ", "name": "寿司と居酒屋 魚民", "tags": [], "match_keywords": ["寿司と居酒屋 魚民"]}, {"category": "グルメ", "name": "すしの和", "tags": ["寿司・回転寿司"], "match_keywords": ["すしの和"]}, {"category": "グルメ", "name": "スシロー", "tags": ["寿司・回転寿司"], "match_keywords": ["スシロー"]}, {"category": "グルメ", "name": "ステーキガスト", "tags": ["ファミレス・洋食"], "match_keywords": ["ステーキガスト"]}, {"category": "グルメ", "name": "ステーキ屋松", "tags": ["牛丼・丼もの"], "match_keywords": ["ステーキ屋松"]}, {"category": "グルメ", "name": "ゼッテリア", "tags": ["ファストフード"], "match_keywords": ["ゼッテリア"]}, {"category": "グルメ", "name": "千年の宴", "tags": [], "match_keywords": ["千年の宴"]}, {"category": "グルメ", "name": "大庄水産", "tags": [], "match_keywords": ["大庄水産"]}, {"category": "グルメ", "name": "中華一番", "tags": ["ラーメン・中華"], "match_keywords": ["中華一番"]}, {"category": "グルメ", "name": "月の宴", "tags": [], "match_keywords": ["月の宴"]}, {"category": "グルメ", "name": "TGI FRIDAYS", "tags": [], "match_keywords": ["TGI FRIDAYS"]}, {"category": "グルメ", "name": "TEXMEX FACTORY", "tags": [], "match_keywords": ["TEXMEX FACTORY"]}, {"category": "グルメ", "name": "デニーズジャパン／デニーズ", "tags": ["ファミレス・洋食"], "match_keywords": ["デニーズジャパン", "デニーズ"]}, {"category": "グルメ", "name": "天下一", "tags": ["ラーメン・中華"], "match_keywords": ["天下一"]}, {"category": "グルメ", "name": "天丼てんや", "tags": [], "match_keywords": ["天丼てんや"]}, {"category": "グルメ", "name": "伝丸", "tags": ["ラーメン・中華"], "match_keywords": ["伝丸"]}, {"category": "グルメ", "name": "豊丸水産", "tags": [], "match_keywords": ["豊丸水産"]}, {"category": "グルメ", "name": "なか卯", "tags": ["牛丼・丼もの"], "match_keywords": ["なか卯"]}, {"category": "グルメ", "name": "ハイデイ日高", "tags": ["ラーメン・中華"], "match_keywords": ["ハイデイ日高"]}, {"category": "グルメ", "name": "バーミヤン", "tags": ["ファミレス・洋食"], "match_keywords": ["バーミヤン"]}, {"category": "グルメ", "name": "パスタ・デ・ココ", "tags": [], "match_keywords": ["パスタ・デ・ココ"]}, {"category": "グルメ", "name": "はなの舞", "tags": [], "match_keywords": ["はなの舞"]}, {"category": "グルメ", "name": "華屋与兵衛", "tags": ["ファミレス・洋食"], "match_keywords": ["華屋与兵衛"]}, {"category": "グルメ", "name": "はま寿司", "tags": ["寿司・回転寿司"], "match_keywords": ["はま寿司"]}, {"category": "グルメ", "name": "濱焼北海道魚萬", "tags": [], "match_keywords": ["濱焼北海道魚萬"]}, {"category": "グルメ", "name": "パークショップ", "tags": [], "match_keywords": ["パークショップ"]}, {"category": "グルメ", "name": "日高屋", "tags": ["ラーメン・中華"], "match_keywords": ["日高屋"]}, {"category": "グルメ", "name": "ビッグボーイ", "tags": ["ファミレス・洋食"], "match_keywords": ["ビッグボーイ"]}, {"category": "グルメ", "name": "ファーストキッチン", "tags": ["ファストフード"], "match_keywords": ["ファーストキッチン"]}, {"category": "グルメ", "name": "福福屋", "tags": [], "match_keywords": ["福福屋"]}, {"category": "グルメ", "name": "ホルモン食堂 食樂", "tags": [], "match_keywords": ["ホルモン食堂 食樂"]}, {"category": "グルメ", "name": "マイカリー食堂", "tags": ["牛丼・丼もの"], "match_keywords": ["マイカリー食堂"]}, {"category": "グルメ", "name": "松のや", "tags": ["牛丼・丼もの"], "match_keywords": ["松のや"]}, {"category": "グルメ", "name": "松屋", "tags": ["牛丼・丼もの"], "match_keywords": ["松屋"]}, {"category": "グルメ", "name": "ミライザカ", "tags": [], "match_keywords": ["ミライザカ"]}, {"category": "グルメ", "name": "目利きの銀次", "tags": [], "match_keywords": ["目利きの銀次"]}, {"category": "グルメ", "name": "モディッシュ札幌", "tags": [], "match_keywords": ["モディッシュ札幌"]}, {"category": "グルメ", "name": "焼鳥日高", "tags": ["ラーメン・中華"], "match_keywords": ["焼鳥日高"]}, {"category": "グルメ", "name": "焼肉の和民", "tags": [], "match_keywords": ["焼肉の和民"]}, {"category": "グルメ", "name": "山内農場", "tags": [], "match_keywords": ["山内農場"]}, {"category": "グルメ", "name": "やまなか家", "tags": [], "match_keywords": ["やまなか家"]}, {"category": "グルメ", "name": "夢庵", "tags": ["ファミレス・洋食"], "match_keywords": ["夢庵"]}, {"category": "グルメ", "name": "横濱魚萬", "tags": [], "match_keywords": ["横濱魚萬"]}, {"category": "グルメ", "name": "来来軒", "tags": ["ラーメン・中華"], "match_keywords": ["来来軒"]}, {"category": "グルメ", "name": "らーめん日高", "tags": ["ラーメン・中華"], "match_keywords": ["らーめん日高"]}, {"category": "グルメ", "name": "レストラン 花の木", "tags": [], "match_keywords": ["レストラン 花の木"]}, {"category": "グルメ", "name": "レストランビアポート", "tags": [], "match_keywords": ["レストランビアポート"]}, {"category": "グルメ", "name": "ロイヤルガーデンカフェ", "tags": ["カフェ・喫茶"], "match_keywords": ["ロイヤルガーデンカフェ"]}, {"category": "グルメ", "name": "ロイヤルホスト", "tags": ["ファミレス・洋食"], "match_keywords": ["ロイヤルホスト"]}, {"category": "グルメ", "name": "笑笑", "tags": [], "match_keywords": ["笑笑"]}, {"category": "グルメ", "name": "WANG'S GARDEN", "tags": [], "match_keywords": ["WANG'S GARDEN"]}, {"category": "レジャー・アミューズメント", "name": "アドベンチャーワールド", "tags": [], "match_keywords": ["アドベンチャーワールド"]}, {"category": "レジャー・アミューズメント", "name": "カラオケまねきねこ", "tags": ["カラオケ"], "match_keywords": ["カラオケまねきねこ", "まねきねこ"]}, {"category": "レジャー・アミューズメント", "name": "ジャンカラ", "tags": ["カラオケ"], "match_keywords": ["ジャンカラ"]}, {"category": "空港施設", "name": "ANA DUTY FREE SHOP", "tags": [], "match_keywords": ["ANA DUTY FREE SHOP"]}, {"category": "空港施設", "name": "ANA FESTA", "tags": [], "match_keywords": ["ANA FESTA"]}, {"category": "宿泊施設", "name": "城山ホテル鹿児島", "tags": [], "match_keywords": ["城山ホテル鹿児島"]}, {"category": "宿泊施設", "name": "リッチモンドホテル", "tags": [], "match_keywords": ["リッチモンドホテル"]}, {"category": "その他ショッピング", "name": "アストロプロダクツ", "tags": [], "match_keywords": ["アストロプロダクツ"]}, {"category": "その他ショッピング", "name": "イエローハット", "tags": [], "match_keywords": ["イエローハット"]}, {"category": "その他ショッピング", "name": "イシグロ", "tags": [], "match_keywords": ["イシグロ"]}, {"category": "その他ショッピング", "name": "Ｎプラス", "tags": [], "match_keywords": ["Ｎプラス"]}, {"category": "その他ショッピング", "name": "オートバックス", "tags": [], "match_keywords": ["オートバックス"]}, {"category": "その他ショッピング", "name": "カクヤス", "tags": [], "match_keywords": ["カクヤス"]}, {"category": "その他ショッピング", "name": "好日山荘", "tags": [], "match_keywords": ["好日山荘"]}, {"category": "その他ショッピング", "name": "酒ゃビック", "tags": [], "match_keywords": ["酒ゃビック"]}, {"category": "その他ショッピング", "name": "ジャパン", "tags": [], "match_keywords": ["ジャパン"]}, {"category": "その他ショッピング", "name": "秀岳荘", "tags": [], "match_keywords": ["秀岳荘"]}, {"category": "その他ショッピング", "name": "セリア", "tags": [], "match_keywords": ["セリア"]}, {"category": "その他ショッピング", "name": "デコホーム", "tags": [], "match_keywords": ["デコホーム"]}, {"category": "その他ショッピング", "name": "トイザらス・ベビーザらス", "tags": [], "match_keywords": ["トイザらス・ベビーザらス"]}, {"category": "その他ショッピング", "name": "ナップス", "tags": [], "match_keywords": ["ナップス"]}, {"category": "その他ショッピング", "name": "ニトリ", "tags": [], "match_keywords": ["ニトリ"]}, {"category": "その他ショッピング", "name": "ニトリホームズ", "tags": [], "match_keywords": ["ニトリホームズ"]}, {"category": "その他ショッピング", "name": "ペットフォレスト", "tags": [], "match_keywords": ["ペットフォレスト"]}, {"category": "その他ショッピング", "name": "ペットワールド アミーゴ", "tags": [], "match_keywords": ["ペットワールド アミーゴ"]}, {"category": "その他サービス", "name": "茨城交通", "tags": [], "match_keywords": ["茨城交通"]}, {"category": "その他サービス", "name": "グローバル治療院", "tags": [], "match_keywords": ["グローバル治療院"]}, {"category": "その他サービス", "name": "てもみん", "tags": [], "match_keywords": ["てもみん"]}, {"category": "JR東日本グループのお店・サービス", "name": "あおもり旬味館", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["あおもり旬味館"]}, {"category": "JR東日本グループのお店・サービス", "name": "atre", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["atre", "アトレ"]}, {"category": "JR東日本グループのお店・サービス", "name": "アプリーズ", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["アプリーズ"]}, {"category": "JR東日本グループのお店・サービス", "name": "いろり庵きらく", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["いろり庵きらく"]}, {"category": "JR東日本グループのお店・サービス", "name": "A-FACTORY", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["A-FACTORY"]}, {"category": "JR東日本グループのお店・サービス", "name": "駅弁屋 祭", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["駅弁屋 祭"]}, {"category": "JR東日本グループのお店・サービス", "name": "ecute", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["ecute", "エキュート"]}, {"category": "JR東日本グループのお店・サービス", "name": "ecute EDITION", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["ecute EDITION"]}, {"category": "JR東日本グループのお店・サービス", "name": "Eki RESQ", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["Eki RESQ"]}, {"category": "JR東日本グループのお店・サービス", "name": "excel", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["excel"]}, {"category": "JR東日本グループのお店・サービス", "name": "S-PAL", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["S-PAL"]}, {"category": "JR東日本グループのお店・サービス", "name": "OIMACHI TRACKS", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["OIMACHI TRACKS"]}, {"category": "JR東日本グループのお店・サービス", "name": "GALA", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["GALA"]}, {"category": "JR東日本グループのお店・サービス", "name": "KINOKUNIYA entrée", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["KINOKUNIYA entrée"]}, {"category": "JR東日本グループのお店・サービス", "name": "KINOKUNIYA Bakery", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["KINOKUNIYA Bakery"]}, {"category": "JR東日本グループのお店・サービス", "name": "牛たん通りすし通り", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["牛たん通りすし通り"]}, {"category": "JR東日本グループのお店・サービス", "name": "GRANAGE", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["GRANAGE"]}, {"category": "JR東日本グループのお店・サービス", "name": "GRANSTA", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["GRANSTA", "グランスタ"]}, {"category": "JR東日本グループのお店・サービス", "name": "GRANDUO", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["GRANDUO"]}, {"category": "JR東日本グループのお店・サービス", "name": "CoCoLo", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["CoCoLo"]}, {"category": "JR東日本グループのお店・サービス", "name": "コレもう食べた！？", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["コレもう食べた！？"]}, {"category": "JR東日本グループのお店・サービス", "name": "THE NIIGATA", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["THE NIIGATA"]}, {"category": "JR東日本グループのお店・サービス", "name": "JR東日本ホテルメッツ", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["JR東日本ホテルメッツ"]}, {"category": "JR東日本グループのお店・サービス", "name": "JR東日本レンタリース", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["JR東日本レンタリース"]}, {"category": "JR東日本グループのお店・サービス", "name": "JEXER", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["JEXER"]}, {"category": "JR東日本グループのお店・サービス", "name": "GENERAL STORE RAILYARD", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["GENERAL STORE RAILYARD"]}, {"category": "JR東日本グループのお店・サービス", "name": "CIAL", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["CIAL"]}, {"category": "JR東日本グループのお店・サービス", "name": "Shapo", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["Shapo", "シャポー"]}, {"category": "JR東日本グループのお店・サービス", "name": "SPICE FACTORY", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["SPICE FACTORY"]}, {"category": "JR東日本グループのお店・サービス", "name": "CELEO", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["CELEO", "セレオ"]}, {"category": "JR東日本グループのお店・サービス", "name": "そばいち", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["そばいち"]}, {"category": "JR東日本グループのお店・サービス", "name": "T'sたんたん", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["T'sたんたん"]}, {"category": "JR東日本グループのお店・サービス", "name": "Daily Table KINOKUNIYA", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["Daily Table KINOKUNIYA"]}, {"category": "JR東日本グループのお店・サービス", "name": "tekute", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["tekute"]}, {"category": "JR東日本グループのお店・サービス", "name": "鉄道博物館", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["鉄道博物館"]}, {"category": "JR東日本グループのお店・サービス", "name": "TERMINA", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["TERMINA"]}, {"category": "JR東日本グループのお店・サービス", "name": "TOKYO豚骨BASE", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["TOKYO豚骨BASE"]}, {"category": "JR東日本グループのお店・サービス", "name": "東京ステーションホテル", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["東京ステーションホテル"]}, {"category": "JR東日本グループのお店・サービス", "name": "トピコ&アルス", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["トピコ&アルス"]}, {"category": "JR東日本グループのお店・サービス", "name": "NewDays", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["NewDays"]}, {"category": "JR東日本グループのお店・サービス", "name": "NEWoMan", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["NEWoMan"]}, {"category": "JR東日本グループのお店・サービス", "name": "nonowa", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["nonowa"]}, {"category": "JR東日本グループのお店・サービス", "name": "HANAGATAYA", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["HANAGATAYA"]}, {"category": "JR東日本グループのお店・サービス", "name": "Beans", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["Beans", "ビーンズ"]}, {"category": "JR東日本グループのお店・サービス", "name": "Pivot", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["Pivot"]}, {"category": "JR東日本グループのお店・サービス", "name": "フェザン", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["フェザン"]}, {"category": "JR東日本グループのお店・サービス", "name": "BOOK COMPASS", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["BOOK COMPASS"]}, {"category": "JR東日本グループのお店・サービス", "name": "PLAYatre", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["PLAYatre"]}, {"category": "JR東日本グループのお店・サービス", "name": "ベックスコーヒーショップ", "tags": ["カフェ・喫茶", "JRエキナカ・駅ビル"], "match_keywords": ["ベックスコーヒーショップ"]}, {"category": "JR東日本グループのお店・サービス", "name": "PERIE", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["PERIE", "ペリエ"]}, {"category": "JR東日本グループのお店・サービス", "name": "ほんのり屋", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["ほんのり屋"]}, {"category": "JR東日本グループのお店・サービス", "name": "ホテルドリームゲート舞浜", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["ホテルドリームゲート舞浜"]}, {"category": "JR東日本グループのお店・サービス", "name": "ホテルB4T", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["ホテルB4T"]}, {"category": "JR東日本グループのお店・サービス", "name": "mAAch ecute", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["mAAch ecute"]}, {"category": "JR東日本グループのお店・サービス", "name": "MIDORI", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["MIDORI"]}, {"category": "JR東日本グループのお店・サービス", "name": "土産店", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["土産店"]}, {"category": "JR東日本グループのお店・サービス", "name": "メズム東京、オートグラフ コレクション", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["メズム東京、オートグラフ コレクション"]}, {"category": "JR東日本グループのお店・サービス", "name": "メトロポリタンホテルズ", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["メトロポリタンホテルズ"]}, {"category": "JR東日本グループのお店・サービス", "name": "LOVINA", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["LOVINA"]}, {"category": "JR東日本グループのお店・サービス", "name": "LUSCA", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["LUSCA"]}, {"category": "JR東日本グループのお店・サービス", "name": "LIERRE", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["LIERRE"]}, {"category": "JR東日本グループのお店・サービス", "name": "LUMINE", "tags": ["JRエキナカ・駅ビル"], "match_keywords": ["LUMINE", "ルミネ"]}];
-    const ALTS_DATA = {"カインズ": {"status": "ng", "reason": "カインズはTeppay非対応です（Smart Code非加盟）。", "recommend": "【コーナン・ビバホーム・島忠ホームズ・ロイヤルホームセンター・コメリ】をご利用ください。", "category": "ホームセンター"}, "ケーヨーデイツー": {"status": "ng", "reason": "ケーヨーデイツー（D2）はTeppay非対応です。", "recommend": "【コーナン・ビバホーム・島忠ホームズ・ロイヤルホームセンター】をご利用ください。", "category": "ホームセンター"}, "ジョイフル本田": {"status": "ng", "reason": "ジョイフル本田はTeppay非対応です（※ジョイフルエーケーは対応）。", "recommend": "【コーナン・ビバホーム・ロイヤルホームセンター・コメリ】をご利用ください。", "category": "ホームセンター"}, "マクドナルド": {"status": "ng", "reason": "マクドナルドはTeppay非対応です。", "recommend": "ファストフード・外食では【ケンタッキーフライドチキン・ウェンディーズ・ファーストキッチン・ゼッテリア・すき家・松屋・なか卯】などが対応しています。", "category": "ファストフード"}, "スターバックス": {"status": "ng", "reason": "スターバックスはTeppay非対応です。", "recommend": "カフェ・喫茶では【コメダ珈琲店・銀座ルノアール・ベックスコーヒーショップ】などが対応しています。", "category": "カフェ"}, "ドトール": {"status": "ng", "reason": "ドトールコーヒーはTeppay非対応です。", "recommend": "カフェでは【コメダ珈琲店・ベックスコーヒーショップ・銀座ルノアール】をご利用ください。", "category": "カフェ"}, "ダイソー": {"status": "ng", "reason": "ダイソー（DAISO）はTeppay非対応です。", "recommend": "100円ショップ・生活雑貨では【Seria（セリア）】がTeppay対応です！", "category": "100円ショップ・雑貨"}, "キャンドゥ": {"status": "ng", "reason": "Can★Do（キャンドゥ）はTeppay非対応です。", "recommend": "100円ショップでは【Seria（セリア）】がTeppay対応です！", "category": "100円ショップ"}, "ユニクロ": {"status": "ng", "reason": "ユニクロ（UNIQLO）・GUはTeppay非対応です。", "recommend": "服飾では【洋服の青山・SUIT SELECT・コナカ・はるやま・P.S.FA】などが対応しています。", "category": "服飾"}, "イオン": {"status": "ng", "reason": "イオン・マックスバリュ・まいばすけっとはTeppay非対応です。", "recommend": "スーパーでは【オーケー・イトーヨーカドー・成城石井・ヨークマート・sanwa】などが対応しています。", "category": "スーパー"}, "セブンイレブン": {"status": "ok", "name": "セブン‐イレブン", "category": "コンビニエンスストア"}, "ローソン": {"status": "ok", "name": "ローソン", "category": "コンビニエンスストア"}, "ファミリーマート": {"status": "ok", "name": "ファミリーマート", "category": "コンビニエンスストア"}, "セリア": {"status": "ok", "name": "セリア", "category": "その他ショッピング"}, "ニトリ": {"status": "ok", "name": "ニトリ", "category": "その他ショッピング"}, "コーナン": {"status": "ok", "name": "コーナン", "category": "スーパーマーケット・ホームセンター"}};
+    const ALTS_DATA = {"カインズ": {"status": "ng", "reason": "カインズはteppay非対応です（Smart Code非加盟）。", "recommend": "【コーナン・ビバホーム・島忠ホームズ・ロイヤルホームセンター・コメリ】をご利用ください。", "category": "ホームセンター"}, "ケーヨーデイツー": {"status": "ng", "reason": "ケーヨーデイツー（D2）はteppay非対応です。", "recommend": "【コーナン・ビバホーム・島忠ホームズ・ロイヤルホームセンター】をご利用ください。", "category": "ホームセンター"}, "ジョイフル本田": {"status": "ng", "reason": "ジョイフル本田はteppay非対応です（※ジョイフルエーケーは対応）。", "recommend": "【コーナン・ビバホーム・ロイヤルホームセンター・コメリ】をご利用ください。", "category": "ホームセンター"}, "マクドナルド": {"status": "ng", "reason": "マクドナルドはteppay非対応です。", "recommend": "ファストフード・外食では【ケンタッキーフライドチキン・ウェンディーズ・ファーストキッチン・ゼッテリア・すき家・松屋・なか卯】などが対応しています。", "category": "ファストフード"}, "スターバックス": {"status": "ng", "reason": "スターバックスはteppay非対応です。", "recommend": "カフェ・喫茶では【コメダ珈琲店・銀座ルノアール・ベックスコーヒーショップ】などが対応しています。", "category": "カフェ"}, "ドトール": {"status": "ng", "reason": "ドトールコーヒーはteppay非対応です。", "recommend": "カフェでは【コメダ珈琲店・ベックスコーヒーショップ・銀座ルノアール】をご利用ください。", "category": "カフェ"}, "ダイソー": {"status": "ng", "reason": "ダイソー（DAISO）はteppay非対応です。", "recommend": "100円ショップ・生活雑貨では【Seria（セリア）】がteppay対応です！", "category": "100円ショップ・雑貨"}, "キャンドゥ": {"status": "ng", "reason": "Can★Do（キャンドゥ）はteppay非対応です。", "recommend": "100円ショップでは【Seria（セリア）】がteppay対応です！", "category": "100円ショップ"}, "ユニクロ": {"status": "ng", "reason": "ユニクロ（UNIQLO）・GUはteppay非対応です。", "recommend": "服飾では【洋服の青山・SUIT SELECT・コナカ・はるやま・P.S.FA】などが対応しています。", "category": "服飾"}, "イオン": {"status": "ng", "reason": "イオン・マックスバリュ・まいばすけっとはteppay非対応です。", "recommend": "スーパーでは【オーケー・イトーヨーカドー・成城石井・ヨークマート・sanwa】などが対応しています。", "category": "スーパー"}, "セブンイレブン": {"status": "ok", "name": "セブン‐イレブン", "category": "コンビニエンスストア"}, "ローソン": {"status": "ok", "name": "ローソン", "category": "コンビニエンスストア"}, "ファミリーマート": {"status": "ok", "name": "ファミリーマート", "category": "コンビニエンスストア"}, "セリア": {"status": "ok", "name": "セリア", "category": "その他ショッピング"}, "ニトリ": {"status": "ok", "name": "ニトリ", "category": "その他ショッピング"}, "コーナン": {"status": "ok", "name": "コーナン", "category": "スーパーマーケット・ホームセンター"}};
 
     // Preset Area Coordinates (Verified via NAVITIME / MapFan)
     const AREA_COORDS = {
@@ -1524,6 +1557,114 @@
       }, 2200);
     }
 
+
+    // Android PWA Deferred Install Prompt Support
+    let deferredInstallPrompt = null;
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+    });
+
+    // Smart Area Suggestion & Search History Logic
+    // Candidate expansions for searched areas
+    const AREA_EXPANSIONS = {
+      "志津": ["志津駅", "勝田台駅", "ユーカリが丘", "八千代市", "佐倉市"],
+      "勝田台": ["勝田台駅", "志津駅", "村上駅", "八千代市"],
+      "八千代": ["八千代市", "八千代緑が丘", "八千代中央", "村上駅"],
+      "佐倉": ["佐倉市", "京成佐倉", "JR佐倉", "志津駅", "臼井駅"],
+      "船橋": ["船橋駅", "西船橋", "津田沼駅", "東船橋", "南船橋"],
+      "津田沼": ["津田沼駅", "新津田沼", "船橋駅", "幕張本郷"],
+      "新宿": ["新宿駅", "西新宿", "新宿三丁目", "東新宿", "高田馬場"],
+      "渋谷": ["渋谷駅", "原宿", "恵比寿", "表参道", "代官山"],
+      "池袋": ["池袋駅", "東池袋", "目白", "大塚", "要町"],
+      "東京": ["東京駅", "有楽町", "大手町", "日本橋", "八重洲"],
+      "品川": ["品川駅", "大崎", "五反田", "大井町"],
+      "武蔵小杉": ["武蔵小杉駅", "新丸子", "元住吉", "武蔵中原"],
+      "横浜": ["横浜駅", "みなとみらい", "桜木町", "関内"],
+      "川崎": ["川崎駅", "京急川崎", "尻手", "鹿島田"],
+      "柏": ["柏駅", "南柏", "柏の葉キャンパス", "松戸駅"],
+      "松戸": ["松戸駅", "新松戸", "北松戸", "柏駅"],
+      "大宮": ["大宮駅", "さいたま新都心", "北大宮", "浦和駅"],
+      "浦和": ["浦和駅", "北浦和", "南浦和", "武蔵浦和"]
+    };
+
+    function getRecentAreas() {
+      try {
+        const raw = localStorage.getItem("teppay_recent_areas");
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function addRecentArea(areaName) {
+      if (!areaName || !areaName.trim()) return;
+      const clean = areaName.trim();
+      let list = getRecentAreas().filter(a => a !== clean);
+      list.unshift(clean);
+      if (list.length > 8) list = list.slice(0, 8);
+      try {
+        localStorage.setItem("teppay_recent_areas", JSON.stringify(list));
+      } catch (e) {}
+      renderAreaSuggestions();
+    }
+
+    function renderAreaSuggestions() {
+      const scrollEl = document.getElementById("chips-scroll");
+      if (!scrollEl) return;
+
+      const recent = getRecentAreas();
+      let proposals = [];
+
+      // If user currently has an area set, first add "現在地に戻る"
+      if (currentArea) {
+        proposals.push({ label: "🎯 現在地に戻る", area: "", isGps: true });
+      }
+
+      // Add expansions if currentArea matches any keyword
+      if (currentArea) {
+        for (const [key, expansions] of Object.entries(AREA_EXPANSIONS)) {
+          if (currentArea.includes(key)) {
+            expansions.forEach(exp => {
+              if (exp !== currentArea && !proposals.some(p => p.area === exp)) {
+                proposals.push({ label: exp, area: exp });
+              }
+            });
+            break;
+          }
+        }
+      }
+
+      // Add recent search history
+      recent.forEach(r => {
+        if (!proposals.some(p => p.area === r)) {
+          proposals.push({ label: r, area: r });
+        }
+      });
+
+      // Default: if no searches yet, keep hidden
+      if (proposals.length === 0) {
+        scrollEl.style.display = "none";
+        scrollEl.innerHTML = "";
+        return;
+      }
+
+      scrollEl.style.display = "flex";
+      scrollEl.innerHTML = proposals.map(p => {
+        const isActive = p.area === currentArea && !p.isGps;
+        const cls = isActive ? "chip active" : "chip";
+        return `<button type="button" class="${cls}" data-area="${p.area}">${p.label}</button>`;
+      }).join("");
+
+      // Re-attach click events
+      scrollEl.querySelectorAll(".chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          const a = chip.getAttribute("data-area");
+          setArea(a);
+        });
+      });
+    }
+
     // Update Area UI
     function updateAreaDisplay() {
       if (currentArea) {
@@ -1545,11 +1686,16 @@
     }
 
     function setArea(newArea) {
-      currentArea = newArea.trim();
+      currentArea = (newArea || "").trim();
       try {
         localStorage.setItem("teppay_area", currentArea);
       } catch (e) {}
+      if (currentArea) {
+        addRecentArea(currentArea);
+      }
       updateAreaDisplay();
+    renderAreaSuggestions();
+      renderAreaSuggestions();
       showToast(currentArea ? `検索エリアを「${currentArea}」に設定しました` : "現在地付近に設定しました");
       if (radarPanel.classList.contains("open")) {
         runAllGenreRadarScan();
@@ -1609,7 +1755,7 @@
       return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
     }
 
-    // Match an OSM POI against all 330 Teppay chains
+    // Match an OSM POI against all 330 teppay chains
     const CHAIN_FP_EXCLUDES = {
       "マルエ": ["マルエツ", "マルエイ", "マルエム", "マルエシ", "マルエ醤油"],
       "松屋": ["西松屋", "小松屋", "若松屋", "鶴松屋", "高松屋", "松屋酒店", "松屋菓舗", "松屋珈琲", "松屋精肉"],
@@ -1636,7 +1782,7 @@
       "ジャパン": ["ドラッグストアジャパン", "スギ薬局ジャパン"]
     };
 
-    function matchPoiToTeppayChain(poiName, poiBrand) {
+    function matchPoiToteppayChain(poiName, poiBrand) {
       const targetStr = `${poiName || ""} ${poiBrand || ""}`.replace(/‐/g, "-").replace(/－/g, "-");
       if (!targetStr.trim()) return null;
       const lowerTarget = targetStr.toLowerCase();
@@ -1953,7 +2099,7 @@
           const tags = el.tags || {};
           const name = tags.name || tags["name:ja"] || "";
           const brand = tags.brand || tags["brand:ja"] || "";
-          const matchedChain = matchPoiToTeppayChain(name, brand);
+          const matchedChain = matchPoiToteppayChain(name, brand);
           if (!matchedChain) return;
 
           const lat = el.lat || (el.center && el.center.lat);
@@ -2033,8 +2179,8 @@
       const listSlice = filtered.slice(0, MAX_LIST_ITEMS);
 
       radarStatusText.textContent = mapMode
-        ? `⚡ 表示中の地図内に ${totalCount}件 のTeppay対応店舗（地図を動かすと即座に更新）`
-        : `⚡ 半径${radarRadius / 1000}km圏内に ${totalCount}件 のTeppay対応店舗が見つかりました`;
+        ? `⚡ 表示中の地図内に ${totalCount}件 のteppay対応店舗（地図を動かすと即座に更新）`
+        : `⚡ 半径${radarRadius / 1000}km圏内に ${totalCount}件 のteppay対応店舗が見つかりました`;
 
       let listHtml = "";
       pinSlice.forEach((store, idx) => {
@@ -2145,8 +2291,8 @@
         chainListContainer.innerHTML = `
           <div style="text-align: center; padding: 32px 16px; color: var(--text-muted); background: white; border-radius: 12px; border: 1px dashed var(--border);">
             <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
-            <div style="font-weight: 600; margin-bottom: 4px;">一致するTeppay対応チェーンが見つかりませんでした</div>
-            <div style="font-size: 12px;">店名「${q}」はTeppay非対応の可能性があります。「使える？判定」タブでご確認ください。</div>
+            <div style="font-weight: 600; margin-bottom: 4px;">一致するteppay対応チェーンが見つかりませんでした</div>
+            <div style="font-size: 12px;">店名「${q}」はteppay非対応の可能性があります。「使える？判定」タブでご確認ください。</div>
           </div>
         `;
         return;
@@ -2184,6 +2330,7 @@
     document.getElementById("rescan-top-btn").addEventListener("click", async () => {
       currentArea = "";
       updateAreaDisplay();
+    renderAreaSuggestions();
       await runAllGenreRadarScan();
     });
 
@@ -2215,14 +2362,7 @@
       }
     });
 
-    document.getElementById("open-gmaps-all-major-btn").addEventListener("click", () => {
-      const majorCrossGenreQuery = excludeCvs
-        ? "ウエルシア OR スギ薬局 OR オーケー OR イトーヨーカドー OR コーナン OR ビバホーム OR 島忠 OR ロイヤルホームセンター OR すき家 OR 松屋 OR ガスト OR スシロー OR くら寿司 OR 日高屋 OR コメダ珈琲店 OR カラオケまねきねこ"
-        : "セブン-イレブン OR ローソン OR ファミリーマート OR ウエルシア OR スギ薬局 OR オーケー OR イトーヨーカドー OR コーナン OR ビバホーム OR すき家 OR 松屋 OR ガスト OR スシロー OR 日高屋 OR コメダ珈琲店 OR カラオケまねきねこ";
-      openGoogleMaps(majorCrossGenreQuery);
-    });
-
-    // Tab Navigation
+        // Tab Navigation
     document.querySelectorAll(".nav-item").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
@@ -2399,7 +2539,7 @@
       // Check in CHAINS_DATA using false-positive-safe matcher first, or exact/substring if not excluded
       const chainMatch = (altMatch && altMatch.data.status === "ng")
         ? null
-        : (matchPoiToTeppayChain(q, "") || CHAINS_DATA.find(c => {
+        : (matchPoiToteppayChain(q, "") || CHAINS_DATA.find(c => {
             const excludes = CHAIN_FP_EXCLUDES[c.name];
             if (excludes && excludes.some(ex => q.toLowerCase().includes(ex.toLowerCase()))) return false;
             return c.name.toLowerCase().includes(q.toLowerCase()) || q.toLowerCase().includes(c.name.toLowerCase());
@@ -2411,11 +2551,11 @@
       if (chainMatch) {
         // Supported!
         checkResultCard.classList.add("ok");
-        resultHeader.innerHTML = `<span>✅</span> 【${chainMatch.name}】はTeppay対応です！`;
+        resultHeader.innerHTML = `<span>✅</span> 【${chainMatch.name}】はteppay対応です！`;
         resultBody.innerHTML = `
           <div><strong>業種:</strong> ${chainMatch.category}</div>
           <div style="margin-top: 4px; font-size: 12px; color: #166534;">
-            ※Smart CodeまたはTeppayマークのある店舗でコード決済が可能です。
+            ※Smart Codeまたはteppayマークのある店舗でコード決済が可能です。
           </div>
         `;
         resultActionArea.innerHTML = `
@@ -2426,7 +2566,7 @@
       } else if (altMatch && altMatch.data.status === "ng") {
         // Known Not Supported!
         checkResultCard.classList.add("ng");
-        resultHeader.innerHTML = `<span>⚠️</span> 【${altMatch.key}】はTeppay対象外です`;
+        resultHeader.innerHTML = `<span>⚠️</span> 【${altMatch.key}】はteppay対象外です`;
         resultBody.innerHTML = `
           <div style="margin-bottom: 6px;">${altMatch.data.reason}</div>
           <div style="background: white; padding: 8px 10px; border-radius: 6px; border: 1px solid #fcd34d;">
@@ -2444,7 +2584,7 @@
         checkResultCard.classList.add("ng");
         resultHeader.innerHTML = `<span>❓</span> 【${q}】は公式対象シートに未掲載です`;
         resultBody.innerHTML = `
-          <div>公式掲載の330チェーンに該当がありませんでした（Teppay / Smart Code非対応の可能性が高いです）。</div>
+          <div>公式掲載の330チェーンに該当がありませんでした（teppay / Smart Code非対応の可能性が高いです）。</div>
           <div style="margin-top: 6px; font-size: 12px;">
             ※個人の商店等で個別にSmart Codeを導入している場合を除き、基本的にチェーン店では利用できません。
           </div>
@@ -2492,6 +2632,7 @@
 
     // Initialize: Immediately start GPS watch and open first-view radar map
     updateAreaDisplay();
+    renderAreaSuggestions();
     renderChains();
     startRealtimeGpsWatch();
     runAllGenreRadarScan();
