@@ -1368,20 +1368,57 @@
     }
 
     // Match an OSM POI against all 330 Teppay chains
+    const CHAIN_FP_EXCLUDES = {
+      "マルエ": ["マルエツ", "マルエイ", "マルエム", "マルエシ", "マルエ醤油"],
+      "松屋": ["西松屋", "小松屋", "若松屋", "鶴松屋", "高松屋", "松屋酒店", "松屋菓舗", "松屋珈琲", "松屋精肉"],
+      "天下一": ["天下一品"],
+      "ダックス": ["シダックス", "マクダックス", "ダックスフンド"],
+      "ココス": ["ココストア", "ココスナカムラ", "ココス中村"],
+      "コジマ": ["ペットの専門店コジマ", "ペットの専門店 コジマ", "ペットのコジマ", "コジマ動物病院"],
+      "洋服の青山": ["青山フラワーマーケット", "青山学院", "青山一丁目", "青山霊園", "南青山", "北青山", "青山病院", "青山歯科", "青山餃子"],
+      "イトーヨーカ堂／アリオ": ["アリオン", "ビアリッツ"],
+      "イトーヨーカ堂／ポッポ": ["ゆ〜ポッポ", "ポケふた", "ポッポ駅前屋", "ポッポ保育園"],
+      "オータニ": ["ニューオータニ", "ホテルオータニ", "ヘアサロンオータニ"],
+      "sanwa": ["鶏三和", "三和公園", "三和クリーニング", "三和交通", "三和銀行", "三和シャッター", "三和シヤッター"],
+      "ジャパン": ["パークジャパン", "ジャパンミート", "ジャパンビバレッジ", "ジャパンレンタカー", "ジャパンネット", "ロフトジャパン"],
+      "セリア": ["コンセリア", "ピッツェリア", "トラットリア"],
+      "ニトリ": ["ニトリ歯科"]
+    };
+
+    const CHAIN_KW_OVERRIDES = {
+      "マルエ": ["マルエドラッグ", "クスリのマルエ"],
+      "洋服の青山": ["洋服の青山"],
+      "sanwa": ["スーパー三和", "フードワン"],
+      "オータニ": ["フードオアシスオータニ", "スーパーオータニ"],
+      "福原": ["フクハラ", "スーパーフクハラ"],
+      "ジャパン": ["ドラッグストアジャパン", "スギ薬局ジャパン"]
+    };
+
     function matchPoiToTeppayChain(poiName, poiBrand) {
       const targetStr = `${poiName || ""} ${poiBrand || ""}`.replace(/‐/g, "-").replace(/－/g, "-");
       if (!targetStr.trim()) return null;
       const lowerTarget = targetStr.toLowerCase();
 
+      if (lowerTarget.includes("ジョイフル本田")) {
+        return CHAINS_DATA.find(c => c.name === "ジョイフル本田") || null;
+      }
+      if (lowerTarget.includes("セブン銀行") && !lowerTarget.includes("セブン-イレブン") && !lowerTarget.includes("セブンイレブン")) {
+        return null;
+      }
+
       for (let i = 0; i < CHAINS_DATA.length; i++) {
         const chain = CHAINS_DATA[i];
-        const kws = chain.match_keywords || [chain.name];
+        const excludes = CHAIN_FP_EXCLUDES[chain.name];
+        if (excludes && excludes.some(ex => lowerTarget.includes(ex.toLowerCase()))) continue;
+
+        const kws = CHAIN_KW_OVERRIDES[chain.name] || chain.match_keywords || [chain.name];
         for (let j = 0; j < kws.length; j++) {
           const kw = kws[j].toLowerCase();
-          if (kw.length >= 2 && lowerTarget.includes(kw)) {
-            // Guard against false positive (e.g. ジョイフル本田 matching ジョイフル)
-            if (lowerTarget.includes("ジョイフル本田") && chain.name !== "ジョイフル本田") continue;
-            if (lowerTarget.includes("セブン銀行") && !lowerTarget.includes("セブン-イレブン") && !lowerTarget.includes("セブンイレブン")) continue;
+          if (kw.length < 2) continue;
+          if (/^[a-z0-9 .&'-]+$/.test(kw)) {
+            const re = new RegExp(`(?<![a-z0-9])${kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![a-z0-9])`);
+            if (re.test(lowerTarget)) return chain;
+          } else if (lowerTarget.includes(kw)) {
             return chain;
           }
         }
@@ -2075,8 +2112,14 @@
         }
       }
 
-      // Check in CHAINS_DATA
-      const chainMatch = CHAINS_DATA.find(c => c.name.toLowerCase().includes(q.toLowerCase()) || q.toLowerCase().includes(c.name.toLowerCase()));
+      // Check in CHAINS_DATA using false-positive-safe matcher first, or exact/substring if not excluded
+      const chainMatch = (altMatch && altMatch.data.status === "ng")
+        ? null
+        : (matchPoiToTeppayChain(q, "") || CHAINS_DATA.find(c => {
+            const excludes = CHAIN_FP_EXCLUDES[c.name];
+            if (excludes && excludes.some(ex => q.toLowerCase().includes(ex.toLowerCase()))) return false;
+            return c.name.toLowerCase().includes(q.toLowerCase()) || q.toLowerCase().includes(c.name.toLowerCase());
+          }));
 
       checkResultCard.className = "result-card";
       resultActionArea.innerHTML = "";
