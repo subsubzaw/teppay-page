@@ -1404,6 +1404,7 @@
               accuracy: Math.round(pos.coords.accuracy || 0),
               timestamp: Date.now()
             };
+            try { localStorage.setItem("teppay_last_pos", JSON.stringify({ lat: userGpsCoords.lat, lng: userGpsCoords.lng })); } catch (e) {}
             if (!currentArea) {
               areaDisplay.textContent = `現在地 (±${userGpsCoords.accuracy}m)`;
               radarAreaTitle.textContent = `現在地 (±${userGpsCoords.accuracy}m)`;
@@ -1455,22 +1456,28 @@
         radarMarkersLayer = L.layerGroup().addTo(radarMap);
         radarMap.on("moveend", () => {
           clearTimeout(moveTimer);
-          moveTimer = setTimeout(onMapMoved, 600);
+          const delay = (storeData && inCoverage(radarMap.getCenter().lat, radarMap.getCenter().lng)) ? 120 : 600;
+          moveTimer = setTimeout(onMapMoved, delay);
         });
       } else {
+        programmaticMove = true;
         radarMap.setView([lat, lng], zoom);
-        setTimeout(() => radarMap.invalidateSize(), 150);
+        setTimeout(() => {
+          programmaticMove = false;
+          radarMap.invalidateSize();
+        }, 180);
       }
     }
 
+    let programmaticMove = false;
+
     // Re-scan when the user pans/zooms the map
     function onMapMoved() {
-      if (!radarMap || !radarPanel.classList.contains("open")) return;
+      if (programmaticMove || !radarMap || !radarPanel.classList.contains("open")) return;
       const c = radarMap.getCenter();
       const moved = radarMap.distance(c, L.latLng(lastCenterCoords.lat, lastCenterCoords.lng));
-      const zoomed = mapMode && Math.abs(radarMap.getZoom() - (radarMap._lastScanZoom ?? -1)) > 0;
-      if (moved < scanRadius * 0.15 && !zoomed && !mapMode) return;
-      if (moved < 30 && !zoomed) return;
+      const zoomed = Math.abs(radarMap.getZoom() - (radarMap._lastScanZoom ?? -1)) > 0;
+      if (moved < 25 && !zoomed) return;
       radarMap._lastScanZoom = radarMap.getZoom();
       runAllGenreRadarScan(true);
     }
@@ -1478,9 +1485,8 @@
     // Resolve Coordinates for currentArea or fresh high-accuracy GPS every time
     async function resolveSearchCenter() {
       if (!currentArea) {
-        radarStatusText.textContent = "📡 現在地の正確なGPS位置情報を取得中...";
         try {
-          const coords = await fetchFreshGpsPosition();
+          const coords = await fetchFreshGpsPosition(15000);
           return {
             lat: coords.lat,
             lng: coords.lng,
@@ -1490,7 +1496,11 @@
           if (userGpsCoords) {
             return { ...userGpsCoords, label: "現在地（直近GPS）" };
           }
-          return { lat: 35.717455, lng: 140.144992, label: "現在地未取得（志津駅基準）" };
+          const saved = savedPosition();
+          if (saved) {
+            return { lat: saved.lat, lng: saved.lng, label: "現在地（前回の位置）" };
+          }
+          return { lat: 35.717455, lng: 140.144992, label: "志津駅周辺（GPS未取得）" };
         }
       }
 
@@ -1514,36 +1524,114 @@
       return { lat: 35.717455, lng: 140.144992, label: currentArea };
     }
 
-    // Scan Overpass API for all POIs around center and filter by 330 Teppay chains
+    // ---- Pre-built store data (data/stores.json): instant local lookup, no live API needed ----
+    const CHAIN_BY_NAME = new Map(CHAINS_DATA.map(c => [c.name, c]));
+    let storeData = null; // { chains:[], stores:[[ci,lat,lng,name]], generated }
+    const storeDataPromise = fetch("data/stores.json")
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { storeData = d; return d; })
+      .catch(() => null);
+    const COVERAGE = { s: 34.85, w: 138.90, n: 36.15, e: 140.95 };
+
+    function inCoverage(lat, lng) {
+      return lat >= COVERAGE.s && lat <= COVERAGE.n && lng >= COVERAGE.w && lng <= COVERAGE.e;
+    }
+
+    function localScan(center, radius, bounds = null) {
+      const dLat = radius / 111320;
+      const dLng = radius / (111320 * Math.cos(center.lat * Math.PI / 180));
+      const sLat = bounds ? bounds.getSouth() : center.lat - dLat;
+      const nLat = bounds ? bounds.getNorth() : center.lat + dLat;
+      const wLng = bounds ? bounds.getWest() : center.lng - dLng;
+      const eLng = bounds ? bounds.getEast() : center.lng + dLng;
+      const out = [];
+      for (let i = 0; i < storeData.stores.length; i++) {
+        const row = storeData.stores[i];
+        const lat = row[1], lng = row[2];
+        if (lat < sLat || lat > nLat || lng < wLng || lng > eLng) continue;
+        const dist = calcDistanceMeters(center.lat, center.lng, lat, lng);
+        if (!bounds && dist > radius) continue;
+        const chainName = storeData.chains[row[0]];
+        const chain = CHAIN_BY_NAME.get(chainName) || { category: "", tags: [] };
+        out.push({
+          storeName: row[3] || chainName,
+          chainName,
+          category: chain.category,
+          tags: chain.tags || [],
+          lat, lng, dist
+        });
+      }
+      out.sort((a, b) => a.dist - b.dist);
+      return out;
+    }
+
+    function savedPosition() {
+      try {
+        const v = JSON.parse(localStorage.getItem("teppay_last_pos") || "null");
+        if (v && typeof v.lat === "number" && typeof v.lng === "number") return v;
+      } catch (e) {}
+      return null;
+    }
+
+    // Scan stores around center (instant local dataset for Tokyo/Kanagawa/Chiba, fallback to Overpass outside)
     async function runAllGenreRadarScan(fromMap = false) {
       const seq = ++scanSeq;
       mapMode = fromMap;
       radarPanel.classList.add("open");
-      radarStatusText.textContent = "⏳ 周辺の全330チェーン対象店舗をスキャン中...";
-      if (!fromMap) radarResultsList.innerHTML = "";
 
       let center;
+      let mapBounds = null;
       if (fromMap && radarMap) {
         const c = radarMap.getCenter();
-        const b = radarMap.getBounds();
+        mapBounds = radarMap.getBounds();
         center = { lat: c.lat, lng: c.lng, label: "表示中の地図エリア" };
         const r = Math.max(
-          radarMap.distance(c, L.latLng(c.lat, b.getEast())),
-          radarMap.distance(c, L.latLng(b.getNorth(), c.lng))
+          radarMap.distance(c, L.latLng(c.lat, mapBounds.getEast())),
+          radarMap.distance(c, L.latLng(mapBounds.getNorth(), c.lng))
         );
-        scanRadius = Math.min(3000, Math.max(200, Math.round(r)));
+        scanRadius = Math.min(4000, Math.max(200, Math.round(r)));
       } else {
-        // Create the map right away so it never stays blank while GPS is pending
-        if (!radarMap) ensureRadarMap(lastCenterCoords.lat, lastCenterCoords.lng);
+        // Instant first paint: immediately render map & pins at best known position before waiting for fresh GPS
+        const fallbackArea = AREA_COORDS[currentArea] || AREA_COORDS["志津駅"];
+        const quick = !currentArea
+          ? (userGpsCoords || savedPosition() || { lat: fallbackArea.lat, lng: fallbackArea.lng, label: "志津駅周辺（現在地を取得中...）" })
+          : fallbackArea;
+        scanRadius = radarRadius;
+        ensureRadarMap(quick.lat, quick.lng);
+        await storeDataPromise;
+        if (seq !== scanSeq) return;
+        if (storeData && inCoverage(quick.lat, quick.lng)) {
+          const qc = {
+            lat: quick.lat,
+            lng: quick.lng,
+            label: currentArea ? (quick.label || currentArea) : (userGpsCoords ? `現在地（±${userGpsCoords.accuracy}m）` : (savedPosition() ? "現在地（前回の位置）" : quick.label))
+          };
+          lastCenterCoords = qc;
+          radarAreaTitle.textContent = qc.label;
+          lastFetchedPois = localScan(qc, scanRadius);
+          renderRadarMapAndList();
+        }
         center = await resolveSearchCenter();
         if (seq !== scanSeq) return;
         scanRadius = radarRadius;
-        ensureRadarMap(center.lat, center.lng);
+        if (calcDistanceMeters(lastCenterCoords.lat, lastCenterCoords.lng, center.lat, center.lng) > 15) {
+          ensureRadarMap(center.lat, center.lng);
+        }
       }
       lastCenterCoords = center;
       radarAreaTitle.textContent = center.label;
 
-      // Query Overpass API for named shops, amenities, tourism, leisure around center
+      // Fast path: pre-built data covers this area
+      await storeDataPromise;
+      if (seq !== scanSeq) return;
+      if (storeData && inCoverage(center.lat, center.lng)) {
+        lastFetchedPois = localScan(center, scanRadius, mapBounds);
+        renderRadarMapAndList();
+        return;
+      }
+
+      // Fallback: live Overpass query (outside pre-built coverage)
+      radarStatusText.textContent = "⏳ 首都圏外のためライブ検索中（時間がかかる場合があります）...";
       const overpassQuery = `[out:json][timeout:15];(node["shop"]["name"](around:${scanRadius},${center.lat},${center.lng});way["shop"]["name"](around:${scanRadius},${center.lat},${center.lng});node["amenity"]["name"](around:${scanRadius},${center.lat},${center.lng});way["amenity"]["name"](around:${scanRadius},${center.lat},${center.lng});node["leisure"]["name"](around:${scanRadius},${center.lat},${center.lng});way["leisure"]["name"](around:${scanRadius},${center.lat},${center.lng}););out center;`;
 
       try {
@@ -1594,6 +1682,9 @@
       }
     }
 
+    const MAX_MAP_PINS = 150;
+    const MAX_LIST_ITEMS = 80;
+
     function renderRadarMapAndList() {
       if (!radarMap || !radarMarkersLayer) return;
       radarMarkersLayer.clearLayers();
@@ -1628,12 +1719,16 @@
         return true;
       });
 
+      const totalCount = filtered.length;
+      const pinSlice = filtered.slice(0, MAX_MAP_PINS);
+      const listSlice = filtered.slice(0, MAX_LIST_ITEMS);
+
       radarStatusText.textContent = mapMode
-        ? `✅ 表示中の地図内に ${filtered.length}件 のTeppay対応店舗が見つかりました（地図を動かすと更新）`
-        : `✅ 半径${radarRadius / 1000}km圏内に ${filtered.length}件 のTeppay対応店舗が見つかりました`;
+        ? `⚡ 表示中の地図内に ${totalCount}件 のTeppay対応店舗（地図を動かすと即座に更新）`
+        : `⚡ 半径${radarRadius / 1000}km圏内に ${totalCount}件 のTeppay対応店舗が見つかりました`;
 
       let listHtml = "";
-      filtered.forEach((store, idx) => {
+      pinSlice.forEach((store, idx) => {
         const isCvs = store.category.includes("コンビニ");
         const isHc = store.tags.includes("ホームセンター");
         const pinColor = isHc ? "#d97706" : (isCvs ? "#0284c7" : "#00873c");
@@ -1654,21 +1749,22 @@
         `);
         marker.addTo(radarMarkersLayer);
 
-        listHtml += `
-          <div class="radar-store-item">
-            <div class="radar-store-info">
-              <div class="radar-store-name">${idx + 1}. ${store.storeName}</div>
-              <div class="radar-store-sub">
-                <span>📏 約${store.dist}m</span>
-                <span>・</span>
-                <span>${store.category}</span>
+        if (idx < MAX_LIST_ITEMS) {
+          listHtml += `
+            <div class="radar-store-item">
+              <div class="radar-store-info">
+                <div class="radar-store-name">${idx + 1}. ${store.storeName}</div>
+                <div class="radar-store-sub">
+                  <span>📏 約${store.dist}m</span>
+                  <span>・</span>
+                  <span>${store.category}</span>
+                </div>
               </div>
-            </div>
-            <button type="button" class="action-btn map" data-action="open-radar-store" data-name="${store.storeName}" data-lat="${store.lat}" data-lng="${store.lng}">
-              <span>📍</span> Googleマップ
-            </button>
-          </div>
-        `;
+              <button type="button" class="action-btn map" data-action="open-radar-store" data-name="${store.storeName}" data-lat="${store.lat}" data-lng="${store.lng}">
+                <span>📍</span> Googleマップ
+              </button>
+            </div>`;
+        }
       });
 
       if (filtered.length === 0) {

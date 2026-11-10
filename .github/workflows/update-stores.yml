@@ -1,0 +1,41 @@
+name: Update Kanto Store Dataset
+
+on:
+  schedule:
+    # Run at 03:00 UTC on the 1st of every month
+    - cron: "0 3 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-stores:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install osmium and download Kanto PBF
+        run: |
+          pip install osmium
+          curl -fSL -o /tmp/kanto.osm.pbf "https://download.geofabrik.de/asia/japan/kanto-latest.osm.pbf"
+
+      - name: Extract Teppay store locations
+        run: |
+          python scripts/extract_kanto_stores.py /tmp/kanto.osm.pbf data/stores.json
+
+      - name: Commit and push if updated
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/stores.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: monthly update of Kanto Teppay stores dataset"
+            git push
+          fi
