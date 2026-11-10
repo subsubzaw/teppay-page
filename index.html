@@ -287,12 +287,10 @@
       box-shadow: 0 2px 6px rgba(0, 190, 183, 0.25);
     }
 
-    /* Area Input Panel */
+    /* Area Input Panel (Always visible) */
     .area-input-panel {
-      display: none;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed var(--border-dark);
+      display: block;
+      margin-top: 6px;
     }
     .area-input-group {
       display: flex;
@@ -1074,12 +1072,11 @@
   <header>
     <div class="header-inner">
       <div class="logo-area">
-        <svg viewBox="0 0 110 34" class="teppay-logo-svg" aria-label="teppay">
-          <rect x="2" y="2" width="106" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
-          <rect x="5.5" y="5.5" width="99" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
-          <text x="55" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="16" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppay</text>
+        <svg viewBox="0 0 142 34" class="teppay-logo-svg" aria-label="teppayナビ">
+          <rect x="2" y="2" width="138" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
+          <rect x="5.5" y="5.5" width="131" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
+          <text x="71" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="15" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppayナビ</text>
         </svg>
-        <span class="nav-title-badge">teppayナビ</span>
       </div>
       <button class="header-btn" id="open-install-guide-btn">
         <svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/><path d="M12 7v6M9.5 10.5 12 13l2.5-2.5"/></svg>
@@ -1112,16 +1109,12 @@
           <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
           <span>現在地</span>
         </button>
-        <button class="btn-sm" id="toggle-area-input-btn">
-          <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          <span>変更</span>
-        </button>
       </div>
     </div>
     <div class="area-input-panel" id="area-input-panel">
       <div class="area-input-group">
         <input type="text" id="custom-area-input" placeholder="駅名・地名（例: 新宿, 渋谷, 横浜, 吉祥寺）">
-        <button class="btn-sm primary" id="apply-area-btn">適用</button>
+        <button class="btn-sm primary" id="apply-area-btn">検索</button>
       </div>
     </div>
     <!-- Area suggestions: hidden by default, shown based on searched content -->
@@ -1159,7 +1152,6 @@
 
         <div class="radar-status">
           <span id="radar-status-text">周辺のteppay対象店舗をスキャン中...</span>
-          <button type="button" class="btn-sm" id="rescan-radar-btn"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg><span>再スキャン</span></button>
         </div>
 
         <div class="radar-results-list" id="radar-results-list"></div>
@@ -1426,12 +1418,11 @@
     <div class="footer-track-ribbon"></div>
     <div class="footer-content">
       <div class="footer-brand">
-        <svg viewBox="0 0 110 34" class="teppay-logo-svg" style="height:28px;">
-          <rect x="2" y="2" width="106" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
-          <rect x="5.5" y="5.5" width="99" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
-          <text x="55" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="16" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppay</text>
+        <svg viewBox="0 0 142 34" class="teppay-logo-svg" style="height:30px;" aria-label="teppayナビ">
+          <rect x="2" y="2" width="138" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
+          <rect x="5.5" y="5.5" width="131" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
+          <text x="71" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="15" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppayナビ</text>
         </svg>
-        <span style="font-weight:800; font-size:12px; color:#ffffff;">teppayナビ</span>
       </div>
       <div class="footer-desc">
         ※本サイトはteppay利用者のための周辺店舗検索・ルート案内ツールです。加盟店データは全330チェーンの対象店舗リストに基づき構成されています。
@@ -2331,16 +2322,9 @@
       chainListContainer.innerHTML = html;
     }
 
-    // Top Rescan & Bottom Rescan buttons
+    // Top Rescan button
     document.getElementById("rescan-top-btn").addEventListener("click", async () => {
-      currentArea = "";
-      updateAreaDisplay();
-    renderAreaSuggestions();
       await runAllGenreRadarScan();
-    });
-
-    document.getElementById("rescan-radar-btn").addEventListener("click", () => {
-      runAllGenreRadarScan();
     });
 
     document.querySelectorAll(".radius-btn").forEach(btn => {
@@ -2399,26 +2383,15 @@
       }
     });
 
-    document.getElementById("toggle-area-input-btn").addEventListener("click", () => {
-      if (areaInputPanel.style.display === "block") {
-        areaInputPanel.style.display = "none";
-      } else {
-        areaInputPanel.style.display = "block";
-        customAreaInput.focus();
-      }
-    });
-
     document.getElementById("apply-area-btn").addEventListener("click", () => {
       const val = customAreaInput.value;
       setArea(val);
-      areaInputPanel.style.display = "none";
     });
 
     customAreaInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const val = customAreaInput.value;
         setArea(val);
-        areaInputPanel.style.display = "none";
       }
     });
 
