@@ -7,23 +7,35 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Teppayナビ">
   <title>Teppayナビ - Teppay対応店舗 & Googleマップ検索</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🟢</text></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%2300873c%22/><text x=%2250%22 y=%2265%22 font-size=%2250%22 text-anchor=%22middle%22 fill=%22white%22 font-weight=%22bold%22 font-family=%22sans-serif%22>T</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%2300beb7%22/><text x=%2250%22 y=%2266%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22white%22 font-weight=%22900%22 font-family=%22sans-serif%22>t</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%2300beb7%22/><text x=%2250%22 y=%2266%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22white%22 font-weight=%22900%22 font-family=%22sans-serif%22>t</text></svg>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     :root {
-      --primary: #00873c;
-      --primary-dark: #006b2f;
-      --primary-light: #e8f5e9;
+      --primary: #00beb7;
+      --primary-dark: #00968f;
+      --primary-mint: #64d9c8;
+      --primary-light: #e6faf7;
+      --primary-ultra-light: #f2fcfb;
+      --accent-yellow: #fcee21;
+      --accent-pink: #ff4081;
+      --slate-footer: #5c6d82;
+      --slate-dark: #283548;
       --accent: #0284c7;
-      --bg: #f8fafc;
+      --bg: #f4fbfb;
       --card-bg: #ffffff;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-      --radius: 12px;
+      --text: #283548;
+      --text-muted: #627284;
+      --border: #d5f4ee;
+      --border-dark: #b2ebe1;
+      --shadow: 0 4px 16px rgba(0, 190, 183, 0.08);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --radius-pill: 9999px;
     }
     * {
       box-sizing: border-box;
@@ -32,59 +44,58 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: 'Zen Kaku Gothic New', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.5;
       padding-bottom: 90px;
+      -webkit-font-smoothing: antialiased;
     }
-    /* Header */
+
+    /* Top White Navbar */
     header {
-      background: linear-gradient(135deg, #00873c 0%, #006028 100%);
-      color: white;
-      padding: 16px 16px 12px;
-      position: sticky;
-      top: 0;
+      background: #ffffff;
+      color: var(--text);
+      padding: 10px 16px;
+      position: relative;
       z-index: 50;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-bottom: 1.5px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.06);
     }
-    .header-top {
+    .header-inner {
+      max-width: 680px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
     }
     .logo-area {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .logo-badge {
-      background: white;
-      color: var(--primary-dark);
-      font-weight: 800;
-      font-size: 14px;
-      padding: 2px 8px;
-      border-radius: 6px;
+    .teppay-logo-svg {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+    .nav-title-badge {
+      background: var(--primary);
+      color: white;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
       letter-spacing: 0.5px;
     }
-    h1 {
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-    }
-    .sub-tag {
-      font-size: 11px;
-      opacity: 0.9;
-    }
     .header-btn {
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 20px;
+      background: #ffffff;
+      border: 1.5px solid var(--primary);
+      color: var(--primary-dark);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -92,41 +103,121 @@
       transition: all 0.2s;
     }
     .header-btn:hover, .header-btn:active {
-      background: rgba(255,255,255,0.35);
+      background: var(--primary-light);
+    }
+
+    /* Hero Brand Banner matching image.png */
+    .hero-brand-banner {
+      background: linear-gradient(135deg, #00beb7 0%, #03bfb7 50%, #2dd4bf 100%);
+      color: white;
+      padding: 18px 16px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-brand-banner::before {
+      content: "";
+      position: absolute;
+      top: -25px;
+      right: -25px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+    }
+    .hero-brand-banner::after {
+      content: "";
+      position: absolute;
+      bottom: -35px;
+      left: -35px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+    .hero-brand-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-brand-top {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .hero-yellow-badge {
+      background: var(--accent-yellow);
+      color: var(--slate-dark);
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      display: inline-block;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+    .hero-pink-badge {
+      background: var(--accent-pink);
+      color: white;
+      font-weight: 700;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+    .hero-brand-title {
+      font-size: 23px;
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+      margin-bottom: 5px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .hero-brand-title span {
+      color: var(--accent-yellow);
+    }
+    .hero-brand-desc {
+      font-size: 12px;
+      opacity: 0.95;
+      font-weight: 500;
     }
 
     /* Global Area Bar */
     .area-bar {
-      background: white;
-      border-bottom: 1px solid var(--border);
+      background: #ffffff;
+      border-bottom: 1.5px solid var(--border);
       padding: 10px 16px;
       position: sticky;
-      top: 59px;
+      top: 0;
       z-index: 40;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 6px rgba(0, 190, 183, 0.08);
     }
     .area-status-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .area-label {
       font-size: 12px;
       color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      font-weight: 700;
     }
     .current-area-badge {
-      font-weight: 700;
+      font-weight: 800;
       color: var(--primary-dark);
       background: var(--primary-light);
-      padding: 3px 8px;
-      border-radius: 6px;
+      border: 1.5px solid var(--border-dark);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
       font-size: 13px;
-      max-width: 170px;
+      max-width: 180px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -136,22 +227,30 @@
       gap: 6px;
     }
     .btn-sm {
-      padding: 4px 10px;
+      padding: 5px 12px;
       font-size: 11px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: #f1f5f9;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--border-dark);
+      background: #ffffff;
       color: var(--text);
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-sm:hover {
+      background: var(--primary-light);
     }
     .btn-sm.primary {
       background: var(--primary);
       color: white;
       border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0, 190, 183, 0.3);
+    }
+    .btn-sm.primary:hover {
+      background: var(--primary-dark);
     }
     .chips-scroll {
       display: flex;
@@ -164,29 +263,35 @@
       display: none;
     }
     .chip {
-      padding: 4px 10px;
-      border-radius: 14px;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
       font-size: 11px;
       white-space: nowrap;
-      background: #f1f5f9;
-      border: 1px solid var(--border);
+      background: #ffffff;
+      border: 1.5px solid var(--border);
       color: var(--text-muted);
       cursor: pointer;
       transition: all 0.15s;
+      font-weight: 600;
+    }
+    .chip:hover {
+      border-color: var(--primary-mint);
+      color: var(--primary-dark);
     }
     .chip.active {
-      background: var(--primary-light);
+      background: var(--primary);
       border-color: var(--primary);
-      color: var(--primary-dark);
-      font-weight: 700;
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 2px 6px rgba(0, 190, 183, 0.25);
     }
 
-    /* Area Input Modal / Dropdown */
+    /* Area Input Panel */
     .area-input-panel {
       display: none;
       margin-top: 8px;
       padding-top: 8px;
-      border-top: 1px dashed var(--border);
+      border-top: 1px dashed var(--border-dark);
     }
     .area-input-group {
       display: flex;
@@ -194,11 +299,12 @@
     }
     .area-input-group input {
       flex: 1;
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      padding: 8px 14px;
+      border: 1.5px solid var(--border-dark);
+      border-radius: var(--radius-pill);
       font-size: 13px;
       outline: none;
+      font-family: inherit;
     }
     .area-input-group input:focus {
       border-color: var(--primary);
@@ -211,52 +317,15 @@
       padding: 16px;
     }
 
-    /* Hero Banner Button for All-Genre Map */
-    .hero-banner-btn {
-      width: 100%;
-      text-align: left;
-      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-      border: 2px solid #34d399;
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      margin-bottom: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 135, 60, 0.12);
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .hero-banner-btn:hover, .hero-banner-btn:active {
-      transform: translateY(-2px);
-      border-color: var(--primary);
-      box-shadow: 0 6px 16px rgba(0, 135, 60, 0.2);
-    }
-    .hero-banner-cta {
-      background: var(--primary);
-      color: white;
-      font-weight: 700;
-      font-size: 12px;
-      padding: 8px 12px;
-      border-radius: 20px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    }
-
-    /* All-Genre Radar Map Panel */
+    /* Radar Map Panel (All-genre map) */
     .radar-panel {
       display: none;
-      background: white;
-      border: 2px solid var(--primary);
-      border-radius: var(--radius);
-      padding: 14px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      background: #ffffff;
+      border: 2px solid var(--primary-mint);
+      border-radius: 22px;
+      padding: 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 20px rgba(0, 190, 183, 0.1);
     }
     .radar-panel.open {
       display: block;
@@ -265,57 +334,83 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       gap: 8px;
+    }
+    .radar-title-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .radar-title-text {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--primary-dark);
+      letter-spacing: -0.2px;
+    }
+    .radar-title-area-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .radar-controls {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       align-items: center;
       justify-content: space-between;
     }
     .radius-group {
       display: flex;
-      gap: 4px;
+      gap: 5px;
     }
     .radius-btn {
-      padding: 4px 10px;
+      padding: 5px 12px;
       font-size: 11px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: #f1f5f9;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--border-dark);
+      background: #ffffff;
       color: var(--text-muted);
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
+      transition: all 0.15s;
+    }
+    .radius-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary-dark);
     }
     .radius-btn.active {
       background: var(--primary);
       color: white;
       border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0, 190, 183, 0.25);
     }
     .exclude-cvs-toggle {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       font-size: 11px;
-      font-weight: 600;
-      color: #334155;
+      font-weight: 700;
+      color: var(--text);
       cursor: pointer;
-      background: #f8fafc;
-      padding: 4px 10px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
+      background: var(--primary-ultra-light);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--border);
     }
     .store-pin {
       position: absolute;
       transform: translate(-50%, -50%);
       display: inline-flex; align-items: center; gap: 4px;
-      max-width: 110px; box-sizing: border-box;
-      color: #fff; border: 2px solid #fff; border-radius: 14px;
-      padding: 2px 6px 2px 3px; font-size: 10px; font-weight: 700; line-height: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+      max-width: 120px; box-sizing: border-box;
+      color: #fff; border: 2px solid #fff; border-radius: var(--radius-pill);
+      padding: 2px 7px 2px 3px; font-size: 11px; font-weight: 800; line-height: 16px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
       cursor: pointer;
       user-select: none;
     }
@@ -327,23 +422,25 @@
     }
     .store-pin span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
     .radar-store-logo {
-      width: 28px; height: 28px; border-radius: 6px;
+      width: 32px; height: 32px; border-radius: 8px;
       background: #fff; object-fit: contain; flex: none;
-      border: 1px solid var(--border); padding: 1px;
+      border: 1px solid var(--border); padding: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
     #radar-map-box {
       width: 100%;
-      height: 350px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      margin-bottom: 10px;
+      height: 360px;
+      border-radius: 16px;
+      border: 1.5px solid var(--border);
+      margin-bottom: 12px;
       z-index: 10;
+      overflow: hidden;
     }
     .radar-status {
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--primary-dark);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -351,23 +448,29 @@
       flex-wrap: wrap;
     }
     .radar-results-list {
-      max-height: 260px;
+      max-height: 270px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-bottom: 10px;
+      gap: 8px;
+      margin-bottom: 12px;
       padding-right: 2px;
     }
     .radar-store-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #f8fafc;
-      gap: 8px;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      background: var(--primary-ultra-light);
+      gap: 10px;
+      transition: all 0.15s;
+    }
+    .radar-store-item:hover {
+      border-color: var(--primary-mint);
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.08);
     }
     .radar-store-info {
       min-width: 0;
@@ -375,10 +478,12 @@
     }
     .radar-store-name {
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
+      color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      margin-bottom: 2px;
     }
     .radar-store-sub {
       font-size: 11px;
@@ -386,6 +491,11 @@
       display: flex;
       gap: 6px;
       align-items: center;
+      font-weight: 500;
+    }
+    .radar-store-sub span:first-child {
+      color: var(--primary-dark);
+      font-weight: 700;
     }
 
     /* Bottom Navigation Tabs */
@@ -394,13 +504,15 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: white;
-      border-top: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1.5px solid var(--border);
       display: flex;
       justify-content: space-around;
       padding: 6px 4px 10px;
       z-index: 60;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 -2px 12px rgba(0, 190, 183, 0.08);
     }
     .nav-item {
       flex: 1;
@@ -412,13 +524,13 @@
       border: none;
       color: var(--text-muted);
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       padding: 4px 0;
       transition: color 0.15s;
     }
     .nav-item.active {
-      color: var(--primary);
+      color: var(--primary-dark);
     }
     .nav-icon {
       font-size: 19px;
@@ -437,15 +549,16 @@
     .card {
       background: var(--card-bg);
       border-radius: var(--radius);
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       box-shadow: var(--shadow);
-      padding: 16px;
+      padding: 18px;
       margin-bottom: 16px;
     }
     .card-title {
       font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 10px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -465,26 +578,28 @@
     }
     .preset-card {
       background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 14px 12px;
       cursor: pointer;
       transition: all 0.15s ease-in-out;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.04);
     }
     .preset-card:hover, .preset-card:active {
       border-color: var(--primary);
       transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 135, 60, 0.15);
+      box-shadow: 0 6px 16px rgba(0, 190, 183, 0.15);
     }
     .preset-header {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 13px;
+      color: var(--text);
       margin-bottom: 4px;
     }
     .preset-icon {
@@ -493,28 +608,30 @@
     .preset-desc {
       font-size: 11px;
       color: var(--text-muted);
-      line-height: 1.3;
-      margin-bottom: 8px;
+      line-height: 1.35;
+      margin-bottom: 10px;
     }
     .preset-btn {
       width: 100%;
       background: var(--primary-light);
       color: var(--primary-dark);
-      border: 1px solid #bbf7d0;
-      font-weight: 700;
+      border: 1.5px solid var(--border-dark);
+      font-weight: 800;
       font-size: 11px;
-      padding: 5px 6px;
-      border-radius: 6px;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
       cursor: pointer;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 4px;
+      transition: all 0.15s;
     }
     .preset-btn:hover {
       background: var(--primary);
       color: white;
+      border-color: var(--primary);
     }
 
     /* Search Bar */
@@ -524,28 +641,30 @@
     }
     .search-input {
       width: 100%;
-      padding: 10px 14px 10px 36px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
+      padding: 11px 16px 11px 38px;
+      border: 2px solid var(--border-dark);
+      border-radius: var(--radius-pill);
       font-size: 14px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
       background: white;
+      font-family: inherit;
     }
     .search-input:focus {
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 190, 183, 0.15);
     }
     .search-icon {
       position: absolute;
-      left: 12px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--text-muted);
+      color: var(--primary);
       font-size: 14px;
     }
     .clear-search-btn {
       position: absolute;
-      right: 12px;
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
       background: none;
@@ -569,21 +688,27 @@
       display: none;
     }
     .cat-pill {
-      padding: 5px 12px;
-      border-radius: 20px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
       font-size: 12px;
       background: white;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       color: var(--text-muted);
       cursor: pointer;
       white-space: nowrap;
-      font-weight: 500;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+    .cat-pill:hover {
+      border-color: var(--primary-mint);
+      color: var(--primary-dark);
     }
     .cat-pill.active {
       background: var(--primary);
       border-color: var(--primary);
       color: white;
-      font-weight: 700;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.3);
     }
 
     /* Chain List Cards */
@@ -594,24 +719,25 @@
     }
     .chain-item {
       background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      transition: border-color 0.15s;
+      transition: all 0.15s;
     }
     .chain-item:hover {
-      border-color: #cbd5e1;
+      border-color: var(--primary-mint);
+      box-shadow: 0 4px 12px rgba(0, 190, 183, 0.08);
     }
     .chain-info {
       flex: 1;
       min-width: 0;
     }
     .chain-name {
-      font-weight: 700;
+      font-weight: 800;
       font-size: 14px;
       color: var(--text);
       white-space: nowrap;
@@ -627,18 +753,19 @@
     }
     .badge {
       font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
     }
     .badge-cat {
-      background: #f1f5f9;
-      color: #475569;
+      background: var(--primary-ultra-light);
+      color: var(--primary-dark);
+      border: 1px solid var(--border);
     }
     .badge-tag {
-      background: #ecfdf5;
-      color: #047857;
-      border: 1px solid #a7f3d0;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
     }
     .chain-actions {
       display: flex;
@@ -646,39 +773,42 @@
       flex-shrink: 0;
     }
     .action-btn {
-      padding: 6px 10px;
-      border-radius: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      border: 1px solid var(--border);
-      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      background: #ffffff;
       color: var(--text);
       display: inline-flex;
       align-items: center;
       gap: 4px;
       text-decoration: none;
+      transition: all 0.15s;
     }
     .action-btn.map {
-      background: #eff6ff;
-      border-color: #bfdbfe;
-      color: #1d4ed8;
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
     }
     .action-btn.map:hover {
-      background: #1d4ed8;
+      background: var(--primary);
       color: white;
     }
     .action-btn.copy:hover {
-      background: #e2e8f0;
+      background: var(--primary-ultra-light);
+      border-color: var(--border-dark);
     }
 
     /* Checker Tab */
     .checker-box {
       background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
+      border: 2px solid var(--primary-mint);
+      border-radius: 22px;
+      padding: 20px;
       margin-bottom: 16px;
+      box-shadow: 0 6px 20px rgba(0, 190, 183, 0.08);
     }
     .checker-input-wrap {
       display: flex;
@@ -687,24 +817,31 @@
     }
     .checker-input {
       flex: 1;
-      padding: 10px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
+      padding: 11px 16px;
+      border: 2px solid var(--border-dark);
+      border-radius: var(--radius-pill);
       font-size: 14px;
       outline: none;
+      font-family: inherit;
     }
     .checker-input:focus {
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 190, 183, 0.15);
     }
     .checker-btn {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 700;
+      padding: 11px 22px;
+      border-radius: var(--radius-pill);
+      font-weight: 800;
       font-size: 13px;
       cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.3);
+      transition: all 0.15s;
+    }
+    .checker-btn:hover {
+      background: var(--primary-dark);
     }
     .checker-samples {
       display: flex;
@@ -713,42 +850,43 @@
       margin-bottom: 16px;
     }
     .sample-pill {
-      padding: 4px 8px;
-      background: #f1f5f9;
-      border-radius: 6px;
+      padding: 5px 12px;
+      background: var(--primary-ultra-light);
+      border-radius: var(--radius-pill);
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--primary-dark);
       cursor: pointer;
       border: 1px solid var(--border);
+      font-weight: 700;
+      transition: all 0.15s;
     }
     .sample-pill:hover {
       background: var(--primary-light);
-      color: var(--primary-dark);
       border-color: var(--primary);
     }
     .result-card {
-      border-radius: 10px;
-      padding: 14px;
+      border-radius: 16px;
+      padding: 16px;
       margin-top: 12px;
       display: none;
     }
     .result-card.ok {
       display: block;
       background: #f0fdf4;
-      border: 1.5px solid #86efac;
+      border: 2px solid #86efac;
       color: #14532d;
     }
     .result-card.ng {
       display: block;
       background: #fffbeb;
-      border: 1.5px solid #fde68a;
+      border: 2px solid #fde68a;
       color: #78350f;
     }
     .result-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 15px;
       margin-bottom: 6px;
     }
@@ -762,7 +900,8 @@
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(40, 53, 72, 0.6);
+      backdrop-filter: blur(4px);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -770,13 +909,14 @@
     }
     .modal-content {
       background: white;
-      border-radius: 16px;
+      border-radius: 22px;
       max-width: 500px;
       width: 100%;
       max-height: 85vh;
       overflow-y: auto;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      padding: 22px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+      border: 2px solid var(--primary-mint);
     }
     .modal-header {
       display: flex;
@@ -787,13 +927,14 @@
       padding-bottom: 10px;
     }
     .modal-close-btn {
-      background: #f1f5f9;
-      border: none;
-      width: 28px;
-      height: 28px;
+      background: var(--primary-ultra-light);
+      border: 1px solid var(--border);
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       cursor: pointer;
       font-weight: bold;
+      color: var(--text);
     }
 
     /* Toast */
@@ -802,13 +943,13 @@
       bottom: 75px;
       left: 50%;
       transform: translateX(-50%) translateY(50px);
-      background: #1e293b;
+      background: var(--slate-dark);
       color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
+      padding: 9px 20px;
+      border-radius: var(--radius-pill);
       font-size: 12px;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
       z-index: 99;
       opacity: 0;
       transition: all 0.25s ease-out;
@@ -825,19 +966,24 @@
       gap: 12px;
       margin-bottom: 14px;
       align-items: flex-start;
+      background: var(--primary-ultra-light);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
     }
     .step-num {
       background: var(--primary);
       color: white;
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 13px;
+      font-weight: 900;
       flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 190, 183, 0.3);
     }
     .step-text {
       font-size: 13px;
@@ -845,23 +991,73 @@
     .step-text strong {
       color: var(--text);
     }
+
+    /* Footer styled after official Teppay page */
+    .teppay-footer {
+      background: var(--slate-footer);
+      color: #e2e8f0;
+      font-size: 11px;
+      line-height: 1.7;
+      margin-top: 30px;
+      position: relative;
+    }
+    .footer-track-ribbon {
+      height: 8px;
+      width: 100%;
+      background: repeating-linear-gradient(90deg, #00beb7 0px, #00beb7 12px, #283548 12px, #283548 24px);
+    }
+    .footer-content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .footer-desc {
+      color: #cbd5e1;
+      margin-bottom: 14px;
+      font-size: 11px;
+    }
+    .footer-copy {
+      color: #94a3b8;
+      font-size: 10px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Top Header -->
+  <!-- Top Header with Official Railway Track Teppay Logo -->
   <header>
-    <div class="header-top">
+    <div class="header-inner">
       <div class="logo-area">
-        <span class="logo-badge">Teppay</span>
-        <h1>Teppay ナビ</h1>
+        <svg viewBox="0 0 110 34" class="teppay-logo-svg" aria-label="teppay">
+          <rect x="2" y="2" width="106" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
+          <rect x="5.5" y="5.5" width="99" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
+          <text x="55" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="16" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppay</text>
+        </svg>
+        <span class="nav-title-badge">ナビ</span>
       </div>
       <button class="header-btn" id="open-install-guide-btn">
-        <span>📲</span> ホーム画面追加
+        <span>📲</span> ホーム追加
       </button>
     </div>
-    <div class="sub-tag">全330チェーン対応店舗 &amp; Googleマップ即時連携ツール</div>
   </header>
+
+  <!-- Hero Brand Banner matching image.png -->
+  <div class="hero-brand-banner">
+    <div class="hero-brand-inner">
+      <div class="hero-brand-top">
+        <span class="hero-yellow-badge">全330チェーン対応！</span>
+        <span class="hero-pink-badge">Googleマップ即時連携</span>
+      </div>
+      <h2 class="hero-brand-title">じゃ、こっちの<span>pay</span>で<br>よくない？</h2>
+      <p class="hero-brand-desc">今いる場所からTeppay対応店舗を瞬時にスキャン &amp; ワンタップでルート案内</p>
+    </div>
+  </div>
 
   <!-- Global Area Context Bar -->
   <div class="area-bar">
@@ -903,10 +1099,11 @@
       <!-- ファーストビュー常時表示：全ジャンル対応店舗レーダーマップ -->
       <div class="radar-panel open" id="radar-panel">
         <div class="radar-header">
-          <div style="font-size: 14px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 6px;">
-            <span>📡</span> 周辺の対象店舗マップ (<span id="radar-area-title">現在地取得中...</span>)
+          <div class="radar-title-box">
+            <span class="radar-title-text">📡 周辺の対象店舗マップ</span>
+            <span class="radar-title-area-badge" id="radar-area-title">現在地取得中...</span>
           </div>
-          <button type="button" class="btn-sm primary" id="rescan-top-btn">🔄 現在地で再検索</button>
+          <button type="button" class="btn-sm primary" id="rescan-top-btn">🔄 再検索</button>
         </div>
 
         <div class="radar-controls">
@@ -931,7 +1128,7 @@
         <div class="radar-results-list" id="radar-results-list"></div>
 
         <div style="border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 6px;">
-          <button type="button" class="action-btn map" style="width: 100%; justify-content: center; padding: 9px; font-size: 12px;" id="open-gmaps-all-major-btn">
+          <button type="button" class="action-btn map" style="width: 100%; justify-content: center; padding: 11px 16px; font-size: 13px; font-weight: 800; background: linear-gradient(135deg, #00beb7 0%, #009e97 100%); color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(0, 190, 183, 0.35);" id="open-gmaps-all-major-btn">
             <span>🚀</span> Googleマップアプリで主要チェーンを一括検索
           </button>
           <div style="font-size: 10px; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">
@@ -1193,6 +1390,27 @@
     </div>
 
   </div>
+
+  <!-- Official Teppay Style Footer -->
+  <footer class="teppay-footer">
+    <div class="footer-track-ribbon"></div>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <svg viewBox="0 0 110 34" class="teppay-logo-svg" style="height:28px;">
+          <rect x="2" y="2" width="106" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
+          <rect x="5.5" y="5.5" width="99" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
+          <text x="55" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="16" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppay</text>
+        </svg>
+        <span style="font-weight:800; font-size:12px; color:#ffffff;">Teppay ナビゲーション</span>
+      </div>
+      <div class="footer-desc">
+        ※本サイトはTeppay利用者のための周辺店舗検索・ルート案内ツールです。加盟店データは全330チェーンの対象店舗リストに基づき構成されています。
+      </div>
+      <div class="footer-copy">
+        &copy; 2026 Teppay Navi - 全330チェーン対象店舗マップ
+      </div>
+    </div>
+  </footer>
 
   <!-- Bottom Navigation -->
   <nav class="nav-bar">
@@ -1788,15 +2006,15 @@
       if (!mapMode) {
         radarCircle = L.circle([lastCenterCoords.lat, lastCenterCoords.lng], {
           radius: scanRadius,
-          color: "#00873c",
-          fillColor: "#34d399",
-          fillOpacity: 0.08,
-          weight: 1.5
+          color: "#00beb7",
+          fillColor: "#64d9c8",
+          fillOpacity: 0.12,
+          weight: 2
         }).addTo(radarMap);
 
         const centerIcon = L.divIcon({
           className: "custom-center-pin",
-          html: `<div style="background:#dc2626;color:white;border:2px solid white;border-radius:50%;width:16px;height:16px;box-shadow:0 2px 5px rgba(0,0,0,0.4);"></div>`,
+          html: `<div style="background:#ff4081;color:white;border:2.5px solid white;border-radius:50%;width:18px;height:18px;box-shadow:0 2px 6px rgba(0,0,0,0.35);"></div>`,
           iconSize: [16, 16],
           iconAnchor: [8, 8]
         });
@@ -1822,7 +2040,7 @@
       pinSlice.forEach((store, idx) => {
         const isCvs = store.category.includes("コンビニ");
         const isHc = store.tags.includes("ホームセンター");
-        const pinColor = isHc ? "#d97706" : (isCvs ? "#0284c7" : "#00873c");
+        const pinColor = isHc ? "#f59e0b" : (isCvs ? "#0284c7" : "#00beb7");
 
         const logoUrl = LOGO_MAP[store.chainName];
         const logoImg = logoUrl ? `<img src="${logoUrl}" class="pin-logo" alt="">` : "";
