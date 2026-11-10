@@ -1328,6 +1328,13 @@
 
     // Google Maps Search URL Helper (fetches fresh GPS when in current location mode)
     async function openGoogleMaps(query) {
+      // Prefer the area currently shown on the map so Google Maps opens exactly there
+      if (radarMap) {
+        const c = radarMap.getCenter();
+        const z = Math.min(17, Math.max(12, radarMap.getZoom()));
+        window.open(`https://www.google.com/maps/search/${encodeURIComponent(query)}/@${c.lat.toFixed(6)},${c.lng.toFixed(6)},${z}z`, "_blank");
+        return;
+      }
       if (currentArea) {
         const fullQuery = `${query} ${currentArea}`;
         const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullQuery)}`;
@@ -1350,9 +1357,14 @@
       }
     }
 
+    // Pin the exact store coordinates (avoids Google re-interpreting the name near the user's GPS)
+    function googleMapsPinUrl(name, lat, lng) {
+      const label = String(name).replace(/[()]/g, " ");
+      return `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})&z=18`;
+    }
+
     function openGoogleMapsLatLng(name, lat, lng) {
-      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + " " + lat + "," + lng)}`;
-      window.open(url, "_blank");
+      window.open(googleMapsPinUrl(name, lat, lng), "_blank");
     }
 
     // Distance calculation (Haversine in meters)
@@ -1781,7 +1793,7 @@
           <div style="font-size:12px;line-height:1.4;">
             <strong>${store.storeName}</strong><br>
             <span style="color:#047857;font-size:11px;">${store.category}（約${store.dist}m）</span><br>
-            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.storeName + ' ' + store.lat + ',' + store.lng)}" target="_blank" style="display:inline-block;margin-top:4px;color:#1d4ed8;font-weight:700;">📍 Googleマップで開く</a>
+            <a href="${googleMapsPinUrl(store.storeName, store.lat, store.lng)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:4px;color:#1d4ed8;font-weight:700;">📍 Googleマップで開く</a>
           </div>
         `);
         marker.addTo(radarMarkersLayer);
