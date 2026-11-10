@@ -1533,6 +1533,8 @@
         );
         scanRadius = Math.min(3000, Math.max(200, Math.round(r)));
       } else {
+        // Create the map right away so it never stays blank while GPS is pending
+        if (!radarMap) ensureRadarMap(lastCenterCoords.lat, lastCenterCoords.lng);
         center = await resolveSearchCenter();
         if (seq !== scanSeq) return;
         scanRadius = radarRadius;
