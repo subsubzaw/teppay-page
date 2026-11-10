@@ -308,6 +308,17 @@
       border-radius: 14px;
       border: 1px solid var(--border);
     }
+    .store-pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      display: flex; align-items: center; gap: 3px;
+      max-width: 88px; box-sizing: border-box;
+      color: #fff; border: 2px solid #fff; border-radius: 12px;
+      padding: 1px 6px; font-size: 10px; font-weight: 700; line-height: 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    .store-pin span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .store-pin img { width: 14px; height: 14px; border-radius: 3px; background: #fff; flex: none; }
     #radar-map-box {
       width: 100%;
       height: 350px;
@@ -1035,27 +1046,6 @@
           </button>
         </div>
       </div>
-
-      <!-- チャットでよく使われた検索パターン -->
-      <div class="card">
-        <div class="card-title">
-          <span>💬 よく使う検索ショートカット</span>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <button class="action-btn map" style="justify-content: flex-start; padding: 10px 12px; font-size: 13px;" data-action="open-chat-query" data-type="hc-nearby">
-            <span>🔨</span> <strong>[現在のエリア] の ホームセンター</strong> を検索
-          </button>
-          <button class="action-btn map" style="justify-content: flex-start; padding: 10px 12px; font-size: 13px;" data-action="open-chat-query" data-type="cvs-nearby">
-            <span>🏪</span> <strong>[現在のエリア] の コンビニ</strong> を検索
-          </button>
-          <button class="action-btn map" style="justify-content: flex-start; padding: 10px 12px; font-size: 13px;" data-action="open-chat-query" data-type="karaoke-nearby">
-            <span>🎤</span> <strong>[現在のエリア] の カラオケまねきねこ</strong> を検索
-          </button>
-          <button class="action-btn map" style="justify-content: flex-start; padding: 10px 12px; font-size: 13px;" data-action="open-chat-query" data-type="gourmet-nearby">
-            <span>🍽️</span> <strong>[現在のエリア] の すき家・松屋・ガスト</strong> を検索
-          </button>
-        </div>
-      </div>
     </div>
 
     <!-- TAB 2: 全330チェーン一覧 & 検索 -->
@@ -1269,6 +1259,10 @@
     let radarMarkersLayer = null;
     let radarCircle = null;
     let radarRadius = 500;
+    let scanRadius = 500;
+    let mapMode = false;
+    let scanSeq = 0;
+    let moveTimer = null;
     let excludeCvs = false;
     let lastFetchedPois = [];
     let lastCenterCoords = { lat: 35.717455, lng: 140.144992 };
@@ -1309,20 +1303,6 @@
         areaDisplay.textContent = "現在地付近";
         radarAreaTitle.textContent = "現在地付近";
       }
-      // Update quick query buttons
-      document.querySelectorAll("[data-action='open-chat-query']").forEach(btn => {
-        const type = btn.getAttribute("data-type");
-        const areaText = currentArea ? currentArea : "現在地";
-        if (type === "hc-nearby") {
-          btn.innerHTML = `<span>🔨</span> <strong>${areaText} の ホームセンター</strong> を検索`;
-        } else if (type === "cvs-nearby") {
-          btn.innerHTML = `<span>🏪</span> <strong>${areaText} の コンビニ</strong> を検索`;
-        } else if (type === "karaoke-nearby") {
-          btn.innerHTML = `<span>🎤</span> <strong>${areaText} の カラオケまねきねこ</strong> を検索`;
-        } else if (type === "gourmet-nearby") {
-          btn.innerHTML = `<span>🍽️</span> <strong>${areaText} の すき家・松屋・ガスト</strong> を検索`;
-        }
-      });
       // Update chips
       document.querySelectorAll(".chips-scroll .chip").forEach(chip => {
         const a = chip.getAttribute("data-area");
@@ -1473,10 +1453,26 @@
         gmapLayer.addTo(radarMap);
         L.control.layers({ "Google マップ": gmapLayer, "標準ストリート": esriLayer }, null, { position: "topright" }).addTo(radarMap);
         radarMarkersLayer = L.layerGroup().addTo(radarMap);
+        radarMap.on("moveend", () => {
+          clearTimeout(moveTimer);
+          moveTimer = setTimeout(onMapMoved, 600);
+        });
       } else {
         radarMap.setView([lat, lng], zoom);
         setTimeout(() => radarMap.invalidateSize(), 150);
       }
+    }
+
+    // Re-scan when the user pans/zooms the map
+    function onMapMoved() {
+      if (!radarMap || !radarPanel.classList.contains("open")) return;
+      const c = radarMap.getCenter();
+      const moved = radarMap.distance(c, L.latLng(lastCenterCoords.lat, lastCenterCoords.lng));
+      const zoomed = mapMode && Math.abs(radarMap.getZoom() - (radarMap._lastScanZoom ?? -1)) > 0;
+      if (moved < scanRadius * 0.15 && !zoomed && !mapMode) return;
+      if (moved < 30 && !zoomed) return;
+      radarMap._lastScanZoom = radarMap.getZoom();
+      runAllGenreRadarScan(true);
     }
 
     // Resolve Coordinates for currentArea or fresh high-accuracy GPS every time
@@ -1519,18 +1515,34 @@
     }
 
     // Scan Overpass API for all POIs around center and filter by 330 Teppay chains
-    async function runAllGenreRadarScan() {
+    async function runAllGenreRadarScan(fromMap = false) {
+      const seq = ++scanSeq;
+      mapMode = fromMap;
       radarPanel.classList.add("open");
       radarStatusText.textContent = "⏳ 周辺の全330チェーン対象店舗をスキャン中...";
-      radarResultsList.innerHTML = "";
+      if (!fromMap) radarResultsList.innerHTML = "";
 
-      const center = await resolveSearchCenter();
+      let center;
+      if (fromMap && radarMap) {
+        const c = radarMap.getCenter();
+        const b = radarMap.getBounds();
+        center = { lat: c.lat, lng: c.lng, label: "表示中の地図エリア" };
+        const r = Math.max(
+          radarMap.distance(c, L.latLng(c.lat, b.getEast())),
+          radarMap.distance(c, L.latLng(b.getNorth(), c.lng))
+        );
+        scanRadius = Math.min(3000, Math.max(200, Math.round(r)));
+      } else {
+        center = await resolveSearchCenter();
+        if (seq !== scanSeq) return;
+        scanRadius = radarRadius;
+        ensureRadarMap(center.lat, center.lng);
+      }
       lastCenterCoords = center;
       radarAreaTitle.textContent = center.label;
-      ensureRadarMap(center.lat, center.lng);
 
       // Query Overpass API for named shops, amenities, tourism, leisure around center
-      const overpassQuery = `[out:json][timeout:15];(node["shop"]["name"](around:${radarRadius},${center.lat},${center.lng});way["shop"]["name"](around:${radarRadius},${center.lat},${center.lng});node["amenity"]["name"](around:${radarRadius},${center.lat},${center.lng});way["amenity"]["name"](around:${radarRadius},${center.lat},${center.lng});node["leisure"]["name"](around:${radarRadius},${center.lat},${center.lng});way["leisure"]["name"](around:${radarRadius},${center.lat},${center.lng}););out center;`;
+      const overpassQuery = `[out:json][timeout:15];(node["shop"]["name"](around:${scanRadius},${center.lat},${center.lng});way["shop"]["name"](around:${scanRadius},${center.lat},${center.lng});node["amenity"]["name"](around:${scanRadius},${center.lat},${center.lng});way["amenity"]["name"](around:${scanRadius},${center.lat},${center.lng});node["leisure"]["name"](around:${scanRadius},${center.lat},${center.lng});way["leisure"]["name"](around:${scanRadius},${center.lat},${center.lng}););out center;`;
 
       try {
         const response = await fetch("https://overpass-api.de/api/interpreter", {
@@ -1538,6 +1550,7 @@
           body: "data=" + encodeURIComponent(overpassQuery)
         });
         const json = await response.json();
+        if (seq !== scanSeq) return;
         const elements = json.elements || [];
 
         const matchedStores = [];
@@ -1574,6 +1587,7 @@
         lastFetchedPois = matchedStores;
         renderRadarMapAndList();
       } catch (err) {
+        if (seq !== scanSeq) return;
         radarStatusText.textContent = "⚠️ ライブスキャンが混雑しています。下のGoogleマップ一括検索をご利用ください。";
       }
     }
@@ -1583,33 +1597,38 @@
       radarMarkersLayer.clearLayers();
       if (radarCircle) {
         radarMap.removeLayer(radarCircle);
+        radarCircle = null;
       }
 
-      // Center marker + radius circle
-      radarCircle = L.circle([lastCenterCoords.lat, lastCenterCoords.lng], {
-        radius: radarRadius,
-        color: "#00873c",
-        fillColor: "#34d399",
-        fillOpacity: 0.08,
-        weight: 1.5
-      }).addTo(radarMap);
+      // Center marker + radius circle (not needed when following the map viewport)
+      if (!mapMode) {
+        radarCircle = L.circle([lastCenterCoords.lat, lastCenterCoords.lng], {
+          radius: scanRadius,
+          color: "#00873c",
+          fillColor: "#34d399",
+          fillOpacity: 0.08,
+          weight: 1.5
+        }).addTo(radarMap);
 
-      const centerIcon = L.divIcon({
-        className: "custom-center-pin",
-        html: `<div style="background:#dc2626;color:white;border:2px solid white;border-radius:50%;width:16px;height:16px;box-shadow:0 2px 5px rgba(0,0,0,0.4);"></div>`,
-        iconSize: [16, 16],
-        iconAnchor: [8, 8]
-      });
-      L.marker([lastCenterCoords.lat, lastCenterCoords.lng], { icon: centerIcon })
-        .bindPopup(`<strong>📍 検索中心: ${lastCenterCoords.label}</strong>`)
-        .addTo(radarMarkersLayer);
+        const centerIcon = L.divIcon({
+          className: "custom-center-pin",
+          html: `<div style="background:#dc2626;color:white;border:2px solid white;border-radius:50%;width:16px;height:16px;box-shadow:0 2px 5px rgba(0,0,0,0.4);"></div>`,
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        });
+        L.marker([lastCenterCoords.lat, lastCenterCoords.lng], { icon: centerIcon })
+          .bindPopup(`<strong>📍 検索中心: ${lastCenterCoords.label}</strong>`)
+          .addTo(radarMarkersLayer);
+      }
 
       const filtered = lastFetchedPois.filter(item => {
         if (excludeCvs && item.category.includes("コンビニ")) return false;
         return true;
       });
 
-      radarStatusText.textContent = `✅ 半径${radarRadius / 1000}km圏内に ${filtered.length}件 のTeppay対応店舗が見つかりました`;
+      radarStatusText.textContent = mapMode
+        ? `✅ 表示中の地図内に ${filtered.length}件 のTeppay対応店舗が見つかりました（地図を動かすと更新）`
+        : `✅ 半径${radarRadius / 1000}km圏内に ${filtered.length}件 のTeppay対応店舗が見つかりました`;
 
       let listHtml = "";
       filtered.forEach((store, idx) => {
@@ -1619,9 +1638,8 @@
 
         const storeIcon = L.divIcon({
           className: "custom-store-pin",
-          html: `<div style="background:${pinColor};color:white;border:2px solid white;border-radius:12px;padding:1px 6px;font-size:10px;font-weight:700;white-space:nowrap;box-shadow:0 2px 5px rgba(0,0,0,0.3);">${store.chainName}</div>`,
-          iconSize: [70, 20],
-          iconAnchor: [35, 10]
+          html: `<div class="store-pin" style="background:${pinColor};" title="${store.chainName}"><span>${store.chainName}</span></div>`,
+          iconSize: null
         });
 
         const marker = L.marker([store.lat, store.lng], { icon: storeIcon });
@@ -1862,22 +1880,6 @@
         if (btn) {
           const chains = btn.getAttribute("data-chains");
           openGoogleMaps(chains);
-        }
-      });
-    });
-
-    // Chat query shortcuts
-    document.querySelectorAll("[data-action='open-chat-query']").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const type = btn.getAttribute("data-type");
-        if (type === "hc-nearby") {
-          openGoogleMaps("コーナン OR ビバホーム OR 島忠ホームズ OR ロイヤルホームセンター OR コメリ");
-        } else if (type === "cvs-nearby") {
-          openGoogleMaps("セブン-イレブン OR ローソン OR ファミリーマート OR ミニストップ");
-        } else if (type === "karaoke-nearby") {
-          openGoogleMaps("カラオケまねきねこ");
-        } else if (type === "gourmet-nearby") {
-          openGoogleMaps("すき家 OR 松屋 OR ガスト OR スシロー OR 日高屋");
         }
       });
     });
