@@ -1483,6 +1483,9 @@
           if (saved) {
             return { lat: saved.lat, lng: saved.lng, label: "現在地（前回の位置）" };
           }
+          if (!window.isSecureContext && location.hostname !== "localhost") {
+            return { lat: 35.681236, lng: 139.767125, label: "東京駅（SSL準備中：上の検索バーで地域指定可能）" };
+          }
           return { lat: 35.681236, lng: 139.767125, label: "東京駅周辺（GPS未取得）" };
         }
       }
@@ -1943,6 +1946,10 @@
 
     // Area buttons & Input
     document.getElementById("gps-btn").addEventListener("click", async () => {
+      if (!window.isSecureContext && location.hostname !== "localhost") {
+        showToast("SSL暗号化（HTTPS）の準備中のため、現在地取得には上の検索バーをご利用ください");
+        return;
+      }
       showToast("高精度GPSで現在地を取得中...");
       try {
         const coords = await fetchFreshGpsPosition();
@@ -1956,7 +1963,11 @@
         }
       } catch (err) {
         setArea("");
-        showToast("位置情報の許可設定をご確認ください");
+        if (err && err.code === 1) {
+          showToast("位置情報の使用が許可されていません。ブラウザ設定をご確認ください");
+        } else {
+          showToast("位置情報の取得に失敗しました。検索バーで地域名を指定してください");
+        }
       }
     });
 
