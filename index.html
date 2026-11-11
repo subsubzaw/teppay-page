@@ -56,7 +56,7 @@
     /* Top Navbar with LP Teal Gradient */
     header {
       background: linear-gradient(135deg, #00beb7 0%, #03bfb7 50%, #2dd4bf 100%);
-      padding: 10px 16px;
+      padding: 6px 14px;
       position: relative;
       z-index: 50;
       border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -68,16 +68,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .logo-area {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-shrink: 0;
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .logo-area:active {
+      opacity: 0.8;
     }
     .teppay-logo-svg {
-      height: 32px;
+      height: 30px;
       width: auto;
       display: block;
     }
@@ -85,8 +91,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      flex-shrink: 0;
     }
     .hero-yellow-badge {
       background: var(--accent-yellow);
@@ -818,16 +823,15 @@
   <!-- Top Header with Official Railway Track teppay Logo & Badges -->
   <header>
     <div class="header-inner">
-      <div class="logo-area">
+      <a href="#" class="logo-area" id="header-logo-link" aria-label="トップに戻る">
         <svg viewBox="0 0 178 34" class="teppay-logo-svg" aria-label="teppayナビ関東版">
           <rect x="2" y="2" width="174" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
           <rect x="5.5" y="5.5" width="167" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
           <text x="89" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="14.5" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppayナビ関東版</text>
         </svg>
-      </div>
+      </a>
       <div class="header-badges">
-        <span class="hero-yellow-badge">全330チェーン</span>
-        <span class="hero-pink-badge">Googleマップ連携</span>
+        <span class="hero-yellow-badge">全330チェーン対応</span>
       </div>
     </div>
   </header>
@@ -1031,7 +1035,7 @@
           </p>
           <p>
             <strong>Q. データの収録元は？</strong><br>
-            全330チェーンの公式対象店舗リストに基づき構成されています。
+            全330チェーンの公式対象店舗情報に基づき構成されています。
           </p>
         </div>
       </div>
@@ -1084,7 +1088,7 @@
         </svg>
       </div>
       <div class="footer-desc">
-        ※本サイトはteppay利用者のための周辺店舗検索・ルート案内ツールです。収録エリアは関東（東京都・神奈川県・埼玉県・千葉県と、茨城県南部・群馬県・栃木県・山梨県・静岡県の一部）です。加盟店データは全330チェーンの対象店舗リストに基づき構成されています。
+        ※本サイトはteppay利用者のための周辺店舗検索・ルート案内ツールです。収録エリアは関東（東京都・神奈川県・埼玉県・千葉県と、茨城県南部・群馬県・栃木県・山梨県・静岡県の一部）です。加盟店データは全330チェーンの対象店舗情報に基づき構成されています。
       </div>
       <div class="footer-copy">
         &copy; 2026 teppayナビ 関東版 - 全330チェーン対象店舗マップ
@@ -1855,6 +1859,14 @@
         switchTab(tabId);
       });
     });
+
+    const headerLogoLink = document.getElementById("header-logo-link");
+    if (headerLogoLink) {
+      headerLogoLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        switchTab("tab-quick");
+      });
+    }
 
     // Area buttons & Input
     document.getElementById("gps-btn").addEventListener("click", async () => {
