@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="teppayナビ関東版">
+  <title>運営者情報 - teppayナビ関東版</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%2300beb7%22/><rect x=%2212%22 y=%2226%22 width=%2276%22 height=%2248%22 rx=%2224%22 fill=%22%23ffffff%22/><rect x=%2216%22 y=%2230%22 width=%2268%22 height=%2240%22 rx=%2220%22 fill=%22none%22 stroke=%22%23283548%22 stroke-width=%223%22 stroke-dasharray=%224,5%22/><text x=%2250%22 y=%2256%22 font-family=%22sans-serif%22 font-size=%2220%22 font-weight=%22900%22 fill=%22%23283548%22 text-anchor=%22middle%22>teppay</text></svg>">
+  <style>
+    :root {
+      --primary: #00beb7;
+      --primary-dark: #00968f;
+      --primary-light: #e6faf7;
+      --primary-ultra-light: #f2fcfb;
+      --accent-yellow: #fcee21;
+      --slate-dark: #283548;
+      --bg: #f4fbfb;
+      --card-bg: #ffffff;
+      --text: #283548;
+      --text-muted: #627284;
+      --border: #d5f4ee;
+      --radius: 20px;
+      --radius-pill: 9999px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Zen Kaku Gothic New', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: linear-gradient(135deg, #00beb7 0%, #03bfb7 50%, #2dd4bf 100%);
+      padding: 6px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.15);
+    }
+    .header-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .teppay-logo-svg {
+      height: 30px;
+      width: auto;
+      display: block;
+    }
+    .hero-yellow-badge {
+      background: var(--accent-yellow);
+      color: var(--slate-dark);
+      font-weight: 900;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      display: inline-block;
+      white-space: nowrap;
+    }
+    main {
+      flex: 1;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 4px 16px rgba(0, 190, 183, 0.08);
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      color: var(--slate-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    .info-table tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .info-table th {
+      text-align: left;
+      padding: 14px 10px 14px 0;
+      font-weight: 800;
+      color: var(--slate-dark);
+      width: 100px;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+    .info-table td {
+      padding: 14px 0 14px 10px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .email-link {
+      color: var(--primary-dark);
+      font-weight: 700;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      background: var(--primary-light);
+      border: 1.5px solid var(--primary);
+      color: var(--primary-dark);
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 13px;
+      margin-top: 20px;
+      transition: all 0.15s;
+    }
+    .back-btn:active {
+      background: var(--primary);
+      color: white;
+    }
+    .teppay-footer {
+      background: #1e293b;
+      color: #cbd5e1;
+      padding-bottom: 30px;
+      margin-top: auto;
+    }
+    .footer-track-ribbon {
+      height: 6px;
+      background: repeating-linear-gradient(90deg, #00beb7 0px, #00beb7 14px, #283548 14px, #283548 20px);
+    }
+    .footer-content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px 20px;
+      text-align: center;
+    }
+    .footer-brand {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .footer-desc {
+      color: #94a3b8;
+      font-size: 11px;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .footer-copy {
+      color: #64748b;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <a href="./index.html" class="logo-area" aria-label="トップに戻る">
+        <svg viewBox="0 0 178 34" class="teppay-logo-svg" aria-label="teppayナビ関東版">
+          <rect x="2" y="2" width="174" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
+          <rect x="5.5" y="5.5" width="167" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
+          <text x="89" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="14.5" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppayナビ関東版</text>
+        </svg>
+      </a>
+      <div class="header-badges">
+        <span class="hero-yellow-badge">全330チェーン対応</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>運営者情報</h1>
+      <table class="info-table">
+        <tbody>
+          <tr>
+            <th>サイト名</th>
+            <td>teppayナビ関東版</td>
+          </tr>
+          <tr>
+            <th>概要</th>
+            <td>teppay（Smart Code等）対応店舗の周辺検索ツール</td>
+          </tr>
+          <tr>
+            <th>連絡先</th>
+            <td>
+              <a href="mailto:subsub.zaw@gmail.com" class="email-link">subsub.zaw@gmail.com</a>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+                ※掲載店舗情報に関するご連絡、お問い合わせ等はこちらのメールアドレスまでお願いいたします。
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <a href="./index.html" class="back-btn">← トップページに戻る</a>
+    </div>
+  </main>
+
+  <footer class="teppay-footer">
+    <div class="footer-track-ribbon"></div>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="./index.html" style="display:inline-block; text-decoration:none;">
+          <svg viewBox="0 0 178 34" class="teppay-logo-svg" style="height:30px;" aria-label="teppayナビ関東版">
+            <rect x="2" y="2" width="174" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
+            <rect x="5.5" y="5.5" width="167" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
+            <text x="89" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="14.5" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppayナビ関東版</text>
+          </svg>
+        </a>
+      </div>
+      <div class="footer-desc">
+        ※本サイトはteppay利用者のための周辺店舗検索ツールです。
+      </div>
+      <div class="footer-copy">
+        &copy; 2026 teppayナビ 関東版 - 全330チェーン対象店舗マップ
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

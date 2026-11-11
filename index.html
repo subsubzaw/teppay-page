@@ -826,8 +826,8 @@
       border-radius: 50%;
       background: #ffffff;
       color: var(--primary-dark);
-      border: 1.5px solid var(--border);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      border: 2px solid #2dd4bf;
+      box-shadow: 0 4px 14px rgba(0, 190, 183, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -939,7 +939,7 @@
             <div class="preset-desc">コーナン、ビバホーム、島忠ホームズ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="ホームセンター" data-chains="コーナン OR ビバホーム OR 島忠ホームズ OR ロイヤルホームセンター OR コメリ">
-            マップで探す
+            Googleマップ
           </button>
         </div>
 
@@ -952,7 +952,7 @@
             <div class="preset-desc">セブン、ローソン、ファミマ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="コンビニ" data-chains="セブン-イレブン OR ローソン OR ファミリーマート OR ミニストップ">
-            マップで探す
+            Googleマップ
           </button>
         </div>
 
@@ -965,7 +965,7 @@
             <div class="preset-desc">ウエルシア、スギ薬局、トモズ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="ドラッグストア" data-chains="ウエルシア薬局 OR スギ薬局 OR トモズ OR コクミン">
-            マップで探す
+            Googleマップ
           </button>
         </div>
 
@@ -978,7 +978,7 @@
             <div class="preset-desc">オーケー、イトーヨーカドー、成城石井等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="スーパーマーケット" data-chains="オーケー OR イトーヨーカドー OR 成城石井 OR ヨークマート">
-            マップで探す
+            Googleマップ
           </button>
         </div>
 
@@ -991,7 +991,7 @@
             <div class="preset-desc">すき家、松屋、ガスト、スシロー等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="飲食店" data-chains="ガスト OR すき家 OR 松屋 OR スシロー OR くら寿司 OR 日高屋">
-            マップで探す
+            Googleマップ
           </button>
         </div>
 
@@ -1004,7 +1004,7 @@
             <div class="preset-desc">コメダ珈琲店、銀座ルノアール等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="カフェ" data-chains="コメダ珈琲店 OR 銀座ルノアール OR ベックスコーヒーショップ">
-            マップで探す
+            Googleマップ
           </button>
         </div>
 
@@ -1017,7 +1017,7 @@
             <div class="preset-desc">ビックカメラ、ヤマダ、ケーズ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="家電量販店" data-chains="ビックカメラ OR ヤマダデンキ OR ケーズデンキ OR エディオン OR ノジマ">
-            マップで探す
+            Googleマップ
           </button>
         </div>
 
@@ -1030,7 +1030,7 @@
             <div class="preset-desc">NewDays、ペリエ、アトレ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="NewDays OR ペリエ OR アトレ OR ルミネ OR エキュート" data-chains="NewDays OR ペリエ OR アトレ OR ルミネ OR エキュート">
-            マップで探す
+            Googleマップ
           </button>
         </div>
 
@@ -1043,7 +1043,7 @@
             <div class="preset-desc">カラオケまねきねこ、ジャンカラ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="カラオケ" data-chains="カラオケまねきねこ OR ジャンカラ">
-            マップで探す
+            Googleマップ
           </button>
         </div>
       </div>
@@ -1122,6 +1122,9 @@
       </div>
       <div class="footer-desc">
         ※本サイトはteppay利用者のための周辺店舗検索ツールです。収録エリアは関東（東京都・神奈川県・埼玉県・千葉県と、茨城県南部・群馬県・栃木県・山梨県・静岡県の一部）です。加盟店データは全330チェーンの対象店舗情報に基づき構成されています。
+      </div>
+      <div class="footer-links" style="margin-bottom: 12px; font-size: 11px;">
+        <a href="about.html" style="color: #94a3b8; text-decoration: underline;">運営者情報</a>
       </div>
       <div class="footer-copy">
         &copy; 2026 teppayナビ 関東版 - 全330チェーン対象店舗マップ
@@ -1415,21 +1418,23 @@
       } catch (e) {}
     }
 
+    // Radius to Map Zoom Helper: ensures entire radius circle is comfortably visible
+    function getZoomForRadius(radius) {
+      if (radius <= 500) return 15;
+      if (radius <= 1000) return 14;
+      return 13.5;
+    }
+
     // Initialize Leaflet Map with Google Maps Japanese Tiles
     function ensureRadarMap(lat, lng) {
-      const zoom = radarRadius <= 500 ? 16 : (radarRadius <= 1000 ? 15 : 14);
+      const zoom = getZoomForRadius(radarRadius);
       if (!radarMap) {
-        radarMap = L.map("radar-map-box").setView([lat, lng], zoom);
+        radarMap = L.map("radar-map-box", { zoomSnap: 0.5 }).setView([lat, lng], zoom);
         const gmapLayer = L.tileLayer("https://mt1.google.com/vt/lyrs=m&hl=ja&x={x}&y={y}&z={z}", {
           attribution: "Map data &copy; Google",
           maxZoom: 20
         });
-        const esriLayer = L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-          attribution: "Tiles &copy; Esri",
-          maxZoom: 19
-        });
         gmapLayer.addTo(radarMap);
-        L.control.layers({ "Google マップ": gmapLayer, "標準ストリート": esriLayer }, null, { position: "topright" }).addTo(radarMap);
         radarMarkersLayer = L.layerGroup().addTo(radarMap);
         radarMap.on("moveend", () => {
           clearTimeout(moveTimer);
@@ -1843,7 +1848,7 @@
             </div>
             <div class="chain-actions">
               <button class="action-btn map" data-action="map-chain" data-name="${item.name}">
-                Googleマップで検索
+                Googleマップ
               </button>
             </div>
           </div>
@@ -1863,6 +1868,15 @@
         document.querySelectorAll(".radius-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         radarRadius = parseInt(btn.getAttribute("data-radius"), 10);
+        mapMode = false;
+        if (radarMap && lastCenterCoords) {
+          const z = getZoomForRadius(radarRadius);
+          programmaticMove = true;
+          radarMap.setView([lastCenterCoords.lat, lastCenterCoords.lng], z);
+          setTimeout(() => {
+            programmaticMove = false;
+          }, 180);
+        }
         runAllGenreRadarScan();
       });
     });
@@ -1981,7 +1995,7 @@
       jreast: "JR東日本グループのお店・サービス"
     };
 
-    // Preset Grid: Only 'マップで探す' opens Google Maps; tapping card jumps to Chain List
+    // Preset Grid: Only 'Googleマップ' opens Google Maps; tapping card jumps to Chain List
     document.querySelectorAll("[data-action='open-preset']").forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
