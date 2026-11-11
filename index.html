@@ -53,15 +53,14 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Top White Navbar */
+    /* Top Navbar with LP Teal Gradient */
     header {
-      background: #ffffff;
-      color: var(--text);
+      background: linear-gradient(135deg, #00beb7 0%, #03bfb7 50%, #2dd4bf 100%);
       padding: 10px 16px;
       position: relative;
       z-index: 50;
-      border-bottom: 1.5px solid var(--border);
-      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.06);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.15);
     }
     .header-inner {
       max-width: 680px;
@@ -69,127 +68,54 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
     .logo-area {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-shrink: 0;
     }
     .teppay-logo-svg {
       height: 32px;
       width: auto;
       display: block;
     }
-    .nav-title-badge {
-      background: var(--primary);
-      color: white;
-      font-weight: 900;
-      font-size: 11px;
-      padding: 3px 9px;
-      border-radius: var(--radius-pill);
-      letter-spacing: 0.5px;
-    }
-    .header-btn {
-      background: #ffffff;
-      border: 1.5px solid var(--primary);
-      color: var(--primary-dark);
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.2s;
-    }
-    .header-btn:hover, .header-btn:active {
-      background: var(--primary-light);
-    }
-
-    /* Hero Brand Banner matching image.png */
-    .hero-brand-banner {
-      background: linear-gradient(135deg, #00beb7 0%, #03bfb7 50%, #2dd4bf 100%);
-      color: white;
-      padding: 18px 16px 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-brand-banner::before {
-      content: "";
-      position: absolute;
-      top: -25px;
-      right: -25px;
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.12);
-      pointer-events: none;
-    }
-    .hero-brand-banner::after {
-      content: "";
-      position: absolute;
-      bottom: -35px;
-      left: -35px;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      pointer-events: none;
-    }
-    .hero-brand-inner {
-      max-width: 680px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-    .hero-brand-top {
+    .header-badges {
       display: flex;
-      gap: 6px;
       align-items: center;
-      margin-bottom: 8px;
+      gap: 6px;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
     .hero-yellow-badge {
       background: var(--accent-yellow);
       color: var(--slate-dark);
       font-weight: 900;
       font-size: 11px;
-      padding: 3px 10px;
+      padding: 4px 10px;
       border-radius: var(--radius-pill);
       display: inline-block;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      white-space: nowrap;
     }
     .hero-pink-badge {
       background: var(--accent-pink);
       color: white;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 10px;
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: var(--radius-pill);
-    }
-    .hero-brand-title {
-      font-size: 23px;
-      font-weight: 900;
-      line-height: 1.25;
-      letter-spacing: -0.5px;
-      margin-bottom: 5px;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-    .hero-brand-title span {
-      color: var(--accent-yellow);
-    }
-    .hero-brand-desc {
-      font-size: 12px;
-      opacity: 0.95;
-      font-weight: 500;
+      display: inline-block;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      white-space: nowrap;
     }
 
     /* Global Area Bar */
     .area-bar {
       background: #ffffff;
       border-bottom: 1.5px solid var(--border);
-      padding: 10px 16px;
+      padding: 8px 16px;
       position: sticky;
       top: 0;
       z-index: 40;
@@ -384,7 +310,7 @@
     .store-pin span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
     #radar-map-box {
       width: 100%;
-      height: 360px;
+      height: 330px;
       border-radius: 16px;
       border: 1.5px solid var(--border);
       margin-bottom: 12px;
@@ -565,6 +491,13 @@
       color: var(--text-muted);
       line-height: 1.35;
       margin-bottom: 10px;
+    }
+    .preset-card-link {
+      display: block;
+      margin-top: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--primary);
     }
     .preset-btn {
       width: 100%;
@@ -751,56 +684,6 @@
       background: var(--primary);
       color: white;
     }
-    .action-btn.copy:hover {
-      background: var(--primary-ultra-light);
-      border-color: var(--border-dark);
-    }
-
-
-
-    /* Modal / Help */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(40, 53, 72, 0.6);
-      backdrop-filter: blur(4px);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .modal-content {
-      background: white;
-      border-radius: 22px;
-      max-width: 500px;
-      width: 100%;
-      max-height: 85vh;
-      overflow-y: auto;
-      padding: 22px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-      border: 2px solid var(--primary-mint);
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
-    }
-    .modal-close-btn {
-      background: var(--primary-ultra-light);
-      border: 1px solid var(--border);
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-weight: bold;
-      color: var(--text);
-    }
-
-    /* Toast */
     /* Flat SVG Icons */
     .icon-svg {
       display: inline-block;
@@ -932,7 +815,7 @@
 </head>
 <body>
 
-  <!-- Top Header with Official Railway Track teppay Logo -->
+  <!-- Top Header with Official Railway Track teppay Logo & Badges -->
   <header>
     <div class="header-inner">
       <div class="logo-area">
@@ -942,23 +825,12 @@
           <text x="71" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="15" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppayナビ</text>
         </svg>
       </div>
-      <button class="header-btn" id="open-install-guide-btn">
-        <svg class="icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/><path d="M12 7v6M9.5 10.5 12 13l2.5-2.5"/></svg>
-        <span>ホーム画面に追加</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- Hero Brand Banner -->
-  <div class="hero-brand-banner">
-    <div class="hero-brand-inner">
-      <div class="hero-brand-top">
+      <div class="header-badges">
         <span class="hero-yellow-badge">全330チェーン対応</span>
         <span class="hero-pink-badge">Googleマップ連携</span>
       </div>
-      <h2 class="hero-brand-title">今いる場所から<span>teppay</span>対応店舗を<br>瞬時にチェック</h2>
     </div>
-  </div>
+  </header>
 
   <!-- Global Area Context Bar -->
   <div class="area-bar">
@@ -1029,7 +901,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#fef3c7;color:#d97706;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div> ホームセンター
             </div>
-            <div class="preset-desc">コーナン、ビバホーム、島忠ホームズ、ロイヤルHC、コメリ等</div>
+            <div class="preset-desc">コーナン、ビバホーム、島忠ホームズ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="ホームセンター" data-chains="コーナン OR ビバホーム OR 島忠ホームズ OR ロイヤルホームセンター OR コメリ">
             マップで探す
@@ -1042,7 +914,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#e0f2fe;color:#0284c7;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div> コンビニ
             </div>
-            <div class="preset-desc">セブン、ローソン、ファミマ、ミニストップ、デイリー等</div>
+            <div class="preset-desc">セブン、ローソン、ファミマ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="コンビニ" data-chains="セブン-イレブン OR ローソン OR ファミリーマート OR ミニストップ">
             マップで探す
@@ -1055,7 +927,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#fce7f3;color:#db2777;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg></div> ドラッグストア
             </div>
-            <div class="preset-desc">ウエルシア、スギ薬局、トモズ、コクミン、サツドラ等</div>
+            <div class="preset-desc">ウエルシア、スギ薬局、トモズ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="ドラッグストア" data-chains="ウエルシア薬局 OR スギ薬局 OR トモズ OR コクミン">
             マップで探す
@@ -1068,7 +940,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#e6faf7;color:#00968f;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></div> スーパー
             </div>
-            <div class="preset-desc">オーケー、イトーヨーカドー、成城石井、ヨークマート等</div>
+            <div class="preset-desc">オーケー、イトーヨーカドー、成城石井等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="スーパーマーケット" data-chains="オーケー OR イトーヨーカドー OR 成城石井 OR ヨークマート">
             マップで探す
@@ -1081,7 +953,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#ffedd5;color:#ea580c;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 11v11"/><path d="M6 2v20"/><path d="M6 7h4a2 2 0 0 0 2-2V2"/></svg></div> グルメ・外食
             </div>
-            <div class="preset-desc">すき家、松屋、ガスト、スシロー、くら寿司、日高屋等</div>
+            <div class="preset-desc">すき家、松屋、ガスト、スシロー等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="飲食店" data-chains="ガスト OR すき家 OR 松屋 OR スシロー OR くら寿司 OR 日高屋">
             マップで探す
@@ -1094,7 +966,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#fef3c7;color:#b45309;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div> カフェ・喫茶
             </div>
-            <div class="preset-desc">コメダ珈琲店、銀座ルノアール、ベックスコーヒー等</div>
+            <div class="preset-desc">コメダ珈琲店、銀座ルノアール等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="カフェ" data-chains="コメダ珈琲店 OR 銀座ルノアール OR ベックスコーヒーショップ">
             マップで探す
@@ -1107,7 +979,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#fef9c3;color:#ca8a04;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div> 家電量販店
             </div>
-            <div class="preset-desc">ビックカメラ、ヤマダ、ケーズ、エディオン、ノジマ等</div>
+            <div class="preset-desc">ビックカメラ、ヤマダ、ケーズ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="家電量販店" data-chains="ビックカメラ OR ヤマダデンキ OR ケーズデンキ OR エディオン OR ノジマ">
             マップで探す
@@ -1120,7 +992,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#e0f2fe;color:#0369a1;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><circle cx="8" cy="15" r="1"/><circle cx="16" cy="15" r="1"/><path d="m6 19-2 2"/><path d="m18 19 2 2"/></svg></div> JR駅ビル・エキナカ
             </div>
-            <div class="preset-desc">NewDays、ペリエ、アトレ、ルミネ、エキュート等</div>
+            <div class="preset-desc">NewDays、ペリエ、アトレ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="NewDays OR ペリエ OR アトレ OR ルミネ OR エキュート" data-chains="NewDays OR ペリエ OR アトレ OR ルミネ OR エキュート">
             マップで探す
@@ -1133,7 +1005,7 @@
             <div class="preset-header">
               <div class="preset-icon-badge" style="background:#ede9fe;color:#7c3aed;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div> カラオケ・娯楽
             </div>
-            <div class="preset-desc">カラオケまねきねこ、ジャンカラ等</div>
+            <div class="preset-desc">カラオケまねきねこ、ジャンカラ等<span class="preset-card-link">一覧を見る →</span></div>
           </div>
           <button class="preset-btn" data-action="open-preset" data-query="カラオケ" data-chains="カラオケまねきねこ OR ジャンカラ">
             マップで探す
@@ -1239,41 +1111,6 @@
     </button>
   </nav>
 
-  <!-- Install Modal with Android & iOS Support -->
-  <div class="modal-overlay" id="install-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div style="font-size: 16px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 8px;">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/><path d="M12 7v6M9.5 10.5 12 13l2.5-2.5"/></svg>
-          <span>ホーム画面に追加</span>
-        </div>
-        <button class="modal-close-btn" id="close-modal-btn" aria-label="閉じる"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-      </div>
-      <div style="font-size: 13px; line-height: 1.6; color: var(--text);">
-        <p style="margin-bottom: 14px;">
-          ホーム画面に追加すると、アドレスバーのないフルスクリーンアプリとして快適にワンタップ起動できます。
-        </p>
-        <div style="background: var(--primary-ultra-light); border-radius: 14px; padding: 14px; margin-bottom: 12px; border: 1.5px solid var(--border);">
-          <strong style="color: var(--primary-dark);">【Android (Chrome等) の場合】</strong>
-          <ol style="margin-left: 20px; margin-top: 6px;">
-            <li>画面右上のメニュー（<strong>⋮</strong>）をタップ</li>
-            <li><strong>「アプリをインストール」</strong>または<strong>「ホーム画面に追加」</strong>をタップ</li>
-            <li>確認ダイアログで「インストール」を選択</li>
-          </ol>
-        </div>
-        <div style="background: var(--primary-ultra-light); border-radius: 14px; padding: 14px; margin-bottom: 12px; border: 1.5px solid var(--border);">
-          <strong style="color: var(--primary-dark);">【iPhone (Safari) の場合】</strong>
-          <ol style="margin-left: 20px; margin-top: 6px;">
-            <li>画面下中央の<strong>共有アイコン</strong>（四角から上向き矢印）をタップ</li>
-            <li>メニューから<strong>「ホーム画面に追加」</strong>をタップ</li>
-            <li>右上の「追加」をタップ</li>
-          </ol>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast -->
   <div class="toast" id="toast">コピーしました</div>
 
   <script>
@@ -1327,7 +1164,6 @@
     const chainSearchInput = document.getElementById("chain-search-input");
     const clearSearchBtn = document.getElementById("clear-search-btn");
     const toast = document.getElementById("toast");
-    const installModal = document.getElementById("install-modal");
     const radarPanel = document.getElementById("radar-panel");
     const radarAreaTitle = document.getElementById("radar-area-title");
     const radarStatusText = document.getElementById("radar-status-text");
@@ -1343,12 +1179,6 @@
     }
 
 
-    // Android PWA Deferred Install Prompt Support
-    let deferredInstallPrompt = null;
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredInstallPrompt = e;
-    });
 
     // Update Area UI
     function updateAreaDisplay() {
@@ -1978,9 +1808,6 @@
               <button class="action-btn map" data-action="map-chain" data-name="${item.name}">
                 マップ
               </button>
-              <button class="action-btn copy" data-action="copy-chain" data-name="${item.name}">
-                コピー
-              </button>
             </div>
           </div>
         `;
@@ -2018,20 +1845,25 @@
       }
     });
 
-        // Tab Navigation
+    // Tab Navigation Helper
+    function switchTab(tabId) {
+      document.querySelectorAll(".nav-item").forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-tab") === tabId);
+      });
+      document.querySelectorAll(".tab-pane").forEach(p => {
+        p.classList.toggle("active", p.id === tabId);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     document.querySelectorAll(".nav-item").forEach(btn => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
-        btn.classList.add("active");
         const tabId = btn.getAttribute("data-tab");
-        const pane = document.getElementById(tabId);
-        if (pane) pane.classList.add("active");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        switchTab(tabId);
       });
     });
 
-    // Area buttons & Chips
+    // Area buttons & Input
     document.getElementById("gps-btn").addEventListener("click", async () => {
       showToast("高精度GPSで現在地を取得中...");
       try {
@@ -2062,7 +1894,18 @@
       }
     });
 
-    // Preset Grid Map Actions
+    const PRESET_TO_CAT = {
+      homecenter: "ホームセンター",
+      convenience: "コンビニ",
+      drugstore: "ドラッグストア",
+      supermarket: "スーパーマーケット",
+      gourmet: "グルメ",
+      cafe: "カフェ・喫茶",
+      kaden: "家電",
+      jreast: "JR東日本グループのお店・サービス"
+    };
+
+    // Preset Grid: Only 'マップで探す' opens Google Maps; tapping card jumps to Chain List
     document.querySelectorAll("[data-action='open-preset']").forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -2072,12 +1915,32 @@
     });
 
     document.querySelectorAll(".preset-card").forEach(card => {
-      card.addEventListener("click", () => {
-        const btn = card.querySelector("[data-action='open-preset']");
-        if (btn) {
-          const chains = btn.getAttribute("data-chains");
-          openGoogleMaps(chains);
+      card.addEventListener("click", (e) => {
+        if (e.target.closest("[data-action='open-preset']")) return;
+
+        const presetKey = card.getAttribute("data-preset");
+        if (presetKey === "leisure") {
+          activeCategory = "all";
+          searchQuery = "カラオケ";
+          chainSearchInput.value = "カラオケ";
+          clearSearchBtn.style.display = "block";
+          document.querySelectorAll(".cat-pill").forEach(p => p.classList.toggle("active", p.getAttribute("data-cat") === "all"));
+        } else {
+          const targetCat = PRESET_TO_CAT[presetKey];
+          if (targetCat) {
+            activeCategory = targetCat;
+            searchQuery = "";
+            chainSearchInput.value = "";
+            clearSearchBtn.style.display = "none";
+            document.querySelectorAll(".cat-pill").forEach(p => p.classList.toggle("active", p.getAttribute("data-cat") === targetCat));
+            const targetPill = document.querySelector(`.cat-pill[data-cat='${targetCat}']`);
+            if (targetPill) {
+              targetPill.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+            }
+          }
         }
+        renderChains();
+        switchTab("tab-list");
       });
     });
 
@@ -2117,56 +1980,6 @@
         const name = mapBtn.getAttribute("data-name");
         openGoogleMaps(name);
         return;
-      }
-      const copyBtn = e.target.closest("[data-action='copy-chain']");
-      if (copyBtn) {
-        const name = copyBtn.getAttribute("data-name");
-        copyToClipboard(name);
-        return;
-      }
-    });
-
-    // Clipboard Copy Helper
-    function copyToClipboard(text) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          showToast(`「${text}」をコピーしました`);
-        }).catch(() => {
-          fallbackCopy(text);
-        });
-      } else {
-        fallbackCopy(text);
-      }
-    }
-
-    function fallbackCopy(text) {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      try {
-        document.execCommand("copy");
-        showToast(`「${text}」をコピーしました`);
-      } catch (err) {
-        showToast("コピーできませんでした");
-      }
-      document.body.removeChild(ta);
-    }
-
-
-
-    // Modal
-    document.getElementById("open-install-guide-btn").addEventListener("click", () => {
-      installModal.style.display = "flex";
-    });
-
-    document.getElementById("close-modal-btn").addEventListener("click", () => {
-      installModal.style.display = "none";
-    });
-
-    installModal.addEventListener("click", (e) => {
-      if (e.target === installModal) {
-        installModal.style.display = "none";
       }
     });
 
