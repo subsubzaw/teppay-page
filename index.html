@@ -1318,6 +1318,9 @@
 
     // Google Maps Search URL Helper (fetches fresh GPS when in current location mode)
     async function openGoogleMaps(query) {
+      if (typeof gtag === "function") {
+        gtag("event", "click_google_maps", { search_query: query });
+      }
       // Prefer the area currently shown on the map so Google Maps opens exactly there
       if (radarMap) {
         const c = radarMap.getCenter();
@@ -1354,6 +1357,9 @@
     }
 
     function openGoogleMapsLatLng(name, lat, lng) {
+      if (typeof gtag === "function") {
+        gtag("event", "click_store_pin", { store_name: name });
+      }
       window.open(googleMapsPinUrl(name, lat, lng), "_blank");
     }
 
