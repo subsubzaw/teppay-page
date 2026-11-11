@@ -1,6 +1,6 @@
 {
   "name": "teppayナビ 関東版",
-  "short_name": "teppayナビ",
+  "short_name": "teppayナビ関東版",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
