@@ -7,7 +7,82 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="teppayナビ関東版">
   <link rel="manifest" href="manifest.json">
-  <title>teppayナビ 関東版 - teppay対応店舗 & Googleマップ検索</title>
+  <title>teppayナビ関東版 | teppay加盟店マップ・対象店舗検索</title>
+  <meta name="description" content="teppay（かながわPay等）が使える関東（東京・神奈川・千葉・埼玉）の加盟店マップ＆対象店舗検索サイト。現在地やエリアからコンビニ、スーパー、ドラッグストア、飲食店など対応チェーンを瞬時に探してGoogleマップ連携できます。">
+  <meta name="keywords" content="teppay,かながわPay,テッペイ,加盟店,使える店,対象店舗,関東,東京,神奈川,マップ,検索">
+  <link rel="canonical" href="https://teppay-navi.com/">
+  
+  <!-- OGP (Open Graph Protocol) / SNS Share -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="teppayナビ関東版">
+  <meta property="og:title" content="teppayナビ関東版 | teppay加盟店マップ・対象店舗検索">
+  <meta property="og:description" content="teppay対応店舗を現在地から瞬時にチェック！関東（東京・神奈川・千葉・埼玉）のコンビニ・スーパー・ドラッグストアなど使えるお店をマップで探せる無料Webツール。">
+  <meta property="og:url" content="https://teppay-navi.com/">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="teppayナビ関東版 | teppay加盟店マップ・対象店舗検索">
+  <meta name="twitter:description" content="teppay対応店舗を現在地から瞬時にチェック！関東のコンビニ・スーパーなど使えるお店をマップで探せる無料Webツール。">
+
+  <!-- AIO / Search Engine Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://teppay-navi.com/#website",
+        "url": "https://teppay-navi.com/",
+        "name": "teppayナビ関東版",
+        "description": "teppay（かながわPay等）の関東加盟店マップ＆対象店舗検索ツール",
+        "inLanguage": "ja",
+        "publisher": {
+          "@type": "Organization",
+          "name": "teppayナビ関東版 運営事務局",
+          "url": "https://teppay-navi.com/about.html"
+        }
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://teppay-navi.com/#app",
+        "name": "teppayナビ関東版",
+        "url": "https://teppay-navi.com/",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "JPY"
+        },
+        "areaServed": [
+          { "@type": "AdministrativeArea", "name": "東京都" },
+          { "@type": "AdministrativeArea", "name": "神奈川県" },
+          { "@type": "AdministrativeArea", "name": "埼玉県" },
+          { "@type": "AdministrativeArea", "name": "千葉県" }
+        ],
+        "featureList": [
+          "現在地周辺のteppay加盟店・対象店舗の即時マップ表示",
+          "業種別（コンビニ、スーパー、ドラッグストア、外食など）絞り込み検索",
+          "Googleマップルート案内へのワンタップ連携",
+          "エリア指定・駅名検索対応"
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google Analytics 4 (GA4) -->
+  <!-- 測定ID（G-XXXXXXXXXX）取得後、下記の G-MEASUREMENT_ID をご自身のIDに書き換えてください -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    if ('G-MEASUREMENT_ID' !== 'G-MEASUREMENT_ID') {
+      gtag('config', 'G-MEASUREMENT_ID');
+    }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
