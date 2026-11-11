@@ -621,9 +621,9 @@
       gap: 10px;
       transition: all 0.15s;
     }
+    /* Tap/hover border change disabled per request */
     .chain-item:hover {
-      border-color: var(--primary-mint);
-      box-shadow: 0 4px 12px rgba(0, 190, 183, 0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
     .chain-info {
       flex: 1;
@@ -815,6 +815,37 @@
     .footer-copy {
       color: #94a3b8;
       font-size: 10px;
+    }
+    /* Floating Scroll To Top Button */
+    .scroll-to-top-btn {
+      position: fixed;
+      bottom: 74px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: var(--primary-dark);
+      border: 1.5px solid var(--border);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 90;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    }
+    .scroll-to-top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .scroll-to-top-btn:active {
+      background: var(--primary-light);
+      transform: scale(0.95);
     }
   </style>
 </head>
@@ -1081,14 +1112,16 @@
     <div class="footer-track-ribbon"></div>
     <div class="footer-content">
       <div class="footer-brand">
-        <svg viewBox="0 0 178 34" class="teppay-logo-svg" style="height:30px;" aria-label="teppayナビ関東版">
-          <rect x="2" y="2" width="174" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
-          <rect x="5.5" y="5.5" width="167" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
-          <text x="89" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="14.5" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppayナビ関東版</text>
-        </svg>
+        <a href="#" id="footer-logo-link" aria-label="トップに戻る" style="display:inline-block; text-decoration:none; cursor:pointer;">
+          <svg viewBox="0 0 178 34" class="teppay-logo-svg" style="height:30px;" aria-label="teppayナビ関東版">
+            <rect x="2" y="2" width="174" height="30" rx="15" fill="#ffffff" stroke="#00beb7" stroke-width="2.5"/>
+            <rect x="5.5" y="5.5" width="167" height="23" rx="11.5" fill="none" stroke="#283548" stroke-width="1.8" stroke-dasharray="3.5,4"/>
+            <text x="89" y="22" font-family="'Zen Kaku Gothic New', sans-serif" font-size="14.5" font-weight="900" fill="#283548" text-anchor="middle" letter-spacing="-0.5px">teppayナビ関東版</text>
+          </svg>
+        </a>
       </div>
       <div class="footer-desc">
-        ※本サイトはteppay利用者のための周辺店舗検索・ルート案内ツールです。収録エリアは関東（東京都・神奈川県・埼玉県・千葉県と、茨城県南部・群馬県・栃木県・山梨県・静岡県の一部）です。加盟店データは全330チェーンの対象店舗情報に基づき構成されています。
+        ※本サイトはteppay利用者のための周辺店舗検索ツールです。収録エリアは関東（東京都・神奈川県・埼玉県・千葉県と、茨城県南部・群馬県・栃木県・山梨県・静岡県の一部）です。加盟店データは全330チェーンの対象店舗情報に基づき構成されています。
       </div>
       <div class="footer-copy">
         &copy; 2026 teppayナビ 関東版 - 全330チェーン対象店舗マップ
@@ -1107,6 +1140,13 @@
       <span>チェーン一覧</span>
     </button>
   </nav>
+
+  <!-- Floating Scroll-to-top Button -->
+  <button id="scroll-to-top-btn" class="scroll-to-top-btn" aria-label="ページ上部へ戻る">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
 
   <div class="toast" id="toast">コピーしました</div>
 
@@ -1737,7 +1777,15 @@
     function renderChains() {
       const q = searchQuery.toLowerCase().trim();
       const filtered = CHAINS_DATA.filter(item => {
-        // Category check
+        // If keyword search is entered, search across ALL categories
+        if (q) {
+          const matchName = item.name.toLowerCase().includes(q);
+          const matchCat = item.category.toLowerCase().includes(q);
+          const matchTags = item.tags.some(t => t.toLowerCase().includes(q));
+          return matchName || matchCat || matchTags;
+        }
+
+        // Category check (applies when no search keyword)
         if (activeCategory !== "all") {
           if (activeCategory === "ホームセンター") {
             if (!item.tags.includes("ホームセンター")) return false;
@@ -1762,14 +1810,6 @@
           } else if (activeCategory === "JR東日本グループのお店・サービス") {
             if (!item.category.includes("JR東日本")) return false;
           }
-        }
-
-        // Text search
-        if (q) {
-          const matchName = item.name.toLowerCase().includes(q);
-          const matchCat = item.category.toLowerCase().includes(q);
-          const matchTags = item.tags.some(t => t.toLowerCase().includes(q));
-          return matchName || matchCat || matchTags;
         }
         return true;
       });
@@ -1803,7 +1843,7 @@
             </div>
             <div class="chain-actions">
               <button class="action-btn map" data-action="map-chain" data-name="${item.name}">
-                マップ
+                Googleマップで検索
               </button>
             </div>
           </div>
@@ -1843,6 +1883,8 @@
     });
 
     // Tab Navigation Helper
+    const globalAreaBar = document.querySelector(".area-bar");
+
     function switchTab(tabId) {
       document.querySelectorAll(".nav-item").forEach(b => {
         b.classList.toggle("active", b.getAttribute("data-tab") === tabId);
@@ -1850,6 +1892,10 @@
       document.querySelectorAll(".tab-pane").forEach(p => {
         p.classList.toggle("active", p.id === tabId);
       });
+      // Hide area/location search bar on chain list tab
+      if (globalAreaBar) {
+        globalAreaBar.style.display = (tabId === "tab-quick") ? "block" : "none";
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -1860,11 +1906,36 @@
       });
     });
 
+    // Header & Footer logo return to top / first-view
     const headerLogoLink = document.getElementById("header-logo-link");
     if (headerLogoLink) {
       headerLogoLink.addEventListener("click", (e) => {
         e.preventDefault();
         switchTab("tab-quick");
+      });
+    }
+
+    const footerLogoLink = document.getElementById("footer-logo-link");
+    if (footerLogoLink) {
+      footerLogoLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        switchTab("tab-quick");
+      });
+    }
+
+    // Floating Scroll-To-Top Button
+    const scrollTopBtn = document.getElementById("scroll-to-top-btn");
+    if (scrollTopBtn) {
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 200) {
+          scrollTopBtn.classList.add("visible");
+        } else {
+          scrollTopBtn.classList.remove("visible");
+        }
+      }, { passive: true });
+
+      scrollTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
 
@@ -1959,11 +2030,15 @@
       });
     });
 
-    // Search Input in List
+    // Search Input in List: searches across ALL categories
     chainSearchInput.addEventListener("input", () => {
       searchQuery = chainSearchInput.value;
-      if (searchQuery) {
+      if (searchQuery.trim()) {
         clearSearchBtn.style.display = "block";
+        activeCategory = "all";
+        document.querySelectorAll(".cat-pill").forEach(p => {
+          p.classList.toggle("active", p.getAttribute("data-cat") === "all");
+        });
       } else {
         clearSearchBtn.style.display = "none";
       }
