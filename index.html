@@ -1601,14 +1601,26 @@
     // ---- Pre-built store data (data/stores.json): instant local lookup, no live API needed ----
     const CHAIN_BY_NAME = new Map(CHAINS_DATA.map(c => [c.name, c]));
     let storeData = null; // { chains:[], stores:[[ci,lat,lng,name]], generated }
-    const storeDataPromise = fetch("data/stores.json")
-      .then(r => (r.ok ? r.json() : null))
-      .then(d => { storeData = d; return d; })
-      .catch(() => null);
-    const COVERAGE = { s: 34.50, w: 137.30, n: 38.60, e: 141.25 };
+    const loadJson = u => fetch(u).then(r => (r.ok ? r.json() : null)).catch(() => null);
+    const storeDataPromise = Promise.all([loadJson("data/stores.json"), loadJson("data/stores_ring2.json")])
+      .then(([d1, d2]) => {
+        if (d1 && d2) { // merge Ring 2 into Ring 1 (remap chain indexes)
+          const idx = new Map(d1.chains.map((n, i) => [n, i]));
+          const remap = d2.chains.map(n => { if (!idx.has(n)) { idx.set(n, d1.chains.length); d1.chains.push(n); } return idx.get(n); });
+          for (const r of d2.stores) d1.stores.push([remap[r[0]], r[1], r[2], r[3]]);
+        }
+        storeData = d1;
+        return d1;
+      });
+    // Covered areas: Ring 1 (Kanto + neighbors), Ring 2 west (Chubu-west/Kansai), Ring 2 north (Miyagi/Yamagata)
+    const COVERAGE_BOXES = [
+      { s: 34.50, w: 137.30, n: 38.60, e: 141.25 },
+      { s: 33.40, w: 134.20, n: 36.60, e: 137.30 },
+      { s: 37.70, w: 139.00, n: 39.25, e: 141.75 }
+    ];
 
     function inCoverage(lat, lng) {
-      return lat >= COVERAGE.s && lat <= COVERAGE.n && lng >= COVERAGE.w && lng <= COVERAGE.e;
+      return COVERAGE_BOXES.some(c => lat >= c.s && lat <= c.n && lng >= c.w && lng <= c.e);
     }
 
     function localScan(center, radius, bounds = null) {
