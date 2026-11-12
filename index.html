@@ -8,20 +8,20 @@
   <meta name="apple-mobile-web-app-title" content="teppayナビ">
   <link rel="manifest" href="manifest.json">
   <title>teppayナビ | teppay加盟店マップ・対象店舗検索</title>
-  <meta name="description" content="teppay（かながわPay等）が使える加盟店マップ＆対象店舗検索サイト。関東・中京・関西・甲信越・南東北など主要23都府県（53,000店舗超）に対応。現在地やエリアからコンビニ、スーパー、ドラッグストア、飲食店など対応チェーンを瞬時に探してGoogleマップ連携できます。">
-  <meta name="keywords" content="teppay,かながわPay,テッペイ,加盟店,使える店,対象店舗,関東,中京,関西,東京,愛知,大阪,マップ,検索">
+  <meta name="description" content="teppay（かながわPay等）が使える加盟店マップ＆対象店舗検索サイト。全国47都道府県（約70,000店舗・全330チェーン）を完全網羅。現在地やエリアからコンビニ、スーパー、ドラッグストア、飲食店など対応チェーンを瞬時に探してGoogleマップ連携できます。">
+  <meta name="keywords" content="teppay,かながわPay,テッペイ,加盟店,使える店,対象店舗,全国,東京,大阪,愛知,福岡,北海道,マップ,検索">
   <link rel="canonical" href="https://teppay-navi.com/">
   
   <!-- OGP (Open Graph Protocol) / SNS Share -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="teppayナビ">
   <meta property="og:title" content="teppayナビ | teppay加盟店マップ・対象店舗検索">
-  <meta property="og:description" content="teppay対応店舗を現在地から瞬時にチェック！関東・中京・関西など主要23都府県（53,000店超）のコンビニ・スーパー・ドラッグストアなど使えるお店をマップで探せる無料Webツール。">
+  <meta property="og:description" content="teppay対応店舗を現在地から瞬時にチェック！全国47都道府県（約70,000店舗）のコンビニ・スーパー・ドラッグストアなど使えるお店をマップで探せる無料Webツール。">
   <meta property="og:url" content="https://teppay-navi.com/">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="teppayナビ | teppay加盟店マップ・対象店舗検索">
-  <meta name="twitter:description" content="teppay対応店舗を現在地から瞬時にチェック！関東・中京・関西など主要23都府県のコンビニ・スーパーなど使えるお店をマップで探せる無料Webツール。">
+  <meta name="twitter:description" content="teppay対応店舗を現在地から瞬時にチェック！全国47都道府県（約70,000店舗）のコンビニ・スーパーなど使えるお店をマップで探せる無料Webツール。">
 
   <!-- AIO / Search Engine Structured Data (JSON-LD) -->
   <script type="application/ld+json">
@@ -33,7 +33,7 @@
         "@id": "https://teppay-navi.com/#website",
         "url": "https://teppay-navi.com/",
         "name": "teppayナビ",
-        "description": "teppay（かながわPay等）の加盟店マップ＆対象店舗検索ツール",
+        "description": "teppay（かながわPay等）の全国47都道府県加盟店マップ＆対象店舗検索ツール",
         "inLanguage": "ja",
         "publisher": {
           "@type": "Organization",
@@ -1202,7 +1202,7 @@
         </a>
       </div>
       <div class="footer-desc">
-        ※本サイトはteppay利用者のための周辺店舗検索ツールです。収録エリアは関東全域、中京・東海、関西、甲信越、南東北など主要23都府県（53,000店舗超）に対応しており、順次全国へ拡大中です。加盟店データは全330チェーンの対象店舗情報に基づき構成されています。
+        ※本サイトはteppay利用者のための周辺店舗検索ツールです。全国47都道府県（約70,000店舗・全330チェーン）の対象店舗を完全網羅。現在地に合わせてエリア別最適化を行い、全国どこでも瞬時に周辺店舗を検索できます。
       </div>
       <div class="footer-links" style="margin-bottom: 12px; font-size: 11px;">
         <a href="about.html" style="color: #94a3b8; text-decoration: underline;">運営者情報</a>
@@ -1598,29 +1598,80 @@
       return { lat: 35.681236, lng: 139.767125, label: currentArea };
     }
 
-    // ---- Pre-built store data (data/stores.json): instant local lookup, no live API needed ----
+    // ---- Pre-built store data: progressive area-based split loading for nationwide coverage ----
     const CHAIN_BY_NAME = new Map(CHAINS_DATA.map(c => [c.name, c]));
-    let storeData = null; // { chains:[], stores:[[ci,lat,lng,name]], generated }
+    let storeData = { chains: [], stores: [] };
     const loadJson = u => fetch(u).then(r => (r.ok ? r.json() : null)).catch(() => null);
-    const storeDataPromise = Promise.all([loadJson("data/stores.json"), loadJson("data/stores_ring2.json")])
-      .then(([d1, d2]) => {
-        if (d1 && d2) { // merge Ring 2 into Ring 1 (remap chain indexes)
-          const idx = new Map(d1.chains.map((n, i) => [n, i]));
-          const remap = d2.chains.map(n => { if (!idx.has(n)) { idx.set(n, d1.chains.length); d1.chains.push(n); } return idx.get(n); });
-          for (const r of d2.stores) d1.stores.push([remap[r[0]], r[1], r[2], r[3]]);
-        }
-        storeData = d1;
-        return d1;
-      });
-    // Covered areas: Ring 1 (Kanto + neighbors), Ring 2 west (Chubu-west/Kansai), Ring 2 north (Miyagi/Yamagata)
-    const COVERAGE_BOXES = [
-      { s: 34.50, w: 137.30, n: 38.60, e: 141.25 },
-      { s: 33.40, w: 134.20, n: 36.60, e: 137.30 },
-      { s: 37.70, w: 139.00, n: 39.25, e: 141.75 }
-    ];
 
+    const RING_FILES = {
+      1: "data/stores.json",           // Ring 1: Kanto & neighbors (~35,400 stores)
+      2: "data/stores_ring2.json",     // Ring 2: Chubu-west, Kansai, Miyagi, Yamagata (~18,500 stores)
+      3: "data/stores_ring3.json",     // Ring 3: Chugoku, Shikoku, North Tohoku, Hokuriku (~7,300 stores)
+      4: "data/stores_ring4.json"      // Ring 4: Kyushu, Okinawa, Hokkaido (~8,200 stores)
+    };
+
+    const loadedRings = new Set();
+    const ringLoadPromises = new Map();
+
+    function getRingForCoords(lat, lng) {
+      if (lat >= 41.3) return 4; // Hokkaido
+      if (lat <= 34.5 && lng <= 132.5) return 4; // Kyushu & Okinawa
+      if (lat >= 39.25) return 3; // North Tohoku (Aomori, Iwate, Akita)
+      if (lng <= 134.5 && lat >= 32.5) return 3; // Chugoku & Shikoku
+      if (lat >= 35.8 && lat <= 37.2 && lng >= 135.8 && lng <= 137.5) return 3; // Hokuriku
+      if (lat >= 37.7 && lat < 39.25 && lng >= 139.0) return 2; // Miyagi & Yamagata
+      if (lat >= 33.4 && lat <= 36.6 && lng >= 134.5 && lng <= 137.3) return 2; // Kansai & Chubu-west
+      return 1; // Default Ring 1: Kanto & neighbors
+    }
+
+    async function loadRing(ringNum) {
+      if (loadedRings.has(ringNum)) return;
+      if (ringLoadPromises.has(ringNum)) return ringLoadPromises.get(ringNum);
+
+      const p = (async () => {
+        const d = await loadJson(RING_FILES[ringNum]);
+        if (d && d.stores) {
+          const idx = new Map(storeData.chains.map((n, i) => [n, i]));
+          const remap = d.chains.map(n => {
+            if (!idx.has(n)) {
+              idx.set(n, storeData.chains.length);
+              storeData.chains.push(n);
+            }
+            return idx.get(n);
+          });
+          for (let i = 0; i < d.stores.length; i++) {
+            const r = d.stores[i];
+            storeData.stores.push([remap[r[0]], r[1], r[2], r[3]]);
+          }
+          loadedRings.add(ringNum);
+        }
+      })();
+      ringLoadPromises.set(ringNum, p);
+      await p;
+    }
+
+    async function ensureRingForCoords(lat, lng) {
+      const ring = getRingForCoords(lat, lng);
+      await loadRing(ring);
+    }
+
+    // Initial load: fast-load Ring 1 (Kanto) immediately, then progressively load remaining rings in background
+    const storeDataPromise = (async () => {
+      await loadRing(1);
+      setTimeout(async () => {
+        for (const r of [2, 3, 4]) {
+          if (!loadedRings.has(r)) {
+            await loadRing(r);
+            await new Promise(res => setTimeout(res, 60));
+          }
+        }
+      }, 400);
+      return storeData;
+    })();
+
+    // Nationwide coverage check (covers all 47 prefectures across Japan)
     function inCoverage(lat, lng) {
-      return COVERAGE_BOXES.some(c => lat >= c.s && lat <= c.n && lng >= c.w && lng <= c.e);
+      return lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 146.0;
     }
 
     function localScan(center, radius, bounds = null) {
@@ -1692,7 +1743,7 @@
           : fallbackArea;
         scanRadius = radarRadius;
         ensureRadarMap(quick.lat, quick.lng);
-        await storeDataPromise;
+        await ensureRingForCoords(quick.lat, quick.lng);
         if (seq !== scanSeq) return;
         if (storeData && inCoverage(quick.lat, quick.lng)) {
           const qc = {
@@ -1715,8 +1766,8 @@
       lastCenterCoords = center;
       radarAreaTitle.textContent = center.label;
 
-      // Fast path: pre-built data covers this area
-      await storeDataPromise;
+      // Fast path: ensure area ring is loaded and scan pre-built data
+      await ensureRingForCoords(center.lat, center.lng);
       if (seq !== scanSeq) return;
       if (storeData && inCoverage(center.lat, center.lng)) {
         lastFetchedPois = localScan(center, scanRadius, mapBounds);
@@ -1724,8 +1775,8 @@
         return;
       }
 
-      // Fallback: live Overpass query (outside pre-built coverage)
-      radarStatusText.textContent = "収録エリア（関東・甲信越・東海・南東北）外のためライブ検索中（時間がかかる場合があります）...";
+      // Fallback: live Overpass query (only if outside Japan)
+      radarStatusText.textContent = "未対応エリアのためライブ検索中（時間がかかる場合があります）...";
       const overpassQuery = `[out:json][timeout:15];(node["shop"]["name"](around:${scanRadius},${center.lat},${center.lng});way["shop"]["name"](around:${scanRadius},${center.lat},${center.lng});node["amenity"]["name"](around:${scanRadius},${center.lat},${center.lng});way["amenity"]["name"](around:${scanRadius},${center.lat},${center.lng});node["leisure"]["name"](around:${scanRadius},${center.lat},${center.lng});way["leisure"]["name"](around:${scanRadius},${center.lat},${center.lng}););out center;`;
 
       try {
