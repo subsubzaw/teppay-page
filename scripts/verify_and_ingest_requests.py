@@ -17,7 +17,10 @@ from datetime import datetime, timezone
 
 SPREADSHEET_ID = os.getenv("SPREADSHEET_ID", "1emw7e7aW_9NXGT7PNbaSS1QihyTqqdNepkkNSLo-e_M")
 SHEET_NAME = "Requests"
-APPS_SCRIPT_URL = os.getenv("APPS_SCRIPT_URL", "")
+APPS_SCRIPT_URL = os.getenv(
+    "APPS_SCRIPT_URL",
+    "https://script.google.com/macros/s/AKfycbzCKjGijNvxx7WhiKHvDKdiq3gazAudxTQ8LnF86LxuMS-Jw5Z-64fbjdqyldXeiBKR_A/exec"
+)
 
 # 1. Load chains data from index.html
 with open("index.html", encoding="utf-8") as f:
