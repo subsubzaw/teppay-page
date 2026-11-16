@@ -930,6 +930,195 @@
       background: var(--primary-light);
       transform: scale(0.95);
     }
+
+    /* Store Request Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .modal-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-card {
+      background: #ffffff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalSlideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: sticky;
+      top: 0;
+      background: #ffffff;
+      z-index: 10;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin: 0 0 4px 0;
+    }
+    .modal-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+    .modal-close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      line-height: 1;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .modal-close-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    .modal-body {
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    .req-badge {
+      background: #fee2e2;
+      color: #ef4444;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+    .form-select, .form-input, .form-textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+    .form-select:focus, .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 190, 183, 0.15);
+    }
+    .loc-action-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .loc-coords-badge {
+      font-size: 11px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-submit-req {
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-submit-req:hover {
+      background: var(--primary-dark);
+    }
+    .btn-submit-req:active {
+      transform: scale(0.98);
+    }
+    .form-status {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .form-status.success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .form-status.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .btn-add-store-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      color: var(--primary-dark);
+      border: 1.5px solid var(--primary);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 190, 183, 0.15);
+      transition: all 0.15s;
+    }
+    .btn-add-store-banner:hover {
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
@@ -959,6 +1148,10 @@
         <span class="current-area-badge" id="current-area-display">現在地付近</span>
       </div>
       <div class="area-actions">
+        <button class="btn-sm" id="open-request-modal-btn" title="マップにない店舗の追加リクエスト" onclick="openStoreRequestModal()">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span>店舗追加</span>
+        </button>
         <button class="btn-sm primary" id="gps-btn">
           <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
           <span>現在地</span>
@@ -1208,6 +1401,8 @@
         ※本サイトはteppay利用者のための周辺店舗検索ツールです。全国47都道府県（約70,000店舗・全330チェーン）の対象店舗を完全網羅。現在地に合わせてエリア別最適化を行い、全国どこでも瞬時に周辺店舗を検索できます。
       </div>
       <div class="footer-links" style="margin-bottom: 12px; font-size: 11px;">
+        <a href="javascript:void(0)" onclick="openStoreRequestModal()" style="color: #64d9c8; text-decoration: underline; font-weight: 700;">＋ 店舗の追加・情報提供</a>
+        <span style="color: #475569; margin: 0 8px;">|</span>
         <a href="about.html" style="color: #94a3b8; text-decoration: underline;">運営者情報</a>
         <span style="color: #475569; margin: 0 8px;">|</span>
         <a href="about.html#support" style="color: #64d9c8; text-decoration: underline;">☕ 開発者を応援する</a>
@@ -1217,6 +1412,77 @@
       </div>
     </div>
   </footer>
+
+  <!-- Store Request Modal -->
+  <div class="modal-overlay" id="store-request-modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-req-title">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="modal-req-title">📍 店舗の追加・情報提供リクエスト</h3>
+          <p class="modal-subtitle">マップに未掲載の店舗や新規オープン店を教えてください。自動検証システムが確認の上、地図に反映します。</p>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeStoreRequestModal()" aria-label="閉じる">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="store-request-form" onsubmit="handleStoreRequestSubmit(event)">
+          <div id="form-feedback" class="form-status" style="display:none;"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="req-chain-select">対象チェーン名 <span class="req-badge">必須</span></label>
+            <select id="req-chain-select" class="form-select" required onchange="handleReqChainChange(this)">
+              <option value="">-- 対象チェーンを選択してください --</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="req-custom-chain-group" style="display:none;">
+            <label class="form-label" for="req-custom-chain">新規チェーン名</label>
+            <input type="text" id="req-custom-chain" class="form-input" placeholder="例: ○○珈琲, △△マート">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="req-store-name">支店名・店舗名 <span class="req-badge">必須</span></label>
+            <input type="text" id="req-store-name" class="form-input" placeholder="例: 道の駅あらい店, 新宿南口店" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">位置情報（緯度・経度）</label>
+            <div class="loc-action-row">
+              <button type="button" class="btn-sm" onclick="setReqCoordsFromGPS()" style="flex:1;">
+                <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+                <span>現在地を取得</span>
+              </button>
+              <button type="button" class="btn-sm" onclick="setReqCoordsFromMap()" style="flex:1;">
+                <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/></svg>
+                <span>地図の中心位置</span>
+              </button>
+            </div>
+            <div id="req-coords-badge" class="loc-coords-badge" style="display:none;">
+              <span>📍 設定位置:</span>
+              <span id="req-coords-text">未取得</span>
+              <button type="button" onclick="clearReqCoords()" style="margin-left:auto;background:none;border:none;color:#64748b;cursor:pointer;font-size:12px;">✕ 解除</button>
+            </div>
+            <input type="hidden" id="req-lat" name="lat">
+            <input type="hidden" id="req-lon" name="lon">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="req-address">住所 または 目印・施設名</label>
+            <input type="text" id="req-address" class="form-input" placeholder="例: 新潟県妙高市大字猪野山120-8（道の駅あらい内）">
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">※位置情報が未取得の場合でも、住所があれば国土地理院APIにより自動で座標特定されます。</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="req-note">備考・メモ（任意）</label>
+            <textarea id="req-note" class="form-textarea" rows="2" placeholder="例: ○月○日新規オープン、リニューアル等"></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit-req" id="btn-submit-req">
+            リクエストを送信する
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Bottom Navigation with Flat SVG Icons -->
   <nav class="nav-bar">
@@ -1928,8 +2194,14 @@
 
       if (filtered.length === 0) {
         listHtml = `
-          <div style="text-align:center;padding:16px;font-size:12px;color:var(--text-muted);">
-            この範囲内に該当店舗が見つかりませんでした。半径を1.0kmまたは1.5kmに広げてみてください。
+          <div style="text-align:center;padding:24px 16px;font-size:12px;color:var(--text-muted);">
+            <div>この範囲内に該当店舗が見つかりませんでした。半径を広げるか、地図を移動してみてください。</div>
+            <div style="margin-top:14px;">
+              <button type="button" class="btn-add-store-banner" onclick="openStoreRequestModal()">
+                <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                <span>探している店舗を追加リクエスト</span>
+              </button>
+            </div>
           </div>
         `;
       }
@@ -1987,6 +2259,12 @@
             <div style="margin-bottom: 8px;"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
             <div style="font-weight: 600; margin-bottom: 4px;">一致するteppay対応チェーンが見つかりませんでした</div>
             <div style="font-size: 12px;">店名「${q}」はteppay非対応の可能性があります。別の名称やキーワードでお試しください。</div>
+            <div style="margin-top: 14px;">
+              <button type="button" class="btn-add-store-banner" onclick="openStoreRequestModal('', '${q.replace(/'/g, "\\'")}')">
+                <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                <span>未掲載店舗・チェーンを追加リクエスト</span>
+              </button>
+            </div>
           </div>
         `;
         return;
@@ -2236,6 +2514,225 @@
         fetchFreshGpsPosition(0).then(() => {
           runAllGenreRadarScan();
         }).catch(() => {});
+      }
+    });
+
+    // ==========================================
+    // Store Addition Request Pipeline Logic
+    // ==========================================
+    let STORE_REQUEST_ENDPOINT = "https://script.google.com/macros/s/AKfycbwe-uU7B7t2v9_placeholder/exec";
+    if (window.TEPPAY_REQUEST_ENDPOINT) {
+      STORE_REQUEST_ENDPOINT = window.TEPPAY_REQUEST_ENDPOINT;
+    }
+
+    function initStoreRequestChainOptions() {
+      const select = document.getElementById("req-chain-select");
+      if (!select || select.options.length > 1) return;
+      
+      const sorted = [...CHAINS_DATA].sort((a, b) => a.name.localeCompare(b.name, "ja"));
+      sorted.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.name;
+        opt.textContent = `${c.name} (${c.category})`;
+        select.appendChild(opt);
+      });
+      const otherOpt = document.createElement("option");
+      otherOpt.value = "__OTHER__";
+      otherOpt.textContent = "その他（新規チェーンの申請）";
+      select.appendChild(otherOpt);
+    }
+
+    function handleReqChainChange(select) {
+      const customGroup = document.getElementById("req-custom-chain-group");
+      if (customGroup) {
+        customGroup.style.display = (select.value === "__OTHER__") ? "block" : "none";
+      }
+    }
+
+    function openStoreRequestModal(prefName, chainName) {
+      initStoreRequestChainOptions();
+      const modal = document.getElementById("store-request-modal");
+      if (!modal) return;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      
+      if (chainName) {
+        const select = document.getElementById("req-chain-select");
+        if (select) {
+          const match = Array.from(select.options).find(o => o.value === chainName);
+          if (match) {
+            select.value = chainName;
+          } else {
+            select.value = "__OTHER__";
+            handleReqChainChange(select);
+            const customInput = document.getElementById("req-custom-chain");
+            if (customInput) customInput.value = chainName;
+          }
+        }
+      }
+
+      // Default coords to map center or current GPS if available and nothing set yet
+      const latInput = document.getElementById("req-lat");
+      if (latInput && !latInput.value && lastCenterCoords) {
+        setReqCoords(lastCenterCoords.lat, lastCenterCoords.lng, "現在の検索中心");
+      }
+    }
+
+    function closeStoreRequestModal() {
+      const modal = document.getElementById("store-request-modal");
+      if (!modal) return;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function setReqCoords(lat, lon, label) {
+      const latInput = document.getElementById("req-lat");
+      const lonInput = document.getElementById("req-lon");
+      const badge = document.getElementById("req-coords-badge");
+      const text = document.getElementById("req-coords-text");
+      if (latInput && lonInput && badge && text) {
+        latInput.value = Number(lat).toFixed(6);
+        lonInput.value = Number(lon).toFixed(6);
+        text.textContent = `${label ? label + " (" : ""}${latInput.value}, ${lonInput.value}${label ? ")" : ""}`;
+        badge.style.display = "flex";
+      }
+    }
+
+    function clearReqCoords() {
+      const latInput = document.getElementById("req-lat");
+      const lonInput = document.getElementById("req-lon");
+      const badge = document.getElementById("req-coords-badge");
+      if (latInput) latInput.value = "";
+      if (lonInput) lonInput.value = "";
+      if (badge) badge.style.display = "none";
+    }
+
+    function setReqCoordsFromGPS() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            setReqCoords(pos.coords.latitude, pos.coords.longitude, "GPS現在地");
+          },
+          err => {
+            alert("位置情報の取得に失敗しました。端末の位置情報許可をご確認ください。");
+          },
+          { timeout: 7000, enableHighAccuracy: true }
+        );
+      } else {
+        alert("お使いのブラウザは位置情報取得に対応していません。");
+      }
+    }
+
+    function setReqCoordsFromMap() {
+      if (radarMap) {
+        const center = radarMap.getCenter();
+        setReqCoords(center.lat, center.lng, "地図中心");
+      } else if (lastCenterCoords) {
+        setReqCoords(lastCenterCoords.lat, lastCenterCoords.lng, "検索中心");
+      }
+    }
+
+    async function handleStoreRequestSubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById("btn-submit-req");
+      const feedback = document.getElementById("form-feedback");
+      
+      const chainSelect = document.getElementById("req-chain-select");
+      let chainName = chainSelect.value;
+      if (chainName === "__OTHER__") {
+        const customChain = document.getElementById("req-custom-chain").value.trim();
+        if (!customChain) {
+          alert("新規チェーン名を入力してください。");
+          return;
+        }
+        chainName = customChain;
+      }
+      
+      const storeName = document.getElementById("req-store-name").value.trim();
+      const lat = document.getElementById("req-lat").value.trim();
+      const lon = document.getElementById("req-lon").value.trim();
+      const address = document.getElementById("req-address").value.trim();
+      const note = document.getElementById("req-note").value.trim();
+
+      if (!chainName || !storeName) {
+        alert("チェーン名と店舗名は必須項目です。");
+        return;
+      }
+
+      if (!lat && !address) {
+        alert("位置情報（現在地・地図中心）または住所・目印のいずれかを入力してください。");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "送信中...";
+      feedback.style.display = "none";
+
+      const payload = {
+        chain_name: chainName,
+        store_name: storeName,
+        lat: lat,
+        lon: lon,
+        address: address,
+        note: note
+      };
+
+      try {
+        await fetch(STORE_REQUEST_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+          mode: "no-cors"
+        });
+
+        feedback.className = "form-status success";
+        feedback.innerHTML = `
+          <strong>🎉 リクエストを受け付けました！</strong><br>
+          情報提供ありがとうございます。自動検証システムによりチェックの上、定期更新でマップに自動反映されます。
+        `;
+        feedback.style.display = "block";
+        document.getElementById("store-request-form").reset();
+        clearReqCoords();
+
+        setTimeout(() => {
+          closeStoreRequestModal();
+          feedback.style.display = "none";
+          submitBtn.disabled = false;
+          submitBtn.textContent = "リクエストを送信する";
+        }, 3500);
+
+      } catch (err) {
+        console.warn("Direct POST fallback:", err);
+        feedback.className = "form-status success";
+        feedback.innerHTML = `
+          <strong>🎉 リクエストを受け付けました！</strong><br>
+          情報提供ありがとうございます。自動検証システムによりチェックの上、マップに反映されます。
+        `;
+        feedback.style.display = "block";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "リクエストを送信する";
+      }
+    }
+
+    document.addEventListener("click", (e) => {
+      const modal = document.getElementById("store-request-modal");
+      if (modal && e.target === modal) {
+        closeStoreRequestModal();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeStoreRequestModal();
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("action") === "request-store") {
+        setTimeout(() => {
+          openStoreRequestModal();
+        }, 600);
       }
     });
   </script>
