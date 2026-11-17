@@ -17,10 +17,9 @@ from datetime import datetime, timezone
 
 SPREADSHEET_ID = os.getenv("SPREADSHEET_ID", "1emw7e7aW_9NXGT7PNbaSS1QihyTqqdNepkkNSLo-e_M")
 SHEET_NAME = "Requests"
-APPS_SCRIPT_URL = os.getenv(
-    "APPS_SCRIPT_URL",
-    "https://script.google.com/macros/s/AKfycbzCKjGijNvxx7WhiKHvDKdiq3gazAudxTQ8LnF86LxuMS-Jw5Z-64fbjdqyldXeiBKR_A/exec"
-)
+DEFAULT_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCKjGijNvxx7WhiKHvDKdiq3gazAudxTQ8LnF86LxuMS-Jw5Z-64fbjdqyldXeiBKR_A/exec"
+_env_script_url = os.getenv("APPS_SCRIPT_URL", "").strip()
+APPS_SCRIPT_URL = _env_script_url if _env_script_url else DEFAULT_APPS_SCRIPT_URL
 
 # 1. Load chains data from index.html
 with open("index.html", encoding="utf-8") as f:
@@ -198,14 +197,18 @@ def fetch_requests():
         except Exception as e:
             print(f"Error fetching via Apps Script URL: {e}", file=sys.stderr)
 
-    print(f"Fetching requests via gsheets CLI from {SPREADSHEET_ID}...")
-    cmd = ["gsheets", "readonly", "read", SPREADSHEET_ID, f"{SHEET_NAME}!A1:J100", "--json"]
-    res = subprocess.run(cmd, capture_output=True, text=True)
-    if res.returncode != 0:
-        print(f"Error reading spreadsheet: {res.stderr}", file=sys.stderr)
+    try:
+        print(f"Fetching requests via gsheets CLI from {SPREADSHEET_ID}...")
+        cmd = ["gsheets", "readonly", "read", SPREADSHEET_ID, f"{SHEET_NAME}!A1:J100", "--json"]
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        if res.returncode != 0:
+            print(f"Error reading spreadsheet: {res.stderr}", file=sys.stderr)
+            return "error", []
+        rows = json.loads(res.stdout)
+    except FileNotFoundError:
+        print("gsheets CLI not installed. Apps Script URL required for fetching.", file=sys.stderr)
         return "error", []
 
-    rows = json.loads(res.stdout)
     items = []
     for idx, row in enumerate(rows[1:], start=2):
         while len(row) < 10:
@@ -242,10 +245,13 @@ def update_row_status(mode, row_index, decided_status, reason, now_str):
             print(f"Error updating row via Apps Script: {e}", file=sys.stderr)
 
     # Fallback to gsheets CLI
-    update_range = f"{SHEET_NAME}!H{row_index}:J{row_index}"
-    safe_reason = reason.replace(",", "，")
-    val_str = f"{decided_status},{safe_reason},{now_str}"
-    subprocess.run(["gsheets", "mutate", "write", SPREADSHEET_ID, update_range, val_str], check=True)
+    try:
+        update_range = f"{SHEET_NAME}!H{row_index}:J{row_index}"
+        safe_reason = reason.replace(",", "，")
+        val_str = f"{decided_status},{safe_reason},{now_str}"
+        subprocess.run(["gsheets", "mutate", "write", SPREADSHEET_ID, update_range, val_str], check=True)
+    except FileNotFoundError:
+        pass
 
 def process_sheet_requests():
     mode, items = fetch_requests()
