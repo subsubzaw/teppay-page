@@ -53,14 +53,26 @@ def haversine_meters(lat1, lon1, lat2, lon2):
 def geocode_gsi(address):
     if not address or len(address.strip()) < 2:
         return None
+    cleaned = address.strip()
+    # Strip postal code (e.g. 〒206-0033 or 206-0033)
+    cleaned = re.sub(r"^〒?\s*\d{3}-?\d{4}\s*", "", cleaned)
     try:
-        url = "https://msearch.gsi.go.jp/address-search/AddressSearch?q=" + urllib.parse.quote(address)
+        url = "https://msearch.gsi.go.jp/address-search/AddressSearch?q=" + urllib.parse.quote(cleaned)
         req = urllib.request.Request(url, headers={"User-Agent": "TeppayVerifier/1.0"})
         with urllib.request.urlopen(req, timeout=8) as r:
             res = json.loads(r.read().decode("utf-8"))
             if res and len(res) > 0:
-                coords = res[0]["geometry"]["coordinates"] # [lon, lat]
+                coords = res[0]["geometry"]["coordinates"]  # [lon, lat]
                 return coords[1], coords[0]
+            # Try original address if cleaned returned nothing
+            if cleaned != address.strip():
+                url2 = "https://msearch.gsi.go.jp/address-search/AddressSearch?q=" + urllib.parse.quote(address.strip())
+                req2 = urllib.request.Request(url2, headers={"User-Agent": "TeppayVerifier/1.0"})
+                with urllib.request.urlopen(req2, timeout=8) as r2:
+                    res2 = json.loads(r2.read().decode("utf-8"))
+                    if res2 and len(res2) > 0:
+                        coords = res2[0]["geometry"]["coordinates"]
+                        return coords[1], coords[0]
     except Exception as e:
         print(f"Geocoding error for '{address}': {e}", file=sys.stderr)
     return None
