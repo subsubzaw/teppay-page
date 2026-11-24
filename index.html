@@ -311,40 +311,24 @@
     .radar-panel.open {
       display: block;
     }
-    .radar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      gap: 8px;
-    }
-    .radar-title-box {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-    .radar-title-text {
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--primary-dark);
-      letter-spacing: -0.2px;
-    }
-    .radar-title-area-badge {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
     .radar-controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
       margin-bottom: 12px;
       align-items: center;
       justify-content: space-between;
+    }
+    .radar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    @media (max-width: 480px) {
+      .radar-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
     }
     .radius-group {
       display: flex;
@@ -1170,24 +1154,19 @@
 
       <!-- ファーストビュー常時表示：全ジャンル対応店舗レーダーマップ -->
       <div class="radar-panel open" id="radar-panel">
-        <div class="radar-header">
-          <div class="radar-title-box">
-            <span class="radar-title-text">周辺の対象店舗マップ</span>
-            <span class="radar-title-area-badge" id="radar-area-title">現在地取得中...</span>
-          </div>
-          <button type="button" class="btn-sm primary" id="rescan-top-btn"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg><span>再検索</span></button>
-        </div>
-
         <div class="radar-controls">
           <div class="radius-group">
             <button type="button" class="radius-btn active" data-radius="250">半径250m</button>
             <button type="button" class="radius-btn" data-radius="500">半径500m</button>
             <button type="button" class="radius-btn" data-radius="1000">半径1km</button>
           </div>
-          <label class="exclude-cvs-toggle">
-            <input type="checkbox" id="exclude-cvs-checkbox">
-            <span>コンビニを除外</span>
-          </label>
+          <div class="radar-actions">
+            <label class="exclude-cvs-toggle">
+              <input type="checkbox" id="exclude-cvs-checkbox">
+              <span>コンビニを除外</span>
+            </label>
+            <button type="button" class="btn-sm primary" id="rescan-top-btn"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="icon-svg"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg><span>再検索</span></button>
+          </div>
         </div>
 
         <div id="radar-map-box"></div>
@@ -1572,10 +1551,10 @@
     function updateAreaDisplay() {
       if (currentArea) {
         areaDisplay.textContent = currentArea;
-        radarAreaTitle.textContent = currentArea;
+        if (radarAreaTitle) radarAreaTitle.textContent = currentArea;
       } else {
         areaDisplay.textContent = "現在地付近";
-        radarAreaTitle.textContent = "現在地付近";
+        if (radarAreaTitle) radarAreaTitle.textContent = "現在地付近";
       }
     }
 
@@ -1727,7 +1706,7 @@
             try { localStorage.setItem("teppay_last_pos", JSON.stringify({ lat: userGpsCoords.lat, lng: userGpsCoords.lng })); } catch (e) {}
             if (!currentArea) {
               areaDisplay.textContent = `現在地 (±${userGpsCoords.accuracy}m)`;
-              radarAreaTitle.textContent = `現在地 (±${userGpsCoords.accuracy}m)`;
+              if (radarAreaTitle) radarAreaTitle.textContent = `現在地 (±${userGpsCoords.accuracy}m)`;
             }
             if (lastFetchedPois && lastFetchedPois.length > 0) {
               lastFetchedPois.forEach(store => {
@@ -2017,7 +1996,7 @@
             label: currentArea ? (quick.label || currentArea) : (userGpsCoords ? `現在地（±${userGpsCoords.accuracy}m）` : (savedPosition() ? "現在地（前回の位置）" : quick.label))
           };
           lastCenterCoords = qc;
-          radarAreaTitle.textContent = qc.label;
+          if (radarAreaTitle) radarAreaTitle.textContent = qc.label;
           lastFetchedPois = localScan(qc, scanRadius);
           renderRadarMapAndList();
         }
@@ -2029,7 +2008,7 @@
         }
       }
       lastCenterCoords = center;
-      radarAreaTitle.textContent = center.label;
+      if (radarAreaTitle) radarAreaTitle.textContent = center.label;
 
       // Fast path: ensure area ring is loaded and scan pre-built data
       await ensureRingForCoords(center.lat, center.lng);
@@ -2385,7 +2364,7 @@
         currentArea = "";
         try { localStorage.setItem("teppay_area", ""); } catch (e) {}
         areaDisplay.textContent = `現在地 (±${coords.accuracy}m)`;
-        radarAreaTitle.textContent = `現在地 (±${coords.accuracy}m)`;
+        if (radarAreaTitle) radarAreaTitle.textContent = `現在地 (±${coords.accuracy}m)`;
         showToast(`現在地を取得しました（精度±${coords.accuracy}m）`);
         if (radarPanel.classList.contains("open")) {
           runAllGenreRadarScan();
