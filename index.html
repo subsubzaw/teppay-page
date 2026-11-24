@@ -380,6 +380,36 @@
       user-select: none;
     }
     .store-pin span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .store-logo-pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 28px;
+      height: 28px;
+      background: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 7px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.32);
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-sizing: border-box;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .store-logo-pin:hover {
+      transform: translate(-50%, -50%) scale(1.18);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+      z-index: 1000;
+    }
+    .store-logo-pin img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+    }
     #radar-map-box {
       width: 100%;
       height: 330px;
@@ -1610,6 +1640,15 @@
       return `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})&z=18`;
     }
 
+    // CVS Logo helper for Seven-Eleven, Lawson, and FamilyMart
+    function getStoreLogoUrl(chainName, storeName) {
+      const name = chainName || storeName || "";
+      if (name.includes("セブン")) return "./assets/logos/seven-eleven.png";
+      if (name.includes("ローソン") && !name.includes("ナチュラル")) return "./assets/logos/lawson.png";
+      if (name.includes("ファミリーマート") || name.includes("ファミマ")) return "./assets/logos/familymart.png";
+      return null;
+    }
+
     function openGoogleMapsLatLng(name, lat, lng) {
       if (typeof gtag === "function") {
         gtag("event", "click_store_pin", { store_name: name });
@@ -2129,10 +2168,13 @@
         const isCvs = store.category.includes("コンビニ");
         const isHc = store.tags.includes("ホームセンター");
         const pinColor = isHc ? "#f59e0b" : (isCvs ? "#0284c7" : "#00beb7");
+        const logoUrl = getStoreLogoUrl(store.chainName, store.storeName);
 
         const storeIcon = L.divIcon({
           className: "custom-store-pin",
-          html: `<div class="store-pin" style="background:${pinColor};" title="${store.chainName}"><span>${store.chainName}</span></div>`,
+          html: logoUrl
+            ? `<div class="store-logo-pin" title="${store.chainName}"><img src="${logoUrl}" alt="${store.chainName}"></div>`
+            : `<div class="store-pin" style="background:${pinColor};" title="${store.chainName}"><span>${store.chainName}</span></div>`,
           iconSize: null
         });
 
