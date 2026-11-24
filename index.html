@@ -1640,12 +1640,14 @@
       return `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})&z=18`;
     }
 
-    // CVS Logo helper for Seven-Eleven, Lawson, and FamilyMart
+    // Store Logo helper for supported brand pins
     function getStoreLogoUrl(chainName, storeName) {
       const name = chainName || storeName || "";
       if (name.includes("セブン")) return "./assets/logos/seven-eleven.png";
       if (name.includes("ローソン") && !name.includes("ナチュラル")) return "./assets/logos/lawson.png";
       if (name.includes("ファミリーマート") || name.includes("ファミマ")) return "./assets/logos/familymart.png";
+      if (name.includes("すき家")) return "./assets/logos/sukiya.png";
+      if (name.includes("松屋")) return "./assets/logos/matsuya.png";
       return null;
     }
 
