@@ -1777,11 +1777,17 @@
               areaDisplay.textContent = `現在地 (±${userGpsCoords.accuracy}m)`;
             }
             if (lastFetchedPois && lastFetchedPois.length > 0) {
+              const prevLat = lastWatchCoords ? lastWatchCoords.lat : null;
+              const prevLng = lastWatchCoords ? lastWatchCoords.lng : null;
+              const movedDist = (prevLat && prevLng) ? calcDistanceMeters(prevLat, prevLng, userGpsCoords.lat, userGpsCoords.lng) : 999;
               lastFetchedPois.forEach(store => {
                 store.userDist = calcDistanceMeters(userGpsCoords.lat, userGpsCoords.lng, store.lat, store.lng);
               });
-              lastFetchedPois.sort((a, b) => (a.userDist ?? Infinity) - (b.userDist ?? Infinity));
-              renderRadarMapAndList();
+              if (movedDist >= 15 && !activePopupStoreKey) {
+                lastWatchCoords = { lat: userGpsCoords.lat, lng: userGpsCoords.lng };
+                lastFetchedPois.sort((a, b) => (a.userDist ?? Infinity) - (b.userDist ?? Infinity));
+                renderRadarMapAndList();
+              }
             }
           },
           () => {},
@@ -1808,7 +1814,27 @@
         });
         gmapLayer.addTo(radarMap);
         radarMarkersLayer = L.layerGroup().addTo(radarMap);
+        radarMap.on("popupopen", () => {
+          isPopupAutoPanning = true;
+          clearTimeout(moveTimer);
+          setTimeout(() => {
+            isPopupAutoPanning = false;
+            if (radarMap) {
+              const c = radarMap.getCenter();
+              lastCenterCoords.lat = c.lat;
+              lastCenterCoords.lng = c.lng;
+            }
+          }, 450);
+        });
+        radarMap.on("popupclose", () => {
+          setTimeout(() => {
+            if (radarMap && !radarMap._popup) {
+              activePopupStoreKey = null;
+            }
+          }, 150);
+        });
         radarMap.on("moveend", () => {
+          if (isPopupAutoPanning) return;
           clearTimeout(moveTimer);
           const delay = (storeData && inCoverage(radarMap.getCenter().lat, radarMap.getCenter().lng)) ? 120 : 600;
           moveTimer = setTimeout(onMapMoved, delay);
@@ -1824,10 +1850,13 @@
     }
 
     let programmaticMove = false;
+    let isPopupAutoPanning = false;
+    let activePopupStoreKey = null;
+    let lastWatchCoords = null;
 
     // Re-scan when the user pans/zooms the map
     function onMapMoved() {
-      if (programmaticMove || !radarMap || !radarPanel.classList.contains("open")) return;
+      if (isPopupAutoPanning || programmaticMove || !radarMap || !radarPanel.classList.contains("open")) return;
       const c = radarMap.getCenter();
       const moved = radarMap.distance(c, L.latLng(lastCenterCoords.lat, lastCenterCoords.lng));
       const zoomed = Math.abs(radarMap.getZoom() - (radarMap._lastScanZoom ?? -1)) > 0;
@@ -2185,14 +2214,26 @@
         const popupDistBadge = distText ? `（現在地から約${distText}）` : "";
         const listDistBadge = distText ? `<span>現在地から約${distText}</span><span>・</span>` : "";
 
+        const storeKey = `${store.storeName}_${store.lat}_${store.lng}`;
+        marker.on("popupopen", () => {
+          activePopupStoreKey = storeKey;
+        });
+
         marker.bindPopup(`
           <div style="font-size:12px;line-height:1.4;">
             <div style="font-weight:800;font-size:13px;margin-bottom:4px;">${store.storeName}</div>
             <span style="color:#047857;font-size:11px;">${store.category}${popupDistBadge}</span><br>
             <a href="${googleMapsPinUrl(store.storeName, store.lat, store.lng)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:4px;color:#1d4ed8;font-weight:700;">Googleマップで開く →</a>
           </div>
-        `);
+        `, {
+          autoPan: true,
+          autoPanPadding: [25, 25]
+        });
         marker.addTo(radarMarkersLayer);
+
+        if (activePopupStoreKey === storeKey) {
+          marker.openPopup();
+        }
 
         if (idx < MAX_LIST_ITEMS) {
           listHtml += `
