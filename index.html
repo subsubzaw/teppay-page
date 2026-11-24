@@ -373,9 +373,9 @@
       transform: translate(-50%, -50%);
       display: inline-flex; align-items: center; justify-content: center;
       max-width: 120px; box-sizing: border-box;
-      color: #fff; border: 2px solid #fff; border-radius: var(--radius-pill);
+      background: #ffffff; border: 2px solid #ffffff; border-radius: var(--radius-pill);
       padding: 2px 8px; font-size: 11px; font-weight: 800; line-height: 16px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.32);
       cursor: pointer;
       user-select: none;
     }
@@ -2211,14 +2211,14 @@
       pinSlice.forEach((store, idx) => {
         const isCvs = store.category.includes("コンビニ");
         const isHc = store.tags.includes("ホームセンター");
-        const pinColor = isHc ? "#f59e0b" : (isCvs ? "#0284c7" : "#00beb7");
+        const pinColor = isHc ? "#b45309" : (isCvs ? "#0369a1" : "#007a75");
         const logoUrl = getStoreLogoUrl(store.chainName, store.storeName);
 
         const storeIcon = L.divIcon({
           className: "custom-store-pin",
           html: logoUrl
             ? `<div class="store-logo-pin" title="${store.chainName}"><img src="${logoUrl}" alt="${store.chainName}"></div>`
-            : `<div class="store-pin" style="background:${pinColor};" title="${store.chainName}"><span>${store.chainName}</span></div>`,
+            : `<div class="store-pin" style="color:${pinColor};" title="${store.chainName}"><span>${store.chainName}</span></div>`,
           iconSize: null
         });
 
