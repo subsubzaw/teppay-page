@@ -1148,10 +1148,6 @@
         <span class="current-area-badge" id="current-area-display">現在地付近</span>
       </div>
       <div class="area-actions">
-        <button class="btn-sm" id="open-request-modal-btn" title="マップにない店舗の追加リクエスト" onclick="openStoreRequestModal()">
-          <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-          <span>店舗追加</span>
-        </button>
         <button class="btn-sm primary" id="gps-btn">
           <svg class="icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
           <span>現在地</span>
@@ -1184,9 +1180,9 @@
 
         <div class="radar-controls">
           <div class="radius-group">
-            <button type="button" class="radius-btn active" data-radius="500">半径0.5km</button>
-            <button type="button" class="radius-btn" data-radius="1000">半径1.0km</button>
-            <button type="button" class="radius-btn" data-radius="1500">半径1.5km</button>
+            <button type="button" class="radius-btn active" data-radius="250">半径250m</button>
+            <button type="button" class="radius-btn" data-radius="500">半径500m</button>
+            <button type="button" class="radius-btn" data-radius="1000">半径1km</button>
           </div>
           <label class="exclude-cvs-toggle">
             <input type="checkbox" id="exclude-cvs-checkbox">
@@ -1535,8 +1531,8 @@
     let radarMap = null;
     let radarMarkersLayer = null;
     let radarCircle = null;
-    let radarRadius = 500;
-    let scanRadius = 500;
+    let radarRadius = 250;
+    let scanRadius = 250;
     let mapMode = false;
     let scanSeq = 0;
     let moveTimer = null;
@@ -1778,9 +1774,9 @@
 
     // Radius to Map Zoom Helper: ensures entire radius circle is comfortably visible
     function getZoomForRadius(radius) {
+      if (radius <= 250) return 16;
       if (radius <= 500) return 15;
-      if (radius <= 1000) return 14;
-      return 13.5;
+      return 14;
     }
 
     // Initialize Leaflet Map with Google Maps Japanese Tiles
@@ -2144,9 +2140,10 @@
       const pinSlice = filtered.slice(0, MAX_MAP_PINS);
       const listSlice = filtered.slice(0, MAX_LIST_ITEMS);
 
+      const radiusLabel = radarRadius < 1000 ? `${radarRadius}m` : `${radarRadius / 1000}km`;
       radarStatusText.textContent = mapMode
         ? `表示中の地図内に ${totalCount}件 のteppay対応店舗（地図を動かすと即座に更新）`
-        : `半径${radarRadius / 1000}km圏内に ${totalCount}件 のteppay対応店舗が見つかりました`;
+        : `半径${radiusLabel}圏内に ${totalCount}件 のteppay対応店舗が見つかりました`;
 
       let listHtml = "";
       pinSlice.forEach((store, idx) => {
