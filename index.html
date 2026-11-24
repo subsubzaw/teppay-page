@@ -301,7 +301,12 @@
     /* Radar Map Panel (All-genre map) */
     .radar-panel {
       display: none;
-      margin-bottom: 20px;
+      background: #ffffff;
+      border: 2px solid var(--primary-mint);
+      border-radius: 22px;
+      padding: 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 20px rgba(0, 190, 183, 0.1);
     }
     .radar-panel.open {
       display: block;
@@ -377,10 +382,9 @@
     .store-pin span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
     #radar-map-box {
       width: 100%;
-      height: clamp(360px, 50vh, 440px);
+      height: 330px;
       border-radius: 16px;
       border: 1.5px solid var(--border);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
       margin-bottom: 12px;
       z-index: 10;
       overflow: hidden;
