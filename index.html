@@ -1872,11 +1872,12 @@
           activePopupStoreKey = null;
         });
         radarMap.on("moveend", () => {
-          if (isPopupAutoPanning) return;
+          if (isPopupAutoPanning || radarMap._isOneHandZooming) return;
           clearTimeout(moveTimer);
           const delay = (storeData && inCoverage(radarMap.getCenter().lat, radarMap.getCenter().lng)) ? 120 : 600;
           moveTimer = setTimeout(onMapMoved, delay);
         });
+        enableOneHandZoom(radarMap);
       } else {
         programmaticMove = true;
         radarMap.setView([lat, lng], zoom);
@@ -1885,6 +1886,102 @@
           radarMap.invalidateSize();
         }, 180);
       }
+    }
+
+    // Google Maps-style one-finger zoom: double-tap and drag down (zoom in) / up (zoom out)
+    function enableOneHandZoom(map) {
+      const container = map.getContainer();
+      let lastTapTime = 0;
+      let lastTapX = 0;
+      let lastTapY = 0;
+      let isCandidate = false;
+      let isZooming = false;
+      let startY = 0;
+      let startZoom = 0;
+      let origZoomSnap = map.options.zoomSnap;
+      let draggingWasEnabled = false;
+
+      const resetState = () => {
+        if (isZooming) {
+          map.options.zoomSnap = origZoomSnap;
+          map._isOneHandZooming = false;
+        }
+        if (draggingWasEnabled && !map.dragging.enabled()) {
+          map.dragging.enable();
+        }
+        isCandidate = false;
+        isZooming = false;
+        draggingWasEnabled = false;
+      };
+
+      container.addEventListener("touchstart", (e) => {
+        if (e.touches.length !== 1) {
+          if (isCandidate || isZooming) resetState();
+          lastTapTime = 0;
+          return;
+        }
+        if (e.target && e.target.closest(".leaflet-control, .leaflet-popup")) {
+          lastTapTime = 0;
+          return;
+        }
+        const touch = e.touches[0];
+        const now = Date.now();
+        const dt = now - lastTapTime;
+        const dist = Math.hypot(touch.clientX - lastTapX, touch.clientY - lastTapY);
+
+        if (dt > 0 && dt < 350 && dist < 40) {
+          lastTapTime = 0;
+          isCandidate = true;
+          isZooming = false;
+          startY = touch.clientY;
+          startZoom = map.getZoom();
+          origZoomSnap = map.options.zoomSnap;
+          draggingWasEnabled = map.dragging.enabled();
+          if (draggingWasEnabled) {
+            map.dragging.disable();
+          }
+        } else {
+          lastTapTime = now;
+          lastTapX = touch.clientX;
+          lastTapY = touch.clientY;
+        }
+      }, { passive: true });
+
+      container.addEventListener("touchmove", (e) => {
+        if (!isCandidate || e.touches.length !== 1) return;
+        const touch = e.touches[0];
+        const dy = touch.clientY - startY;
+
+        if (!isZooming && Math.abs(dy) > 6) {
+          isZooming = true;
+          map._isOneHandZooming = true;
+          map.options.zoomSnap = 0;
+        }
+        if (isZooming) {
+          e.preventDefault();
+          e.stopPropagation();
+          const minZ = map.getMinZoom();
+          const maxZ = map.getMaxZoom();
+          const targetZoom = Math.max(minZ, Math.min(maxZ, startZoom + dy / 110));
+          map.setZoom(targetZoom, { animate: false });
+        }
+      }, { passive: false });
+
+      const onTouchEnd = (e) => {
+        if (!isCandidate && !isZooming) return;
+        const didZoom = isZooming;
+        if (didZoom) {
+          e.preventDefault();
+        }
+        resetState();
+        if (didZoom) {
+          clearTimeout(moveTimer);
+          moveTimer = setTimeout(onMapMoved, 120);
+        }
+      };
+
+      container.addEventListener("touchend", onTouchEnd, { passive: false });
+      container.addEventListener("touchcancel", onTouchEnd, { passive: false });
     }
 
     let programmaticMove = false;
