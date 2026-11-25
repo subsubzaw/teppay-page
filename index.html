@@ -2432,7 +2432,7 @@
           } else if (activeCategory === "服飾") {
             if (!item.category.includes("服飾")) return false;
           } else if (activeCategory === "本") {
-            if (!item.category.includes("本")) return false;
+            if (item.category !== "本") return false;
           } else if (activeCategory === "百貨店・モール") {
             if (!item.category.includes("百貨店")) return false;
           } else if (activeCategory === "JR東日本グループのお店・サービス") {
